@@ -1,3 +1,3 @@
-# rZone--RaspberryGate--WDT/Arduino
+# rZone--RaspberryGate--WDT/memo
 
 Watchdog Timers for Raspberry Gate
