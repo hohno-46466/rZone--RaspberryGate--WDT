@@ -13,7 +13,7 @@ void setup() {
 void loop() {
   // loop function is here
   digitalWrite(PIN_LED, HIGH);
-  delay(300);
+  delay(350);
   digitalWrite(PIN_LED, LOW);
-  delay(700);
+  delay(650);
 }
