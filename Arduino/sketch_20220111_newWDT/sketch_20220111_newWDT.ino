@@ -87,13 +87,13 @@ uint32_t ten_millis_task_timeout[4] = { 0, 0, 0, 0 };
 
 // loop()
 
+int debug_cnt = 0;
+int debug_ten_millis = 0;
+
 void loop() {
 
-	// We can NEVER use delay() function in the loop() function.
+	// We can NEVER use delay() function in the loop() and sub_...() functions.
 	// Instead of using delay(), we have to create and use the task function like task1()
-
-	static int debug_cnt = 0;
-	static int debug_ten_millis = 0;
 
 	ten_millis_curr = millis() / 10;
 
@@ -104,9 +104,16 @@ void loop() {
 		debug_ten_millis = ten_millis_curr;
 	}
 
-	// ------------------------
+	sub_for_debug();
+
+}
+
+	// -------------------------------------
+
+void sub_for_debug() {
+
 	// example task: LED blinking
-	// ------------------------
+
 	if (debug_cnt < 5) {
 		task1(500,500);
 	} else if (debug_cnt < 10) {
@@ -125,7 +132,6 @@ void loop() {
 	if (flag_reboot) {
 		task2(1000, 1);
 	}
-
 
 }
 
