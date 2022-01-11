@@ -8,6 +8,49 @@
 
 // ---------------------------------------------------------
 
+// taskX - - blinkint LED
+
+// taskX(int arg1, int arg2)
+//   arg1 - duration of LED ON (in msec);
+//   arg2 - duration of LED OFF (in msec)
+// returns
+//   true  - LED is ON
+//   false - LED is OFF
+
+boolean taskX(int arg1, int arg2) {
+	static uint32_t _ten_millis_prev = 0;
+	static uint32_t _ten_millis_next = 0;
+	static int _prev_arg1 = 0;
+	static int _prev_arg2 = 0;
+  static boolean _flag = false;
+
+	if ((arg1 == _prev_arg1) && (arg2 == _prev_arg2)) {
+		// Bith arg1 and arg2 are not updated
+		if (_ten_millis_next <= ten_millis_curr) {
+			if (_flag) {
+				_flag = false;
+				_ten_millis_next += (arg2/10);
+				ATT_NOTE_OFF;
+			} else {
+				_flag = true;
+				_ten_millis_next += (arg1/10);;
+				ATT_NOTE_ON;
+			}
+		}
+	} else {
+		// one of arg1 and arg2 was updated
+		_prev_arg1 = arg1;
+		_prev_arg2 = arg2;
+		_ten_millis_next = (millis() + arg1) / 10;
+		_flag = true;
+		ATT_NOTE_ON;
+	}
+
+	return(_flag);
+}
+
+// -------------------------------------
+
 // task1 - - blinkint LED
 
 // task1(int arg1, int arg2)

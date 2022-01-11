@@ -61,16 +61,16 @@ Note: ((2**32)/100)/3600/24 = ~497.1
 */
 
 // internal time counter
-uint32_t ten_millis_prev = 0; // previous time (in 10msec)
+// uint32_t ten_millis_prev = 0; // previous time (in 10msec)
 uint32_t ten_millis_curr = 0; // current time (in 10msec)
-uint32_t ten_millis_task_timeout[4] = { 0, 0, 0, 0 };
+// uint32_t ten_millis_task_timeout[4] = { 0, 0, 0, 0 };
 
 // ---------------------------------------------------------
 
 // loop()
 
-int cnt_debug = 0;
-int ten_millis_debug = 0;
+int debug_cnt = 0;
+uint32_t debug_ten_millis_lastcnt = 0;
 
 // WARNING:
 // We can NEVER use delay() function in the loop() and task...() functions.
@@ -82,13 +82,14 @@ void loop() {
 
   ten_millis_curr = millis() / 10;
 
-  if ((ten_millis_curr - ten_millis_debug) >= 100) {
-    // cnt_debug increments every second
-    // ten_millis_debug holds the time when cnt_debug was updated.
-    cnt_debug ++;
-    ten_millis_debug = ten_millis_curr;
+  if ((ten_millis_curr - debug_ten_millis_lastcnt) >= 100) {
+    // debug_cnt increments every second
+    // debug_ten_millis_lastcnt holds the time when debug_cnt was updated.
+    debug_cnt++;
+    debug_ten_millis_lastcnt = ten_millis_curr;
   }
 
+	task_for_debugX();
   task_for_debug1();
   task_for_debug2();
 
@@ -96,23 +97,46 @@ void loop() {
 
 // -------------------------------------
 
+void task_for_debugX() {
+
+  // example task: LED blinking
+
+  if (debug_cnt < 6) {
+    taskX(75,25);
+  } else if (debug_cnt < 12) {
+    taskX(150,50);
+  } else if (debug_cnt < 18) {
+		taskX(200,50);
+  } else if (debug_cnt < 24) {
+    taskX(300,100);
+  } else {
+    debug_cnt = 0;
+    taskX(20,20);
+  }
+}
+
+
+// -------------------------------------
+
 void task_for_debug1() {
 
   // example task: LED blinking
 
-  if (cnt_debug < 5) {
+  if (debug_cnt < 5) {
     task1(500,500);
-  } else if (cnt_debug < 10) {
+  } else if (debug_cnt < 10) {
     task1(250,250);
-  } else if (cnt_debug < 15) {
+  } else if (debug_cnt < 15) {
     task1(100,100);
-  } else if (cnt_debug < 20) {
+  } else if (debug_cnt < 20) {
     task1(50,50);
   } else {
-    cnt_debug = 0;
-		task1(200,50);
+    debug_cnt = 0;
+		task1(20,20);
   }
 }
+
+
 // -------------------------------------
 
 void task_for_debug2() {
