@@ -28,6 +28,9 @@ const int PIN_5 = 5;
 #define PIN_O_RESET   (PIN_3)
 #define PIN_O_NOTE    (PIN_4)
 
+#define ATT_GET_PULSE digitalRead(PIN_I_PULSE)
+#define ATT_GET_REQ   digitalRead(PIN_I_REQ)
+
 #define ATT_LED_ON    (digitalWrite(PIN_O_LED, HIGH))
 #define ATT_LED_OFF   (digitalWrite(PIN_O_LED, LOW))
 

@@ -8,6 +8,15 @@
 
 // ---------------------------------------------------------
 
+boolean task0() {
+	return(true);
+}
+
+
+
+
+// ---------------------------------------------------------
+
 // taskX - - blinkint LED
 
 // taskX(int arg1, int arg2)
@@ -94,13 +103,13 @@ boolean task1(int arg1, int arg2) {
 
 // -------------------------------------
 
-// task2 - RESET Raspberry Pi
+// task3 - RESET Raspberry Pi
 
-// task2(int arg1, boolean arg2)
+// task3(int arg1, boolean arg2)
 //    arg1 - duration of pulling down the Reset pin (in msec)
-//    arg2 - how many times will it generate Reset pulse (usually 1)
+//    arg2 - how many times will it generate Reset pulse (usually it's one)
 
-boolean task2(int32_t arg1, int arg2) {
+boolean task3(int32_t arg1, int arg2) {
 	static int32_t _prev_arg1 = -1;
 	static boolean _flag = false;
 	static uint32_t _ten_millis_next = 0;

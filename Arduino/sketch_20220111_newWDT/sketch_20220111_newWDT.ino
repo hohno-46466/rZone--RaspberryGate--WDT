@@ -89,15 +89,18 @@ void loop() {
     debug_ten_millis_lastcnt = ten_millis_curr;
   }
 
-	task_for_debugX();
-  task_for_debug1();
-  task_for_debug2();
+	taskX_debug();
+  task0_debug();
+  task1_debug();
+  task2_debug();
+  task3_debug();
+  task4_debug();
 
 }
 
 // -------------------------------------
 
-void task_for_debugX() {
+void taskX_debug() {
 
   // example task: LED blinking
 
@@ -118,7 +121,7 @@ void task_for_debugX() {
 
 // -------------------------------------
 
-void task_for_debug1() {
+void task1_debug() {
 
   // example task: LED blinking
 
@@ -136,17 +139,37 @@ void task_for_debug1() {
   }
 }
 
-
 // -------------------------------------
 
-void task_for_debug2() {
+void task3_debug() {
 
   boolean flag_reboot = false;
 
   if (flag_reboot) {
-    task2(1000, 1);
+    task3(1000, 1);
   }
 }
+
+// -------------------------------------
+
+void task0_debug() {
+
+}
+
+
+// -------------------------------------
+
+void task2_debug() {
+
+}
+
+
+// -------------------------------------
+
+void task4_debug() {
+
+}
+
 
 // ---------------------------------------------------------
 // sub functions
