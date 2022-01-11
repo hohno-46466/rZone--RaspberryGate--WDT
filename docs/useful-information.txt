@@ -1,0 +1,16 @@
+
+# Last update: Tue Jan 11 08:57:38 JST 2022
+
+* ATtiny85 Module with Micro USB 
+
+	https://protosupplies.com/product/attiny85-module-with-micro-usb/
+
+	http://digistump.com/wiki/digispark/tutorials/connecting
+ 
+* schematic (Digispark ATtiny85)
+
+	https://s3.amazonaws.com/digistump-resources/files/97a1bb28_DigisparkSchematic.pdf
+
+
+-EOF-
+
