@@ -45,9 +45,15 @@ void setup() {
   pinMode(PIN_I_REQ  ,INPUT_PULLUP);
   pinMode(PIN_O_RESET,OUTPUT);
   pinMode(PIN_O_NOTE ,OUTPUT);
+
   ATT_LED_OFF;    // LED is OFF
   ATT_NOTE_OFF;   // Reset pin on Raspberry Pi is not activated (Negative logic)
   ATT_RESET_OFF;  // No notification information
+
+#ifdef _USE_UNO_
+	Serial.begin(57600);
+#endif // _USE_UNO_
+
 }
 
 // ---------------------------------------------------------
@@ -80,6 +86,8 @@ uint32_t debug_ten_millis_lastcnt = 0;
 
 void loop() {
 
+	static int debug_N;
+
   ten_millis_curr = millis() / 10;
 
   if ((ten_millis_curr - debug_ten_millis_lastcnt) >= 100) {
@@ -87,14 +95,17 @@ void loop() {
     // debug_ten_millis_lastcnt holds the time when debug_cnt was updated.
     debug_cnt++;
     debug_ten_millis_lastcnt = ten_millis_curr;
+#ifdef _USE_UNO_
+		Serial.println(debug_N);
+#endif // _USE_UNO_
   }
 
-	taskX_debug();
-  task0_debug();
+  debug_N = task0_debug();
   task1_debug();
   task2_debug();
   task3_debug();
   task4_debug();
+	taskX_debug();
 
 }
 
@@ -152,8 +163,9 @@ void task3_debug() {
 
 // -------------------------------------
 
-void task0_debug() {
+int task0_debug() {
 
+	return(task0());
 }
 
 

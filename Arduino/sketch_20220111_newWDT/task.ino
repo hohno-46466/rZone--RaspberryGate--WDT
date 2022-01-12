@@ -8,15 +8,6 @@
 
 // ---------------------------------------------------------
 
-boolean task0() {
-	return(true);
-}
-
-
-
-
-// ---------------------------------------------------------
-
 // taskX - - blinkint LED
 
 // taskX(int arg1, int arg2)
@@ -27,7 +18,7 @@ boolean task0() {
 //   false - LED is OFF
 
 boolean taskX(int arg1, int arg2) {
-	static uint32_t _ten_millis_prev = 0;
+	// 	static uint32_t _ten_millis_prev = 0;
 	static uint32_t _ten_millis_next = 0;
 	static int _prev_arg1 = 0;
 	static int _prev_arg2 = 0;
@@ -60,7 +51,75 @@ boolean taskX(int arg1, int arg2) {
 
 // -------------------------------------
 
-// task1 - - blinkint LED
+
+// task0 -- returns number of pulses in last 10 seconds
+
+int task0() {
+	const int _LEVEL_MIN = 0;
+	const int _LEVEL_MAX = 100;
+	const int _LEVEL_H   = 80;
+	const int _LEVEL_L   = 0;
+
+	static uint32_t _lastReadData = 0;
+	uint32_t _currentMillis = millis();
+	struct secCnt {
+		uint32_t millis;
+		int cnt;
+	} _secCnt[10];
+  static boolean _currentStat = false;
+	static int _currentVal = 0;
+
+	if ((_currentMillis - _lastReadData) < 2) {
+		return(-1);
+  }
+
+	boolean _tmpVal = ATT_GET_PULSE;
+
+	if (_tmpVal) {
+		_currentVal += 10;
+		if (_currentVal > _LEVEL_MAX) { _currentVal = _LEVEL_MAX; }
+	} else {
+		_currentVal -= 10;
+		if (_currentVal < _LEVEL_MIN) { _currentVal = _LEVEL_MIN; }
+	}
+
+	if ((_currentStat == false) && (_currentVal > _LEVEL_H)) {
+		_currentStat = true;
+	} else if ((_currentStat == true) && (_currentVal < _LEVEL_L)) {
+		_currentStat = false;
+	}
+
+	int _index = (_currentMillis / 1000UL)  % 10;
+
+	if ((_secCnt[_index].millis % 1000UL) == (_currentMillis / 1000UL)) {
+		_secCnt[_index].cnt ++;
+	} else {
+		_secCnt[_index].millis = _currentMillis;
+		_secCnt[_index].cnt = 1;
+	}
+
+	int _ss = ((sizeof _secCnt) / (sizeof _secCnt[0]));
+
+	for (int i = 0; i < _ss; i++) {
+		uint32_t _tt = _secCnt[i].millis;
+		if ((int)((_currentMillis  - _tt) / 1000UL) > _ss) {
+			_secCnt[i].millis = 0;
+			_secCnt[i].cnt = 0;
+		}
+	}
+
+	int _sum = 0;
+	for (int i = 0; i < _ss; i++) {
+	  _sum += _secCnt[i].cnt;
+	}
+
+	return(_sum);
+}
+
+
+// ---------------------------------------------------------
+
+// task1 -- blinkint LED
 
 // task1(int arg1, int arg2)
 //   arg1 - duration of LED ON (in msec);
@@ -70,7 +129,7 @@ boolean taskX(int arg1, int arg2) {
 //   false - LED is OFF
 
 boolean task1(int arg1, int arg2) {
-	static uint32_t _ten_millis_prev = 0;
+	// static uint32_t _ten_millis_prev = 0;
 	static uint32_t _ten_millis_next = 0;
 	static int _prev_arg1 = 0;
 	static int _prev_arg2 = 0;
@@ -105,15 +164,15 @@ boolean task1(int arg1, int arg2) {
 
 // task3 - RESET Raspberry Pi
 
-// task3(int arg1, boolean arg2)
+// task3(int32_t arg1, int arg2)
 //    arg1 - duration of pulling down the Reset pin (in msec)
 //    arg2 - how many times will it generate Reset pulse (usually it's one)
 
 boolean task3(int32_t arg1, int arg2) {
-	static int32_t _prev_arg1 = -1;
+	// static int32_t _prev_arg1 = -1;
 	static boolean _flag = false;
 	static uint32_t _ten_millis_next = 0;
-	static boolean _cnt = 0;
+	static int _cnt = 0;
 
 		if (arg2 < 0) {
 		_cnt = 0;
