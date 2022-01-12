@@ -8,7 +8,7 @@
 
 // ---------------------------------------------------------
 
-// taskX - - blinkint LED
+// taskX - - blinkint LED using Notification Pin
 
 // taskX(int arg1, int arg2)
 //   arg1 - duration of LED ON (in msec);
@@ -58,24 +58,26 @@ int task0() {
 	const int _LEVEL_MIN = 0;
 	const int _LEVEL_MAX = 100;
 	const int _LEVEL_H   = 80;
-	const int _LEVEL_L   = 0;
+	const int _LEVEL_L   = 20;
 
-	static uint32_t _lastReadData = 0;
+	static int _sum = 0;
+	static uint32_t _lastGetPulse = 0;
 	uint32_t _currentMillis = millis();
-	struct secCnt {
+	static struct secCnt {
 		uint32_t millis;
 		int cnt;
 	} _secCnt[10];
   static boolean _currentStat = false;
 	static int _currentVal = 0;
 
-	if ((_currentMillis - _lastReadData) < 2) {
-		return(-1);
+	if ((_currentMillis - _lastGetPulse) < 2) {
+		return(_sum);
   }
 
-	boolean _tmpVal = ATT_GET_PULSE;
+	boolean _state = ATT_GET_PULSE;
+	_lastGetPulse = _currentMillis;
 
-	if (_tmpVal) {
+	if (_state) {
 		_currentVal += 10;
 		if (_currentVal > _LEVEL_MAX) { _currentVal = _LEVEL_MAX; }
 	} else {
@@ -83,35 +85,92 @@ int task0() {
 		if (_currentVal < _LEVEL_MIN) { _currentVal = _LEVEL_MIN; }
 	}
 
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 4)
+	Serial.print(_currentVal); Serial.print(" ");
+#endif // (_DEBUG_LEVEL >= 4)
+#endif // _USE_UNO_
+
+	boolean _flagX = false;
+
 	if ((_currentStat == false) && (_currentVal > _LEVEL_H)) {
 		_currentStat = true;
+		_flagX = true;
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 4)
+		Serial.println("L->H"); // Serial.print("H "); //
+#endif // (_DEBUG_LEVEL >= 4)
+#endif // _USE_UNO_
+
 	} else if ((_currentStat == true) && (_currentVal < _LEVEL_L)) {
 		_currentStat = false;
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 4)
+		Serial.println("H->L"); // Serial.print("L "); //
+#endif // (_DEBUG_LEVEL >= 4)
+#endif // _USE_UNO_
+
+		_flagX = false;
 	}
 
-	int _index = (_currentMillis / 1000UL)  % 10;
+	// if (!_flagX) {
+	// 	return(_sum); // return(-2);
+	// }
 
-	if ((_secCnt[_index].millis % 1000UL) == (_currentMillis / 1000UL)) {
-		_secCnt[_index].cnt ++;
-	} else {
-		_secCnt[_index].millis = _currentMillis;
-		_secCnt[_index].cnt = 1;
+	if (_flagX) {
+		int _index = (_currentMillis / 1000UL)  % 10;
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 3)
+		Serial.print("_index = "); Serial.print(_index); Serial.print(", ");
+		Serial.print(_secCnt[_index].millis / 1000UL); Serial.print(", ");
+		Serial.print(_currentMillis / 1000UL); Serial.println();
+#endif // (_DEBUG_LEVEL >= 3)
+#endif // _USE_UNO_
+
+		if ((_secCnt[_index].millis / 1000UL) == (_currentMillis / 1000UL)) {
+			_secCnt[_index].cnt ++;
+		} else {
+			_secCnt[_index].millis = _currentMillis;
+			_secCnt[_index].cnt = 1;
+		}
 	}
 
 	int _ss = ((sizeof _secCnt) / (sizeof _secCnt[0]));
 
 	for (int i = 0; i < _ss; i++) {
 		uint32_t _tt = _secCnt[i].millis;
-		if ((int)((_currentMillis  - _tt) / 1000UL) > _ss) {
+		if ((int)((_currentMillis  - _tt) / 1000UL) > _ss/*sec*/) {
 			_secCnt[i].millis = 0;
 			_secCnt[i].cnt = 0;
 		}
 	}
 
-	int _sum = 0;
+	_sum = 0;
 	for (int i = 0; i < _ss; i++) {
-	  _sum += _secCnt[i].cnt;
+		int _xx = _secCnt[i].cnt;
+		if (_secCnt[i].millis > 0) {
+			_sum += _xx;
+		}
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 3)
+		Serial.print(_xx);
+		Serial.print(", ");
+#endif // (_DEBUG_LEVEL >= 3)
+#endif // _USE_UNO_
+
 	}
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 3)
+	Serial.print("-> ");
+	Serial.print(_sum);
+	Serial.println();
+#endif // (_DEBUG_LEVEL >= 3)
+#endif // _USE_UNO_
 
 	return(_sum);
 }
@@ -169,7 +228,7 @@ boolean task1(int arg1, int arg2) {
 //    arg2 - how many times will it generate Reset pulse (usually it's one)
 
 boolean task3(int32_t arg1, int arg2) {
-	// static int32_t _prev_arg1 = -1;
+	// mystatic int32_t _prev_arg1 = -1;
 	static boolean _flag = false;
 	static uint32_t _ten_millis_next = 0;
 	static int _cnt = 0;

@@ -52,6 +52,7 @@ void setup() {
 
 #ifdef _USE_UNO_
 	Serial.begin(57600);
+	Serial.println("# Hello!"); Serial.println();
 #endif // _USE_UNO_
 
 }
@@ -75,18 +76,19 @@ uint32_t ten_millis_curr = 0; // current time (in 10msec)
 
 // loop()
 
-int debug_cnt = 0;
-uint32_t debug_ten_millis_lastcnt = 0;
-
 // WARNING:
 // We can NEVER use delay() function in the loop() and task...() functions.
 // Instead of using delay(), we have to create and use the task function like task1()
 
 // -------------------------------------
 
+int debug_cnt = 0;
+uint32_t debug_ten_millis_lastcnt = 0;
+
+
 void loop() {
 
-	static int debug_N;
+  static int pulseStat = 0;
 
   ten_millis_curr = millis() / 10;
 
@@ -95,23 +97,34 @@ void loop() {
     // debug_ten_millis_lastcnt holds the time when debug_cnt was updated.
     debug_cnt++;
     debug_ten_millis_lastcnt = ten_millis_curr;
-#ifdef _USE_UNO_
-		Serial.println(debug_N);
-#endif // _USE_UNO_
-  }
+	}
 
-  debug_N = task0_debug();
-  task1_debug();
-  task2_debug();
-  task3_debug();
-  task4_debug();
-	taskX_debug();
+	pulseStat = task0_wrapper();
+
+#ifdef _USE_UNO_
+		if (pulseStat >= 0) {
+			Serial.print(">>> pulsStat = "); Serial.println(pulseStat);
+		}
+#endif // _USE_UNO_
+
+  task1_wrapper();
+
+  task2_wrapper();
+
+  task3_wrapper();
+
+	task4_wrapper();
+
+	taskX_wrapper();
 
 }
 
-// -------------------------------------
 
-void taskX_debug() {
+// ---------------------------------------------------------
+// wrapper functions
+// ---------------------------------------------------------
+
+void taskX_wrapper() {
 
   // example task: LED blinking
 
@@ -132,7 +145,7 @@ void taskX_debug() {
 
 // -------------------------------------
 
-void task1_debug() {
+void task1_wrapper() {
 
   // example task: LED blinking
 
@@ -152,7 +165,7 @@ void task1_debug() {
 
 // -------------------------------------
 
-void task3_debug() {
+void task3_wrapper() {
 
   boolean flag_reboot = false;
 
@@ -163,22 +176,62 @@ void task3_debug() {
 
 // -------------------------------------
 
-int task0_debug() {
+int task0_wrapper() {
 
-	return(task0());
+	static int _pulsesPerTenSec = 0, _pulsesPerTenSec_prev = -1;
+  static boolean _pulsesPerTenSecStat = false;
+  int _retval = -1;
+
+	_pulsesPerTenSec = task0();
+
+	if ((_pulsesPerTenSecStat == false) && (_pulsesPerTenSec > 8)) {
+			_pulsesPerTenSecStat = true;
+			_retval = 0;
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 1)
+			Serial.print("# *** newWDT started. ***  "); Serial.println(_pulsesPerTenSec);
+#endif // (_DEBUG_LEVEL >= 1)
+#endif // _USE_UNO_
+
+	} else if ((_pulsesPerTenSecStat == true) && (_pulsesPerTenSec < 3)) {
+			_pulsesPerTenSecStat = false;
+			_retval = 1;
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 1)
+			Serial.print("# *** RESET required. ***  "); Serial.println(_pulsesPerTenSec);
+#endif // (_DEBUG_LEVEL >= 1)
+#endif // _USE_UNO_
+	}
+
+		if (_pulsesPerTenSec >= 0) {
+			if (_pulsesPerTenSec != _pulsesPerTenSec_prev) {
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 2)
+				Serial.print("# _pulsesPerTenSec = "); Serial.println(_pulsesPerTenSec);
+#endif // (_DEBUG_LEVEL >= 2)
+#endif // _USE_UNO_
+
+				_pulsesPerTenSec_prev = _pulsesPerTenSec;
+			}
+		}
+
+		return(_retval);
 }
 
 
 // -------------------------------------
 
-void task2_debug() {
+void task2_wrapper() {
 
 }
 
 
 // -------------------------------------
 
-void task4_debug() {
+void task4_wrapper() {
 
 }
 

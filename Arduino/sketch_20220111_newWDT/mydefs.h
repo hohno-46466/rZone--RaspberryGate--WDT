@@ -14,24 +14,25 @@
 // ---------------------------------------------------------
 
 #define _USE_UNO_
+#define _DEBUG_LEVEL  (2)
 
 // ---------------------------------------------------------
 
 #ifdef _USE_UNO_
-const int PIN_0 = 3;
-const int PIN_1 = 4;
-const int PIN_2 = 5;
-const int PIN_3 = 6;
-const int PIN_4 = 7;
-const int PIN_5 = 8;
-#else // USE_UNO
+const int PIN_0 = 6;  // Pulse (In)
+const int PIN_1 = 4;  // LED (Out)
+const int PIN_2 = 7;  // WDT Type (In)
+const int PIN_3 = 8;  // RPi Reset (Out)
+const int PIN_4 = 9;  // Notification (Out)
+// const int PIN_5 = 5;
+#else // _USE_UNO_
 const int PIN_0 = 0;
 const int PIN_1 = 1;
 const int PIN_2 = 2;
 const int PIN_3 = 3;
 const int PIN_4 = 4;
-const int PIN_5 = 5;
-#endif // USE_UNO
+// const int PIN_5 = 5;
+#endif // _USE_UNO_
 
 // ---------------------------------------------------------
 
@@ -41,7 +42,11 @@ const int PIN_5 = 5;
 #define PIN_O_RESET   (PIN_3)
 #define PIN_O_NOTE    (PIN_4)
 
-#define ATT_GET_PULSE digitalRead(PIN_I_PULSE)
+#ifdef _USE_UNO_
+#define ATT_GET_PULSE (digitalRead(PIN_I_PULSE) == HIGH)
+#else  // _USE_UNO_
+#define ATT_GET_PULSE (digitalRead(PIN_I_PULSE) == LOW)
+#endif // _USE_UNO_
 #define ATT_GET_REQ   digitalRead(PIN_I_REQ)
 
 #define ATT_LED_ON    (digitalWrite(PIN_O_LED, HIGH))
@@ -52,7 +57,6 @@ const int PIN_5 = 5;
 
 #define ATT_RESET_ON  (digitalWrite(PIN_O_RESET, LOW))
 #define ATT_RESET_OFF (digitalWrite(PIN_O_RESET, HIGH))
-
 
 // ---------------------------------------------------------
 
