@@ -178,43 +178,46 @@ void task3_wrapper() {
 
 int task0_wrapper() {
 
-	static int _pulsesPerTenSec = 0, _pulsesPerTenSec_prev = -1;
-  static boolean _pulsesPerTenSecStat = false;
+	static int _pulsesPer30Sec = 0, _pulsesPer30Sec_prev = -1;
+  static boolean _pulsesPer30SecStat = false;
   int _retval = -1;
+	const int _WDT_START_LEVEL = 8;
+	const int _WDT_RESET_LEVEL = 3;
 
-	_pulsesPerTenSec = task0();
 
-	if ((_pulsesPerTenSecStat == false) && (_pulsesPerTenSec > 8)) {
-			_pulsesPerTenSecStat = true;
+	_pulsesPer30Sec = task0();
+
+	if ((_pulsesPer30SecStat == false) && (_pulsesPer30Sec > _WDT_START_LEVEL)) {
+			_pulsesPer30SecStat = true;
 			_retval = 0;
 
 #ifdef _USE_UNO_
 #if (_DEBUG_LEVEL >= 1)
-			Serial.print("# *** newWDT started. ***  "); Serial.println(_pulsesPerTenSec);
+			Serial.print("# *** newWDT started. ***  "); Serial.println(_pulsesPer30Sec);
 #endif // (_DEBUG_LEVEL >= 1)
 #endif // _USE_UNO_
 
-	} else if ((_pulsesPerTenSecStat == true) && (_pulsesPerTenSec < 3)) {
-			_pulsesPerTenSecStat = false;
+	} else if ((_pulsesPer30SecStat == true) && (_pulsesPer30Sec < _WDT_RESET_LEVEL)) {
+			_pulsesPer30SecStat = false;
 			_retval = 1;
 
 #ifdef _USE_UNO_
 #if (_DEBUG_LEVEL >= 1)
-			Serial.print("# *** RESET required. ***  "); Serial.println(_pulsesPerTenSec);
+			Serial.print("# *** RESET required. ***  "); Serial.println(_pulsesPer30Sec);
 #endif // (_DEBUG_LEVEL >= 1)
 #endif // _USE_UNO_
 	}
 
-		if (_pulsesPerTenSec >= 0) {
-			if (_pulsesPerTenSec != _pulsesPerTenSec_prev) {
+		if (_pulsesPer30Sec >= 0) {
+			if (_pulsesPer30Sec != _pulsesPer30Sec_prev) {
 
 #ifdef _USE_UNO_
 #if (_DEBUG_LEVEL >= 2)
-				Serial.print("# _pulsesPerTenSec = "); Serial.println(_pulsesPerTenSec);
+				Serial.print("# _pulsesPer30Sec = "); Serial.println(_pulsesPer30Sec);
 #endif // (_DEBUG_LEVEL >= 2)
 #endif // _USE_UNO_
 
-				_pulsesPerTenSec_prev = _pulsesPerTenSec;
+				_pulsesPer30Sec_prev = _pulsesPer30Sec;
 			}
 		}
 

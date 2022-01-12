@@ -52,7 +52,7 @@ boolean taskX(int arg1, int arg2) {
 // -------------------------------------
 
 
-// task0 -- returns number of pulses in last 10 seconds
+// task0 -- returns number of pulses in last 30 seconds
 
 int task0() {
 	const int _LEVEL_MIN = 0;
@@ -66,7 +66,8 @@ int task0() {
 	static struct secCnt {
 		uint32_t millis;
 		int cnt;
-	} _secCnt[10];
+	} _secCnt[30]; // 30 is for 30 seconds
+	const int _secCntSize = ((sizeof _secCnt) / (sizeof _secCnt[0]));
   static boolean _currentStat = false;
 	static int _currentVal = 0;
 
@@ -120,7 +121,7 @@ int task0() {
 	// }
 
 	if (_flagX) {
-		int _index = (_currentMillis / 1000UL)  % 10;
+		int _index = (_currentMillis / 1000UL)  % _secCntSize;
 
 #ifdef _USE_UNO_
 #if (_DEBUG_LEVEL >= 3)
@@ -138,18 +139,16 @@ int task0() {
 		}
 	}
 
-	int _ss = ((sizeof _secCnt) / (sizeof _secCnt[0]));
-
-	for (int i = 0; i < _ss; i++) {
+	for (int i = 0; i < _secCntSize; i++) {
 		uint32_t _tt = _secCnt[i].millis;
-		if ((int)((_currentMillis  - _tt) / 1000UL) > _ss/*sec*/) {
+		if ((int)((_currentMillis  - _tt) / 1000UL) > _secCntSize) {
 			_secCnt[i].millis = 0;
 			_secCnt[i].cnt = 0;
 		}
 	}
 
 	_sum = 0;
-	for (int i = 0; i < _ss; i++) {
+	for (int i = 0; i < _secCntSize; i++) {
 		int _xx = _secCnt[i].cnt;
 		if (_secCnt[i].millis > 0) {
 			_sum += _xx;
