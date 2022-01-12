@@ -34,6 +34,12 @@ P5 - - - (By default, this pin is assigned as reset for ATtiny85 (can't be used 
 // Includes and Definitions
 
 #include "./mydefs.h"
+#include "./taskClass1.h"
+
+// ---------------------------------------------------------
+
+taskClass1 task1(PIN_O_LED);
+taskClass1 taskX(PIN_O_NOTE);
 
 // ---------------------------------------------------------
 
@@ -69,7 +75,7 @@ Note: ((2**32)/100)/3600/24 = ~497.1
 
 // internal time counter
 // uint32_t ten_millis_prev = 0; // previous time (in 10msec)
-uint32_t ten_millis_curr = 0; // current time (in 10msec)
+uint32_t Global_ten_millis_curr = 0; // current time (in 10msec)
 // uint32_t ten_millis_task_timeout[4] = { 0, 0, 0, 0 };
 
 // ---------------------------------------------------------
@@ -90,13 +96,15 @@ void loop() {
 
   static int pulseStat = 0;
 
-  ten_millis_curr = millis() / 10;
+  // Global_ten_millis_curr = millis() / 10;
+	Global_ten_millis_curr = tenMillis();
 
-  if ((ten_millis_curr - debug_ten_millis_lastcnt) >= 100) {
+  if ((Global_ten_millis_curr - debug_ten_millis_lastcnt) >= 100) {
     // debug_cnt increments every second
     // debug_ten_millis_lastcnt holds the time when debug_cnt was updated.
     debug_cnt++;
-    debug_ten_millis_lastcnt = ten_millis_curr;
+		if (debug_cnt >= 30) { debug_cnt = 0; }
+    debug_ten_millis_lastcnt = Global_ten_millis_curr;
 	}
 
 	pulseStat = task0_wrapper();
@@ -128,17 +136,22 @@ void taskX_wrapper() {
 
   // example task: LED blinking
 
+	// taskX.set(500,500); taskX.blink();
+
   if (debug_cnt < 6) {
-    taskX(75,25);
+		taskX.set(50,950); taskX.blink();
+
   } else if (debug_cnt < 12) {
-    taskX(150,50);
+		taskX.set(250,750); taskX.blink();
+
   } else if (debug_cnt < 18) {
-		taskX(200,50);
+		taskX.set(500,500); taskX.blink();
+
   } else if (debug_cnt < 24) {
-    taskX(300,100);
+		taskX.set(750,250); taskX.blink();
+
   } else {
-    debug_cnt = 0;
-    taskX(20,20);
+		taskX.set(950,50); taskX.blink();
   }
 }
 
@@ -150,16 +163,19 @@ void task1_wrapper() {
   // example task: LED blinking
 
   if (debug_cnt < 5) {
-    task1(500,500);
+		task1.set(500,500); task1.blink();
+
   } else if (debug_cnt < 10) {
-    task1(250,250);
+		task1.set(250,250); task1.blink();
+
   } else if (debug_cnt < 15) {
-    task1(100,100);
+		task1.set(100,100); task1.blink();
+
   } else if (debug_cnt < 20) {
-    task1(50,50);
+		task1.set(50,50); task1.blink();
+
   } else {
-    debug_cnt = 0;
-		task1(20,20);
+		task1.set(20,20); task1.blink();
   }
 }
 
@@ -243,6 +259,21 @@ void task4_wrapper() {
 // sub functions
 // ---------------------------------------------------------
 
+uint32_t tenMillis() {
+  static int cntOVF = 0;
+	static uint32_t Tnow = 0;
+	static uint32_t millisPrev = 0, millisNow = 0;
+
+	millisNow = millis();
+
+	if (millisNow < millisPrev) {
+		cntOVF++;
+	}
+	Tnow = (millisNow / 10UL) + (cntOVF % 10) * 429496729UL;
+	millisPrev = millisNow;
+
+	return(Tnow);
+}
 
 // ---------------------------------------------------------
 // References:

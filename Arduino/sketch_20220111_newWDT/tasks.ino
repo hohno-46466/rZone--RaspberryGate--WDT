@@ -1,5 +1,5 @@
 //
-// task.ino
+// tasks.ino
 //
 // ---------------------------------------------------------
 
@@ -8,49 +8,7 @@
 
 // ---------------------------------------------------------
 
-// taskX - - blinkint LED using Notification Pin
-
-// taskX(int arg1, int arg2)
-//   arg1 - duration of LED ON (in msec);
-//   arg2 - duration of LED OFF (in msec)
-// returns
-//   true  - LED is ON
-//   false - LED is OFF
-
-boolean taskX(int arg1, int arg2) {
-	// 	static uint32_t _ten_millis_prev = 0;
-	static uint32_t _ten_millis_next = 0;
-	static int _prev_arg1 = 0;
-	static int _prev_arg2 = 0;
-  static boolean _flag = false;
-
-	if ((arg1 == _prev_arg1) && (arg2 == _prev_arg2)) {
-		// Bith arg1 and arg2 are not updated
-		if (_ten_millis_next <= ten_millis_curr) {
-			if (_flag) {
-				_flag = false;
-				_ten_millis_next += (arg2/10);
-				ATT_NOTE_OFF;
-			} else {
-				_flag = true;
-				_ten_millis_next += (arg1/10);;
-				ATT_NOTE_ON;
-			}
-		}
-	} else {
-		// one of arg1 and arg2 was updated
-		_prev_arg1 = arg1;
-		_prev_arg2 = arg2;
-		_ten_millis_next = (millis() + arg1) / 10;
-		_flag = true;
-		ATT_NOTE_ON;
-	}
-
-	return(_flag);
-}
-
 // -------------------------------------
-
 
 // task0 -- returns number of pulses in last 30 seconds
 
@@ -75,10 +33,10 @@ int task0() {
 		return(_sum);
   }
 
-	boolean _state = ATT_GET_PULSE;
+	boolean _pulseState = ATT_GET_PULSE;
 	_lastGetPulse = _currentMillis;
 
-	if (_state) {
+	if (_pulseState) {
 		_currentVal += 10;
 		if (_currentVal > _LEVEL_MAX) { _currentVal = _LEVEL_MAX; }
 	} else {
@@ -177,49 +135,6 @@ int task0() {
 
 // ---------------------------------------------------------
 
-// task1 -- blinkint LED
-
-// task1(int arg1, int arg2)
-//   arg1 - duration of LED ON (in msec);
-//   arg2 - duration of LED OFF (in msec)
-// returns
-//   true  - LED is ON
-//   false - LED is OFF
-
-boolean task1(int arg1, int arg2) {
-	// static uint32_t _ten_millis_prev = 0;
-	static uint32_t _ten_millis_next = 0;
-	static int _prev_arg1 = 0;
-	static int _prev_arg2 = 0;
-  static boolean _flag = false;
-
-	if ((arg1 == _prev_arg1) && (arg2 == _prev_arg2)) {
-		// Bith arg1 and arg2 are not updated
-		if (_ten_millis_next <= ten_millis_curr) {
-			if (_flag) {
-				_flag = false;
-				_ten_millis_next += (arg2/10);
-				ATT_LED_OFF;
-			} else {
-				_flag = true;
-				_ten_millis_next += (arg1/10);;
-				ATT_LED_ON;
-			}
-		}
-	} else {
-		// one of arg1 and arg2 was updated
-		_prev_arg1 = arg1;
-		_prev_arg2 = arg2;
-		_ten_millis_next = (millis() + arg1) / 10;
-		_flag = true;
-		ATT_LED_ON;
-	}
-
-	return(_flag);
-}
-
-// -------------------------------------
-
 // task3 - RESET Raspberry Pi
 
 // task3(int32_t arg1, int arg2)
@@ -232,7 +147,7 @@ boolean task3(int32_t arg1, int arg2) {
 	static uint32_t _ten_millis_next = 0;
 	static int _cnt = 0;
 
-		if (arg2 < 0) {
+	if (arg2 < 0) {
 		_cnt = 0;
 		return(true);
 	}
@@ -241,18 +156,18 @@ boolean task3(int32_t arg1, int arg2) {
 		return(false);
 	}
 
-
 	if (!_flag) {
 		if (_cnt < arg2) {
 			_flag = true;
 			_cnt++;
-	  	_ten_millis_next = (millis() + arg1) / 10;
+			// ten_millis_next = (millis() + arg1) / 10;
+			_ten_millis_next = tenMillis() + (arg1 / 10);
 	  	ATT_RESET_ON;
 		}
 
 	} else {
 		// flag is true;
-		if (_ten_millis_next <= ten_millis_curr) {
+		if (_ten_millis_next <= Global_ten_millis_curr) {
 			ATT_RESET_OFF;
 			_flag = false;
 		}

@@ -23,7 +23,7 @@ const int PIN_0 = 6;  // Pulse (In)
 const int PIN_1 = 4;  // LED (Out)
 const int PIN_2 = 7;  // WDT Type (In)
 const int PIN_3 = 8;  // RPi Reset (Out)
-const int PIN_4 = 9;  // Notification (Out)
+const int PIN_4 = 12;  // Notification (Out)
 // const int PIN_5 = 5;
 #else // _USE_UNO_
 const int PIN_0 = 0;
