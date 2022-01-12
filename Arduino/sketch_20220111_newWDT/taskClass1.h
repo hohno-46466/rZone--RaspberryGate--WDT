@@ -1,9 +1,10 @@
-#ifndef _TASK_CLASS1_H_
-#define _TASK_CLASS1_H_
+#ifndef __TASK_CLASS_1_H__
+#define __TASK_CLASS_1_H__
 
 //
 // taskClass1.h
 //
+
 // ---------------------------------------------------------
 
 // History:
@@ -31,4 +32,4 @@ class taskClass1 {
 
 // ---------------------------------------------------------
 
-#endif // _TASK_CLASS1_H_
+#endif // __TASK_CLASS_1_H__

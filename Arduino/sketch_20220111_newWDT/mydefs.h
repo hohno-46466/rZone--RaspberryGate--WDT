@@ -18,29 +18,53 @@
 
 // ---------------------------------------------------------
 
-#ifdef _USE_UNO_
-const int PIN_0 = 6;  // Pulse (In)
-const int PIN_1 = 4;  // LED (Out)
-const int PIN_2 = 7;  // WDT Type (In)
-const int PIN_3 = 8;  // RPi Reset (Out)
-const int PIN_4 = 12;  // Notification (Out)
-// const int PIN_5 = 5;
-#else // _USE_UNO_
-const int PIN_0 = 0;
-const int PIN_1 = 1;
-const int PIN_2 = 2;
-const int PIN_3 = 3;
-const int PIN_4 = 4;
-// const int PIN_5 = 5;
-#endif // _USE_UNO_
+#if 0
+// #ifdef _USE_UNO_
+// const int PIN_0 = 6;  // Pulse (In)
+// const int PIN_1 = 4;  // LED (Out)
+// const int PIN_2 = 7;  // WDT Type (In)
+// const int PIN_3 = 8;  // RPi Reset (Out)
+// const int PIN_4 = 12;  // Notification (Out)
+// // const int PIN_5 = 5;
+// #else // _USE_UNO_
+// const int PIN_0 = 0;
+// const int PIN_1 = 1;
+// const int PIN_2 = 2;
+// const int PIN_3 = 3;
+// const int PIN_4 = 4;
+// // const int PIN_5 = 5;
+// #endif // _USE_UNO_
+#endif // 0
 
 // ---------------------------------------------------------
 
-#define PIN_I_PULSE   (PIN_0)
-#define PIN_O_LED     (PIN_1)
-#define PIN_I_REQ     (PIN_2)
-#define PIN_O_RESET   (PIN_3)
-#define PIN_O_NOTE    (PIN_4)
+#if 0
+//
+// #define PIN_I_PULSE   (PIN_0)
+// #define PIN_O_LED     (PIN_1)
+// #define PIN_I_REQ     (PIN_2)
+// #define PIN_O_RESET   (PIN_3)
+// #define PIN_O_NOTE    (PIN_4)
+//
+#else // 0
+#ifdef _USE_UNO_
+#define PIN_I_PULSE   (6)
+#define PIN_O_LED     (4)
+#define PIN_I_REQ     (7)
+#define PIN_O_RESET   (8)
+#define PIN_O_NOTE    (12)
+//
+#else // _USE_UNO_
+#define PIN_I_PULSE   (0)
+#define PIN_O_LED     (1)
+#define PIN_I_REQ     (2)
+#define PIN_O_RESET   (3)
+#define PIN_O_NOTE    (4)
+#endif // _USE_UNO_
+//
+#endif // 0
+
+// ---------------------------------------------------------
 
 #ifdef _USE_UNO_
 #define ATT_GET_PULSE (digitalRead(PIN_I_PULSE) == HIGH)

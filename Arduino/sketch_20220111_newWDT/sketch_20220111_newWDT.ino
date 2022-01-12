@@ -34,11 +34,19 @@ P5 - - - (By default, this pin is assigned as reset for ATtiny85 (can't be used 
 // Includes and Definitions
 
 #include "./mydefs.h"
+#include "./taskClass0.h"
 #include "./taskClass1.h"
+#include "./taskClass2.h"
+#include "./taskClass3.h"
+#include "./taskClass4.h"
 
 // ---------------------------------------------------------
 
+taskClass0 task0(PIN_I_PULSE);
 taskClass1 task1(PIN_O_LED);
+taskClass2 task2(PIN_I_REQ);
+taskClass3 task3(PIN_O_RESET);
+//taskClass4 task4(PIN_O_NOTE);
 taskClass1 taskX(PIN_O_NOTE);
 
 // ---------------------------------------------------------
@@ -57,8 +65,8 @@ void setup() {
   ATT_RESET_OFF;  // No notification information
 
 #ifdef _USE_UNO_
-	Serial.begin(57600);
-	Serial.println("# Hello!"); Serial.println();
+  Serial.begin(57600);
+  Serial.println("# Hello!"); Serial.println();
 #endif // _USE_UNO_
 
 }
@@ -97,22 +105,22 @@ void loop() {
   static int pulseStat = 0;
 
   // Global_ten_millis_curr = millis() / 10;
-	Global_ten_millis_curr = tenMillis();
+  Global_ten_millis_curr = tenMillis();
 
   if ((Global_ten_millis_curr - debug_ten_millis_lastcnt) >= 100) {
     // debug_cnt increments every second
     // debug_ten_millis_lastcnt holds the time when debug_cnt was updated.
     debug_cnt++;
-		if (debug_cnt >= 30) { debug_cnt = 0; }
+    if (debug_cnt >= 30) { debug_cnt = 0; }
     debug_ten_millis_lastcnt = Global_ten_millis_curr;
-	}
+  }
 
-	pulseStat = task0_wrapper();
+  pulseStat = task0_wrapper();
 
 #ifdef _USE_UNO_
-		if (pulseStat >= 0) {
-			Serial.print(">>> pulsStat = "); Serial.println(pulseStat);
-		}
+    if (pulseStat >= 0) {
+      Serial.print(">>> pulsStat = "); Serial.println(pulseStat);
+    }
 #endif // _USE_UNO_
 
   task1_wrapper();
@@ -121,9 +129,9 @@ void loop() {
 
   task3_wrapper();
 
-	task4_wrapper();
+  task4_wrapper();
 
-	taskX_wrapper();
+  taskX_wrapper();
 
 }
 
@@ -136,23 +144,24 @@ void taskX_wrapper() {
 
   // example task: LED blinking
 
-	// taskX.set(500,500); taskX.blink();
+  // taskX.set(500,500); taskX.blink();
 
-  if (debug_cnt < 6) {
-		taskX.set(50,950); taskX.blink();
+  if (debug_cnt == 0) {
+    taskX.set(50,950);
 
-  } else if (debug_cnt < 12) {
-		taskX.set(250,750); taskX.blink();
+  } else if (debug_cnt == 6) {
+    taskX.set(250,750);
 
-  } else if (debug_cnt < 18) {
-		taskX.set(500,500); taskX.blink();
+  } else if (debug_cnt == 12) {
+    taskX.set(500,500);
 
-  } else if (debug_cnt < 24) {
-		taskX.set(750,250); taskX.blink();
+  } else if (debug_cnt == 18) {
+    taskX.set(750,250);
 
-  } else {
-		taskX.set(950,50); taskX.blink();
+  } else if (debug_cnt == 24) {
+    taskX.set(950,50);
   }
+  taskX.blink();
 }
 
 
@@ -163,19 +172,19 @@ void task1_wrapper() {
   // example task: LED blinking
 
   if (debug_cnt < 5) {
-		task1.set(500,500); task1.blink();
+    task1.set(500,500); task1.blink();
 
   } else if (debug_cnt < 10) {
-		task1.set(250,250); task1.blink();
+    task1.set(250,250); task1.blink();
 
   } else if (debug_cnt < 15) {
-		task1.set(100,100); task1.blink();
+    task1.set(100,100); task1.blink();
 
   } else if (debug_cnt < 20) {
-		task1.set(50,50); task1.blink();
+    task1.set(50,50); task1.blink();
 
   } else {
-		task1.set(20,20); task1.blink();
+    task1.set(20,20); task1.blink();
   }
 }
 
@@ -186,7 +195,7 @@ void task3_wrapper() {
   boolean flag_reboot = false;
 
   if (flag_reboot) {
-    task3(1000, 1);
+    task3tmp(1000, 1);
   }
 }
 
@@ -194,50 +203,50 @@ void task3_wrapper() {
 
 int task0_wrapper() {
 
-	static int _pulsesPer30Sec = 0, _pulsesPer30Sec_prev = -1;
+  static int _pulsesPer30Sec = 0, _pulsesPer30Sec_prev = -1;
   static boolean _pulsesPer30SecStat = false;
   int _retval = -1;
-	const int _WDT_START_LEVEL = 8;
-	const int _WDT_RESET_LEVEL = 3;
+  const int _WDT_START_LEVEL = 8;
+  const int _WDT_RESET_LEVEL = 3;
 
 
-	_pulsesPer30Sec = task0();
+  _pulsesPer30Sec = task0tmp();
 
-	if ((_pulsesPer30SecStat == false) && (_pulsesPer30Sec > _WDT_START_LEVEL)) {
-			_pulsesPer30SecStat = true;
-			_retval = 0;
-
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 1)
-			Serial.print("# *** newWDT started. ***  "); Serial.println(_pulsesPer30Sec);
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
-
-	} else if ((_pulsesPer30SecStat == true) && (_pulsesPer30Sec < _WDT_RESET_LEVEL)) {
-			_pulsesPer30SecStat = false;
-			_retval = 1;
+  if ((_pulsesPer30SecStat == false) && (_pulsesPer30Sec > _WDT_START_LEVEL)) {
+      _pulsesPer30SecStat = true;
+      _retval = 0;
 
 #ifdef _USE_UNO_
 #if (_DEBUG_LEVEL >= 1)
-			Serial.print("# *** RESET required. ***  "); Serial.println(_pulsesPer30Sec);
+      Serial.print("# *** newWDT started. ***  "); Serial.println(_pulsesPer30Sec);
 #endif // (_DEBUG_LEVEL >= 1)
 #endif // _USE_UNO_
-	}
 
-		if (_pulsesPer30Sec >= 0) {
-			if (_pulsesPer30Sec != _pulsesPer30Sec_prev) {
+  } else if ((_pulsesPer30SecStat == true) && (_pulsesPer30Sec < _WDT_RESET_LEVEL)) {
+      _pulsesPer30SecStat = false;
+      _retval = 1;
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 1)
+      Serial.print("# *** RESET required. ***  "); Serial.println(_pulsesPer30Sec);
+#endif // (_DEBUG_LEVEL >= 1)
+#endif // _USE_UNO_
+  }
+
+    if (_pulsesPer30Sec >= 0) {
+      if (_pulsesPer30Sec != _pulsesPer30Sec_prev) {
 
 #ifdef _USE_UNO_
 #if (_DEBUG_LEVEL >= 2)
-				Serial.print("# _pulsesPer30Sec = "); Serial.println(_pulsesPer30Sec);
+        Serial.print("# _pulsesPer30Sec = "); Serial.println(_pulsesPer30Sec);
 #endif // (_DEBUG_LEVEL >= 2)
 #endif // _USE_UNO_
 
-				_pulsesPer30Sec_prev = _pulsesPer30Sec;
-			}
-		}
+        _pulsesPer30Sec_prev = _pulsesPer30Sec;
+      }
+    }
 
-		return(_retval);
+    return(_retval);
 }
 
 
@@ -261,18 +270,18 @@ void task4_wrapper() {
 
 uint32_t tenMillis() {
   static int cntOVF = 0;
-	static uint32_t Tnow = 0;
-	static uint32_t millisPrev = 0, millisNow = 0;
+  static uint32_t Tnow = 0;
+  static uint32_t millisPrev = 0, millisNow = 0;
 
-	millisNow = millis();
+  millisNow = millis();
 
-	if (millisNow < millisPrev) {
-		cntOVF++;
-	}
-	Tnow = (millisNow / 10UL) + (cntOVF % 10) * 429496729UL;
-	millisPrev = millisNow;
+  if (millisNow < millisPrev) {
+    cntOVF++;
+  }
+  Tnow = (millisNow / 10UL) + (cntOVF % 10) * 429496729UL;
+  millisPrev = millisNow;
 
-	return(Tnow);
+  return(Tnow);
 }
 
 // ---------------------------------------------------------

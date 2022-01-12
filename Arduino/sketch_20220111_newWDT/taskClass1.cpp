@@ -1,6 +1,7 @@
 //
 // taskClass1.cpp
 //
+
 // ---------------------------------------------------------
 
 // History:
@@ -77,7 +78,7 @@ boolean taskClass1::blink() {
 		// _ten_millis_next = (millis() + _arg1) / 10;
     _ten_millis_next = tenMillis() + (_arg1 / 10);
     _flag = true;
-    ATT_LED_ON;
+    _LED_ON;
   }
 
   return(_flag);
