@@ -74,17 +74,27 @@ void setup() {
 // ---------------------------------------------------------
 
 /*
-Caveat:
-The value of the internal clock is in increments of 10m seconds.
-This means that the internal clock overflows approximately every 497 days.
-Since there is no overflow protection, this sketch needs to be restarted within 497 days after startup.
-Note: ((2**32)/100)/3600/24 = ~497.1
+ Caveat:
+  The value of the internal clock is in increments of 10m seconds.
+  This means that the internal clock overflows approximately every 497 days.
+  Since there is no overflow protection, this sketch needs to be restarted within 497 days after startup.
+
+ Note: ((2**32)/100)/3600/24 = ~497.1
 */
 
-// internal time counter
+// ---------------------------------------------------------
+
+// Time Counter (unit: 10msec)
+
 // uint32_t ten_millis_prev = 0; // previous time (in 10msec)
 uint32_t Global_ten_millis_curr = 0; // current time (in 10msec)
 // uint32_t ten_millis_task_timeout[4] = { 0, 0, 0, 0 };
+
+// ---------------------------------------------------------
+
+int debug_cnt = 0;
+uint32_t debug_ten_millis_lastcnt = 0;
+
 
 // ---------------------------------------------------------
 
@@ -93,12 +103,6 @@ uint32_t Global_ten_millis_curr = 0; // current time (in 10msec)
 // WARNING:
 // We can NEVER use delay() function in the loop() and task...() functions.
 // Instead of using delay(), we have to create and use the task function like task1()
-
-// -------------------------------------
-
-int debug_cnt = 0;
-uint32_t debug_ten_millis_lastcnt = 0;
-
 
 void loop() {
 
@@ -115,21 +119,50 @@ void loop() {
     debug_ten_millis_lastcnt = Global_ten_millis_curr;
   }
 
+// -------------------------------------
+
+	// task0 - Check the pulse from Raspberry Pi
+
   pulseStat = task0_wrapper();
 
+	// Return value:
+	//   0 - watchdog timer is running.
+	//   1 - reset required
+	//  -1 - other condition
+
 #ifdef _USE_UNO_
-    if (pulseStat >= 0) {
-      Serial.print(">>> pulsStat = "); Serial.println(pulseStat);
-    }
+	if (pulseStat >= 0) {
+		Serial.print(">>> pulsStat = "); Serial.println(pulseStat);
+	}
 #endif // _USE_UNO_
 
-  task1_wrapper();
+// -------------------------------------
+
+	// task0 - Blink LED
+
+	task1_wrapper();
+
+// -------------------------------------
+
+	// task2 - Request from Raspberry Pi for the watchdog type
 
   task2_wrapper();
 
+// -------------------------------------
+
+	// task3 - Generate reset pulse (for both of the gentle and the delayed watchdog)
+
   task3_wrapper();
 
+// -------------------------------------
+
+	// task4 - Generate notification signal for Raspberry Pi
+
   task4_wrapper();
+
+// -------------------------------------
+
+	// taskX - Blink LED using the notification pin
 
   taskX_wrapper();
 
