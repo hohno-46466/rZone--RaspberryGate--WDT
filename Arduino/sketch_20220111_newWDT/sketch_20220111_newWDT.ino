@@ -75,11 +75,12 @@ void setup() {
 
 /*
  Caveat:
-  The value of the internal clock is in increments of 10m seconds.
-  This means that the internal clock overflows approximately every 497 days.
-  Since there is no overflow protection, this sketch needs to be restarted within 497 days after startup.
+  The value of the internal clock is incremented every 8 milliseconds.
+  This means that the internal clock will overflow approximately every 397 days.
+  Since there is no overflow protection, this sketch must be rebooted within 397 days after startup.
 
- Note: ((2**32)/100)/3600/24 = ~497.1
+ Note: ((2**32)*8)/(1000*3600*24) = ~397.68
+
 */
 
 // ---------------------------------------------------------
