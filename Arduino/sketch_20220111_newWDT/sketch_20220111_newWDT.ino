@@ -86,13 +86,13 @@ void setup() {
 
 // Time Counter (unit: 10msec)
 
-uint32_t GLOBAL_ten_millis_curr = 0; // current time (in 10msec)
-// uint32_t GLOBAL_ten_millis_task_timeout[4] = { 0, 0, 0, 0 };
+uint32_t GLOBAL_8millis_curr = 0; // current time (in 10msec)
+// uint32_t GLOBAL_8millis_task_timeout[4] = { 0, 0, 0, 0 };
 
 // ---------------------------------------------------------
 
 int debug_cnt = 0;
-uint32_t debug_ten_millis_lastcnt = 0;
+uint32_t debug_8millis_lastcnt = 0;
 
 
 // ---------------------------------------------------------
@@ -107,15 +107,15 @@ void loop() {
 
   static int pulseStat = 0;
 
-  // GLOBAL_ten_millis_curr = millis() / 10;
-  GLOBAL_ten_millis_curr = tenMillis();
+  // GLOBAL_8millis_curr = millis() / 10;
+  GLOBAL_8millis_curr = tenMillis();
 
-  if ((GLOBAL_ten_millis_curr - debug_ten_millis_lastcnt) >= 100) {
+  if ((GLOBAL_8millis_curr - debug_8millis_lastcnt) >= 100) {
     // debug_cnt increments every second
-    // debug_ten_millis_lastcnt holds the time when debug_cnt was updated.
+    // debug_8millis_lastcnt holds the time when debug_cnt was updated.
     debug_cnt++;
     if (debug_cnt >= 30) { debug_cnt = 0; }
-    debug_ten_millis_lastcnt = GLOBAL_ten_millis_curr;
+    debug_8millis_lastcnt = GLOBAL_8millis_curr;
   }
 
 // -------------------------------------

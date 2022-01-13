@@ -17,7 +17,7 @@
 #include "taskClass3.h"
 #include "mydefs.h"
 
-extern uint32_t GLOBAL_ten_millis_curr;
+extern uint32_t GLOBAL_8millis_curr;
 extern uint32_t tenMillis();
 
 // ---------------------------------------------------------

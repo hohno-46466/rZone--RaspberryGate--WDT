@@ -147,7 +147,7 @@ int task0tmp() {
 boolean task3tmp(int32_t arg1, int arg2) {
   // mystatic int32_t _prev_arg1 = -1;
   static boolean _flag = false;
-  static uint32_t _ten_millis_next = 0;
+  static uint32_t _8millis_next = 0;
   static int _cnt = 0;
 
   if (arg2 < 0) {
@@ -163,14 +163,14 @@ boolean task3tmp(int32_t arg1, int arg2) {
     if (_cnt < arg2) {
       _flag = true;
       _cnt++;
-      // ten_millis_next = (millis() + arg1) / 10;
-      _ten_millis_next = tenMillis() + (arg1 / 10);
+      // _8_millis_next = (millis() + arg1) / 8;
+      _8millis_next = eightMillis() + (arg1 / 8);
       ATT_RESET_ON;
     }
 
   } else {
     // flag is true;
-    if (_ten_millis_next <= GLOBAL_ten_millis_curr) {
+    if (_8millis_next <= GLOBAL_8millis_curr) {
       ATT_RESET_OFF;
       _flag = false;
     }

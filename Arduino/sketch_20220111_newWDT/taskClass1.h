@@ -27,7 +27,7 @@ class taskClass1 {
 	int _prev_arg1 = 0;
 	int _prev_arg2 = 0;
 	boolean _flag = false;
-	uint32_t _ten_millis_next = 0;
+	uint32_t _8millis_next = 0;
 };
 
 // ---------------------------------------------------------

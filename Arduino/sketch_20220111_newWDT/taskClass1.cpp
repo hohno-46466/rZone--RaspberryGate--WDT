@@ -17,7 +17,7 @@
 #include "taskClass1.h"
 #include "mydefs.h"
 
-extern uint32_t GLOBAL_ten_millis_curr;
+extern uint32_t GLOBAL_8millis_curr;
 extern uint32_t tenMillis();
 
 // ---------------------------------------------------------
@@ -60,14 +60,14 @@ boolean taskClass1::blink() {
 	}
 	if ((_arg1 == _prev_arg1) && (_arg2 == _prev_arg2)) {
     // Both arg1 and arg2 are not updated
-    if (_ten_millis_next <= GLOBAL_ten_millis_curr) {
+    if (_8millis_next <= GLOBAL_8millis_curr) {
       if (_flag) {
         _flag = false;
-        _ten_millis_next += (_arg2/10);
+        _8millis_next += (_arg2/10);
         _LED_OFF;
       } else {
         _flag = true;
-        _ten_millis_next += (_arg1/10);;
+        _8millis_next += (_arg1/10);;
         _LED_ON;
       }
     }
@@ -75,8 +75,8 @@ boolean taskClass1::blink() {
     // one of _arg1 and _arg2 was updated
     _prev_arg1 = _arg1;
     _prev_arg2 = _arg2;
-		// _ten_millis_next = (millis() + _arg1) / 10;
-    _ten_millis_next = tenMillis() + (_arg1 / 10);
+		// _8millis_next = (millis() + _arg1) / 10;
+    _8millis_next = tenMillis() + (_arg1 / 10);
     _flag = true;
     _LED_ON;
   }
