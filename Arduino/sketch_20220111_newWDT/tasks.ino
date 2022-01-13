@@ -170,7 +170,7 @@ boolean task3tmp(int32_t arg1, int arg2) {
 
   } else {
     // flag is true;
-    if (_ten_millis_next <= Global_ten_millis_curr) {
+    if (_ten_millis_next <= GLOBAL_ten_millis_curr) {
       ATT_RESET_OFF;
       _flag = false;
     }

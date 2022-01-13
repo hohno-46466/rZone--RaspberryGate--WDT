@@ -86,9 +86,8 @@ void setup() {
 
 // Time Counter (unit: 10msec)
 
-// uint32_t ten_millis_prev = 0; // previous time (in 10msec)
-uint32_t Global_ten_millis_curr = 0; // current time (in 10msec)
-// uint32_t ten_millis_task_timeout[4] = { 0, 0, 0, 0 };
+uint32_t GLOBAL_ten_millis_curr = 0; // current time (in 10msec)
+// uint32_t GLOBAL_ten_millis_task_timeout[4] = { 0, 0, 0, 0 };
 
 // ---------------------------------------------------------
 
@@ -108,15 +107,15 @@ void loop() {
 
   static int pulseStat = 0;
 
-  // Global_ten_millis_curr = millis() / 10;
-  Global_ten_millis_curr = tenMillis();
+  // GLOBAL_ten_millis_curr = millis() / 10;
+  GLOBAL_ten_millis_curr = tenMillis();
 
-  if ((Global_ten_millis_curr - debug_ten_millis_lastcnt) >= 100) {
+  if ((GLOBAL_ten_millis_curr - debug_ten_millis_lastcnt) >= 100) {
     // debug_cnt increments every second
     // debug_ten_millis_lastcnt holds the time when debug_cnt was updated.
     debug_cnt++;
     if (debug_cnt >= 30) { debug_cnt = 0; }
-    debug_ten_millis_lastcnt = Global_ten_millis_curr;
+    debug_ten_millis_lastcnt = GLOBAL_ten_millis_curr;
   }
 
 // -------------------------------------
@@ -312,6 +311,24 @@ uint32_t tenMillis() {
     cntOVF++;
   }
   Tnow = (millisNow / 10UL) + (cntOVF % 10) * 429496729UL;
+  millisPrev = millisNow;
+
+  return(Tnow);
+}
+
+// ---------------------------------------------------------
+
+uint32_t eightMillis() {
+  static int cntOVF = 0;
+  static uint32_t Tnow = 0;
+  static uint32_t millisPrev = 0, millisNow = 0;
+
+  millisNow = millis();
+
+  if (millisNow < millisPrev) {
+    cntOVF++;
+  }
+  Tnow = (millisNow / 8UL) + (cntOVF % 8) * 536870912UL;
   millisPrev = millisNow;
 
   return(Tnow);
