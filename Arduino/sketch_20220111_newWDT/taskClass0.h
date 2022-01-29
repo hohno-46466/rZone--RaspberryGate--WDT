@@ -12,11 +12,18 @@
 
 // ---------------------------------------------------------
 
+// task0 - Check the "heart beat" pulse from Raspberry Pi
+
+// ---------------------------------------------------------
+
 #include "Arduino.h"
 
 class taskClass0 {
  public:
 	taskClass0(int pin);
+	boolean init();
+	boolean init(int pin);
+	float core();
  private:
 	int _pin = -1;
 };

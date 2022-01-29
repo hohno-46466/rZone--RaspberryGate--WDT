@@ -9,7 +9,7 @@
 
 // ---------------------------------------------------------
 
-// taskClass2 --
+// task2 - Detect type-specified request from Raspberry Pi
 
 // ---------------------------------------------------------
 
@@ -17,8 +17,8 @@
 #include "taskClass2.h"
 #include "mydefs.h"
 
-extern uint32_t GLOBAL_8millis_curr;
-extern uint32_t tenMillis();
+extern uint32_t CurrentTime_8ms;
+extern uint32_t eightMillis();
 
 // ---------------------------------------------------------
 
@@ -27,9 +27,25 @@ extern uint32_t tenMillis();
 
 taskClass2::taskClass2(int pin) {
 	_pin = pin;
-	if (_pin > 0) {
-		pinMode(_pin, INPUT_PULLUP);
-	}
+}
+
+// ---------------------------------------------------------
+
+// taskClass2::init()
+// taskClass2::init(int pin)
+//   pin - pin No. to receive WDT pulse
+
+boolean taskClass2::init() {
+	if (_pin <= 1) { return(false); }
+	pinMode(_pin, INPUT_PULLUP);
+	return(true);
+}
+
+boolean taskClass2::init(int pin) {
+	_pin = pin;
+	if (_pin <= 1) { return(false); }
+	pinMode(_pin, INPUT_PULLUP);
+	return(true);
 }
 
 // ---------------------------------------------------------

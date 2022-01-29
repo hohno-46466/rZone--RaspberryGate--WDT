@@ -1,8 +1,8 @@
-#ifndef __TASK_CLASS_4_H__
-#define __TASK_CLASS_4_H__
+#ifndef __STATUS_H__
+#define __STATUS_H__
 
 //
-// taskClass4.h
+// status.h
 //
 
 // ---------------------------------------------------------
@@ -12,21 +12,22 @@
 
 // ---------------------------------------------------------
 
-// task4 - Generate notification signal for Raspberry Pi
-
-// ---------------------------------------------------------
-
 #include "Arduino.h"
 
-class taskClass4 {
+class status {
  public:
-	taskClass4(int pin);
-	boolean init();
-	boolean init(int pin);
+	status();
+	void init();
+	void task0set(int x);
+	int task0get();
+	void task3set(int x);
+	int task3get();
+	void show();
+	boolean should_be_reboot();
  private:
-	int _pin = -1;
+	int _verbose = -1;
 };
 
 // ---------------------------------------------------------
 
-#endif // __TASK_CLASS_4_H__
+#endif  // __STATUS_H__

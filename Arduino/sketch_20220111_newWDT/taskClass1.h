@@ -12,22 +12,20 @@
 
 // ---------------------------------------------------------
 
-#include "Arduino.h"
+// taskClass1 -- Blink LED to show the current status
 
-class taskClass1 {
+// ---------------------------------------------------------
+
+#include "Arduino.h"
+#include "classBlinkLED.h"
+
+class taskClass1 : public classBlinkLED {
  public:
-	taskClass1(int pin);
-	void set(int arg1, int arg2);
-	boolean blink();
-	void stop();
+	taskClass1(int pin); // : classBlinkLED(13){};
+	boolean init();
+	boolean init(int pin);
  private:
 	int _pin = -1;
-	int _arg1 = -1;
-	int _arg2 = -1;
-	int _prev_arg1 = 0;
-	int _prev_arg2 = 0;
-	boolean _flag = false;
-	uint32_t _8millis_next = 0;
 };
 
 // ---------------------------------------------------------

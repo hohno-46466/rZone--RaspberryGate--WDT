@@ -21,48 +21,88 @@
 // Pinouts:
 
 /*
-P0 - I ← Watchdog Pulse from RPito ATtiny85   - IO5  21
-P1 - O → Indicator (blink the onboard)        - N/A  N/A
-P2 - I ← Request for watchdog type            - IO6  22
-P3 - O → Hardware Reset                       - (RUN pin (via level shifter))
-P4 - O → Notification from ATtiny85 to RPi    - IO12 32  (via level shifter)
-P5 - - - (By default, this pin is assigned as reset for ATtiny85 (can't be used for GPIO)
+ P0 - I ← Watchdog Pulse from RPito ATtiny85   - IO5  21
+ P1 - O → Indicator (blink the onboard)        - N/A  N/A
+ P2 - I ← Request for watchdog type            - IO6  22
+ P3 - O → Hardware Reset                       - (RUN pin (via level shifter))
+ P4 - O → Notification from ATtiny85 to RPi    - IO12 32  (via level shifter)
+ P5 - - - (By default, this pin is assigned to RESET on the ATtiny85 (It cannot be used for GPIO)
 */
 
 // ---------------------------------------------------------
 
 // Includes and Definitions
 
-#include "./mydefs.h"
+#include "./mydefs.h"			// Read mydefs.h before you read this sketch
+
 #include "./taskClass0.h"
 #include "./taskClass1.h"
 #include "./taskClass2.h"
 #include "./taskClass3.h"
 #include "./taskClass4.h"
 
+#include "classButtonSW.h"
+#include "classBlinkLED.h"
+
 // ---------------------------------------------------------
 
+// constructors
+
+// Button Switches
+classButtonSW task0input();
+classButtonSW task3input();
+
+// task0 - Check the "heart beat" pulse from Raspberry Pi
 taskClass0 task0(PIN_I_PULSE);
+
+// task1 - Blink LED to show the current status
 taskClass1 task1(PIN_O_LED);
+
+// task2 - Detect type-specified request from Raspberry Pi
 taskClass2 task2(PIN_I_REQ);
+
+// task3 - Generate RESET pulse (for both of the gentle and the delayed watchdog)
 taskClass3 task3(PIN_O_RESET);
-//taskClass4 task4(PIN_O_NOTE);
+
+#ifdef _USE_TASKX_INSTEAD_OF_TASK4_
+// taskX - Blink LED using the notification pin (for debugging)
 taskClass1 taskX(PIN_O_NOTE);
+#else // _USE_TASKX_INSTEAD_OF_TASK4_
+// task4 - Generate notification signal for Raspberry Pi
+taskClass4 task4(PIN_O_NOTE);
+#endif // _USE_TASKX_INSTEAD_OF_TASK4_
+
+int task0stat = -1;
+int task1stat = -1;
+int task2stat = -1;
+int task3stat = -1;
+
+#ifdef _USE_TASKX_INSTEAD_OF_TASK4_
+int taskXstat = -1;
+#else // _USE_TASKX_INSTEAD_OF_TASK4_
+int task4stat = -1;
+#endif // _USE_TASKX_INSTEAD_OF_TASK4_
 
 // ---------------------------------------------------------
 
 // setup()
 
 void setup() {
-  pinMode(PIN_I_PULSE,INPUT_PULLUP);
-  pinMode(PIN_O_LED,  OUTPUT);
-  pinMode(PIN_I_REQ  ,INPUT_PULLUP);
-  pinMode(PIN_O_RESET,OUTPUT);
-  pinMode(PIN_O_NOTE ,OUTPUT);
 
-  ATT_LED_OFF;    // LED is OFF
-  ATT_NOTE_OFF;   // Reset pin on Raspberry Pi is not activated (Negative logic)
-  ATT_RESET_OFF;  // No notification information
+  task0.init(PIN_I_PULSE);  // pinMode(PIN_I_PULSE,INPUT_PULLUP);
+  task1.init(PIN_O_LED);    // pinMode(PIN_O_LED,  OUTPUT);
+  task2.init(PIN_I_REQ );   // pinMode(PIN_I_REQ  ,INPUT_PULLUP);
+  task3.init(PIN_O_RESET);  // pinMode(PIN_O_RESET,OUTPUT);
+
+#ifdef _USE_TASKX_INSTEAD_OF_TASK4_
+  taskX.init(PIN_O_NOTE);   // pinMode(PIN_O_NOTE ,OUTPUT);
+#else // _USE_TASKX_INSTEAD_OF_TASK4_
+  task4.init(PIN_O_NOTE);
+#endif // _USE_TASKX_INSTEAD_OF_TASK4_
+
+  AVR_LED_OFF;    // LED is OFF
+  AVR_NOTE_OFF;   // Reset pin on Raspberry Pi is not activated (Negative logic)
+  AVR_RESET_OFF;  // No notification information
 
 #ifdef _USE_UNO_
   Serial.begin(57600);
@@ -75,7 +115,7 @@ void setup() {
 
 /*
  Caveat:
-  The value of the internal clock is incremented every 8 milliseconds.
+  The value of the internal clock is incremented every 8 milli seconds.
   This means that the internal clock will overflow approximately every 397 days.
   Since there is no overflow protection, this sketch must be rebooted within 397 days after startup.
 
@@ -85,16 +125,16 @@ void setup() {
 
 // ---------------------------------------------------------
 
-// Time Counter (unit: 10msec)
+// Time Counter (unit: 8msec)
 
-uint32_t GLOBAL_8millis_curr = 0; // current time (in 10msec)
-// uint32_t GLOBAL_8millis_task_timeout[4] = { 0, 0, 0, 0 };
+uint32_t CurrentTime_8ms = 0; // current time (in 8msec)
 
 // ---------------------------------------------------------
 
-int debug_cnt = 0;
-uint32_t debug_8millis_lastcnt = 0;
+// For debugging
 
+int debug_cnt = 0;
+uint32_t debug_LastCnt = 0;
 
 // ---------------------------------------------------------
 
@@ -104,76 +144,134 @@ uint32_t debug_8millis_lastcnt = 0;
 // We can NEVER use delay() function in the loop() and task...() functions.
 // Instead of using delay(), we have to create and use the task function like task1()
 
+uint32_t eightMillis();
+
 void loop() {
 
-  static int pulseStat = 0;
+  CurrentTime_8ms = eightMillis();
 
-  // GLOBAL_8millis_curr = millis() / 10;
-  GLOBAL_8millis_curr = tenMillis();
-
-  if ((GLOBAL_8millis_curr - debug_8millis_lastcnt) >= 100) {
+  if ((CurrentTime_8ms - debug_LastCnt) >= 125 /* 125 == 1000/8 */) {
     // debug_cnt increments every second
-    // debug_8millis_lastcnt holds the time when debug_cnt was updated.
+    // debug_LastCnt holds the time when debug_cnt was updated.
     debug_cnt++;
-    if (debug_cnt >= 30) { debug_cnt = 0; }
-    debug_8millis_lastcnt = GLOBAL_8millis_curr;
+    if (debug_cnt >= 30) {
+      debug_cnt = 0;
+
+#ifdef _USE_UNO_
+      Serial.print(">>> CurrentTime_8ms = "); Serial.println(CurrentTime_8ms);
+#endif // _USE_UNO_
+    }
+    debug_LastCnt = CurrentTime_8ms;
   }
 
 // -------------------------------------
 
-	// task0 - Check the pulse from Raspberry Pi
+  // task0 - Check the "heart beat" pulse from Raspberry Pi
 
-  pulseStat = task0_wrapper();
+  task0stat = task0_wrapper();
 
-	// Return value:
-	//   0 - watchdog timer is running.
-	//   1 - reset required
-	//  -1 - other condition
+  // task0_wrapper() returns:
+  //   0 - watchdog timer is running.
+  //   1 - reset required (normal mode)
+  //   2 - reset required (extended mode)
+  //  -1 - other condition
 
 #ifdef _USE_UNO_
-	if (pulseStat >= 0) {
-		Serial.print(">>> pulsStat = "); Serial.println(pulseStat);
-	}
+  if (task0stat > 0) {
+    // Serial.print(">>> task0_wrapper() returned "); Serial.println(task0stat);
+  }
 #endif // _USE_UNO_
 
 // -------------------------------------
 
-	// task0 - Blink LED
+  // task1 - Blink LED to show the current status
 
-	task1_wrapper();
+  task1stat = task1_wrapper();
 
-// -------------------------------------
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 1)
+	if (task1stat >= 1) {
+      Serial.print("# *** RESET reqired. *** retval = "); Serial.println(task1stat);
+	}
+#endif // (_DEBUG_LEVEL >= 1)
+#endif // _USE_UNO_
 
-	// task2 - Request from Raspberry Pi for the watchdog type
-
-  task2_wrapper();
-
-// -------------------------------------
-
-	// task3 - Generate reset pulse (for both of the gentle and the delayed watchdog)
-
-  task3_wrapper();
-
-// -------------------------------------
-
-	// task4 - Generate notification signal for Raspberry Pi
-
-  task4_wrapper();
+  // Since current task1_wrapper() just blinks a LED,
+  // task0_wrapper() always returns zero.
 
 // -------------------------------------
 
-	// taskX - Blink LED using the notification pin
+  // task2 - Detect type-specified request from Raspberry Pi
 
-  taskX_wrapper();
+  task2stat = task2_wrapper();
+
+  // task2_wrapper() returns:
+  //   0 - delayed mode
+  //   1 - gentle mode
+  //  -1 - other condition
+
+// -------------------------------------
+
+  // task3 - Generate RESET pulse (for both of the gentle and the delayed watchdog)
+
+    task3stat = task3_wrapper();
+
+  // task3_wrapper() returns:
+  //   0 - RESET pulse is NOT generated
+  //   1 - RESET is ongoing
+  //  -1 - other condition
+
+// -------------------------------------
+
+#ifdef _USE_TASKX_INSTEAD_OF_TASK4_
+
+  // taskX - Blink LED using the notification pin (for debugging)
+
+  // Since current version of taskX_wrapper() just blinks a LED,
+  // taskX_wrapper() always returns zero.
+
+  taskXstat = taskX_wrapper();
+
+#else // _USE_TASKX_INSTEAD_OF_TASK4_
+
+  // task4 - Generate notification signal for Raspberry Pi
+
+  task4stat = task4_wrapper();
+
+// task4_wrapper() returns:
+//   0 - notification is NOT activated
+//   1 - notification is activated
+//  -1 - other condition
+
+#endif // _USE_TASKX_INSTEAD_OF_TASK4_
+
+// -------------------------------------
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL == 0)
+	Serial.print("# "); Serial.print(task0stat);
+	Serial.print("  "); Serial.print(task1stat);
+	Serial.print("  "); Serial.print(task2stat);
+	Serial.print("  "); Serial.print(task3stat);
+#ifdef _USE_TASKX_INSTEAD_OF_TASK4_
+	Serial.print("  "); Serial.print(taskXstat);
+#else
+	Serial.print("  "); Serial.print(task4stat);
+#endif
+	Serial.println();
+	delay(50);
+#endif // (_DEBUG_LEVEL >= 0)
+#endif // _USE_UNO_
 
 }
-
 
 // ---------------------------------------------------------
 // wrapper functions
 // ---------------------------------------------------------
 
-void taskX_wrapper() {
+#ifdef _USE_TASKX_INSTEAD_OF_TASK4_
+
+int taskX_wrapper() {
 
   // example task: LED blinking
 
@@ -195,14 +293,74 @@ void taskX_wrapper() {
     taskX.set(950,50);
   }
   taskX.blink();
+
+  return(0);
 }
 
+#endif // _USE_TASKX_INSTEAD_OF_TASK4_
 
 // -------------------------------------
 
-void task1_wrapper() {
+// task0_wrapper() returns:
+//   0 - watchdog timer is running.
+//   1 - reset required (normal mode)
+//   2 - reset required (extended mode)
+//  -1 - other condition
+
+int task0_wrapper() {
+
+  static int _pulsesPerNsec = 0, _pulsesPerNsec_prev = -1;
+  static boolean _pulsesPerNsecStat = false;
+  static int _retval = -1;
+  const int _WDT_START_LEVEL = 8;
+  const int _WDT_RESET_LEVEL = 3;
+  // const int _Nsec = PulseCounterSize;
+
+  // _pulsesPerNsec = task0core() * _Nsec; // task0core() returns avaraged number of pulses per second in float style
+  _pulsesPerNsec = task0.core();
+
+  if ((_pulsesPerNsecStat == false) && (_pulsesPerNsec > _WDT_START_LEVEL)) {
+      _pulsesPerNsecStat = true;
+      _retval = 0;
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 1)
+      Serial.print("# *** newWDT started. ***  "); Serial.println(_pulsesPerNsec);
+#endif // (_DEBUG_LEVEL >= 1)
+#endif // _USE_UNO_
+
+  } else if ((_pulsesPerNsecStat == true) && (_pulsesPerNsec < _WDT_RESET_LEVEL)) {
+      _pulsesPerNsecStat = false;
+      if (_pulsesPerNsec > (PulseCounterSize + 10)) {
+        _retval = 2;
+      } else {
+        _retval = 1;
+      }
+  }
+
+    if (_pulsesPerNsec >= 0) {
+      if (_pulsesPerNsec != _pulsesPerNsec_prev) {
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 2)
+        // Serial.print("# _pulsesPerNsec = "); Serial.println(_pulsesPerNsec);
+#endif // (_DEBUG_LEVEL >= 2)
+#endif // _USE_UNO_
+
+        _pulsesPerNsec_prev = _pulsesPerNsec;
+      }
+    }
+
+    return(_retval);
+}
+
+// -------------------------------------
+
+int task1_wrapper() {
 
   // example task: LED blinking
+
+  // task1_wrapper() always returns zero
 
   if (debug_cnt < 5) {
     task1.set(500,500); task1.blink();
@@ -219,120 +377,144 @@ void task1_wrapper() {
   } else {
     task1.set(20,20); task1.blink();
   }
+
+  return(0);
 }
 
 // -------------------------------------
 
-void task3_wrapper() {
+// task2_wrapper() returns:
+//   0 - delayed mode
+//   1 - gentle mode
+//  -1 - other condition
 
-  boolean flag_reboot = false;
+int task2_wrapper() {
 
-  if (flag_reboot) {
-    task3tmp(1000, 1);
-  }
-}
-
-// -------------------------------------
-
-int task0_wrapper() {
-
-  static int _pulsesPer30Sec = 0, _pulsesPer30Sec_prev = -1;
-  static boolean _pulsesPer30SecStat = false;
   int _retval = -1;
-  const int _WDT_START_LEVEL = 8;
-  const int _WDT_RESET_LEVEL = 3;
+
+  // int _retval = task2core();
+
+  return(_retval);
+}
 
 
-  _pulsesPer30Sec = task0tmp();
+// -------------------------------------
 
-  if ((_pulsesPer30SecStat == false) && (_pulsesPer30Sec > _WDT_START_LEVEL)) {
-      _pulsesPer30SecStat = true;
-      _retval = 0;
+// task3_wrapper() returns:
+//   0 - RESET pulse is NOT generated
+//   1 - RESET is ongoing
+//  -1 - other condition
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 1)
-      Serial.print("# *** newWDT started. ***  "); Serial.println(_pulsesPer30Sec);
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
+int task3_wrapper() {
 
-  } else if ((_pulsesPer30SecStat == true) && (_pulsesPer30Sec < _WDT_RESET_LEVEL)) {
-      _pulsesPer30SecStat = false;
-      _retval = 1;
-
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 1)
-      Serial.print("# *** RESET required. ***  "); Serial.println(_pulsesPer30Sec);
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
-  }
-
-    if (_pulsesPer30Sec >= 0) {
-      if (_pulsesPer30Sec != _pulsesPer30Sec_prev) {
+  static int _reset = 0;
 
 #ifdef _USE_UNO_
 #if (_DEBUG_LEVEL >= 2)
-        Serial.print("# _pulsesPer30Sec = "); Serial.println(_pulsesPer30Sec);
-#endif // (_DEBUG_LEVEL >= 2)
+  //    Serial.print("#*** CurrentTime_8ms = "); Serial.print(CurrentTime_8ms);
+  //    Serial.print("  task0stat = "); Serial.println(task0stat);
+#endif // (_DEBUG_LEVEL >= 1)
 #endif // _USE_UNO_
 
-        _pulsesPer30Sec_prev = _pulsesPer30Sec;
-      }
-    }
 
-    return(_retval);
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 1)
+	if (task1stat >= 1) {
+		Serial.print("# *** RESET reqired. *** HEARTBEAT_LOST = "); Serial.println(HEARTBEAT_LOST);
+	}
+#endif // (_DEBUG_LEVEL >= 1)
+#endif // _USE_UNO_
+
+
+  if (HEARTBEAT_LOST && (_reset == 0)) {
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 2)
+    Serial.print("# task3_wrapper()  "); Serial.println(task0stat);
+#endif // (_DEBUG_LEVEL >= 1)
+#endif // _USE_UNO_
+
+    uint32_t _gTime1 = EXTENDED_MODE ? (60*1000L) : 1000L;
+    uint32_t _gTime2 = 1000L;
+    _reset = task3.core(1000, _gTime1, _gTime2, 1); // Gemerate a RESET pulse only once for 1second
+    // arg1 - duration of the RESET pulse
+    // arg2 - guard time before the first RESET pulse (in msec)
+    // arg3 - guard time after for each RESET pulse (in msec)
+    // arg4 - number of RESET pulses
+
+    // retval = _reset ? 1 : 0;
+
+#ifdef _USE_UNO_
+#if (_DEBUG_LEVEL >= 2)
+    Serial.print("# task3.core() returned "); Serial.println(_reset);
+#endif // (_DEBUG_LEVEL >= 1)
+#endif // _USE_UNO_
+
+  }
+
+  return(_reset);
 }
-
 
 // -------------------------------------
 
-void task2_wrapper() {
+#ifndef _USE_TASKX_INSTEAD_OF_TASK4_
+
+// task4_wrapper() returns:
+//   0 - notification is NOT activated
+//   1 - notification is activated
+//  -1 - other condition
+
+int task4_wrapper() {
+
+  int _retval = -1;
+
+  // int _retval = task4core();
+
+  return(_retval);
 
 }
 
-
-// -------------------------------------
-
-void task4_wrapper() {
-
-}
-
+#endif // _USE_TASKX_INSTEAD_OF_TASK4_
 
 // ---------------------------------------------------------
 // sub functions
 // ---------------------------------------------------------
 
 uint32_t tenMillis() {
-  static int cntOVF = 0;
-  static uint32_t Tnow = 0;
-  static uint32_t millisPrev = 0, millisNow = 0;
+  static int _cntOVF = 0;
+  static uint32_t _now_8ms = 0;
+  static uint32_t _prev_1ms = 0, _now_1ms = 0;
 
-  millisNow = millis();
+  _now_1ms = millis();
 
-  if (millisNow < millisPrev) {
-    cntOVF++;
+  if (_now_1ms < _prev_1ms) {
+    // increment the overflow counter
+    _cntOVF++;
   }
-  Tnow = (millisNow / 10UL) + (cntOVF % 10) * 429496729UL;
-  millisPrev = millisNow;
+  _now_8ms = (_now_1ms / 10UL) + (_cntOVF % 10) * 429496729UL;
+  _prev_1ms = _now_1ms;
 
-  return(Tnow);
+  return(_now_8ms);
 }
 
 // ---------------------------------------------------------
 
 uint32_t eightMillis() {
-  static int cntOVF = 0;
-  static uint32_t Tnow = 0;
-  static uint32_t millisPrev = 0, millisNow = 0;
+  static int _cntOVF = 0;
+  static uint32_t _now_8ms = 0;
+  static uint32_t _prev_1ms = 0, _now_1ms = 0;
 
-  millisNow = millis();
+  _now_1ms = millis();
 
-  if (millisNow < millisPrev) {
-    cntOVF++;
+  if (_now_1ms < _prev_1ms) {
+    // increment the overflow counter
+    _cntOVF++;
   }
-  Tnow = (millisNow / 8UL) + (cntOVF % 8) * 536870912UL;
-  millisPrev = millisNow;
+  _now_8ms = (_now_1ms / 8UL) + (_cntOVF % 8) * 536870912UL;
+  _prev_1ms = _now_1ms;
 
-  return(Tnow);
+  return(_now_8ms);
 }
 
 // ---------------------------------------------------------

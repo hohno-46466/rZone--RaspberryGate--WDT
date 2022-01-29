@@ -12,11 +12,17 @@
 
 // ---------------------------------------------------------
 
+// task2 - Detect type-specified request from Raspberry Pi
+
+// ---------------------------------------------------------
+
 #include "Arduino.h"
 
 class taskClass2 {
  public:
 	taskClass2(int pin);
+	boolean init();
+	boolean init(int pin);
  private:
 	int _pin = -1;
 };
