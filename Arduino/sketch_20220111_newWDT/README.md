@@ -20,3 +20,16 @@ Watchdog Timers for Raspberry Gate
      └── tasks.ino                   // other tasks
 
      0 directories, 15 files (Thu Jan 13 09:35:17 JST 2022)
+
+
+task0 - Check the "heart beat" pulse from Raspberry Pi
+
+task1 - Blink LED to show the current status
+
+task2 - Detect type-specified request from Raspberry Pi
+
+task3 - Generate RESET pulse (for both of the gentle and the delayed watchdog)
+
+task4 - Generate notification signal for Raspberry Pi
+
+taskX - Blink LED using the notification pin (for debugging)

@@ -1,8 +1,8 @@
-#ifndef __STATUS_H__
-#define __STATUS_H__
+#ifndef __WDT_STATUS_H__
+#define __WDT_STATUS_H__
 
 //
-// status.h
+// WDTstatus.h
 //
 
 // ---------------------------------------------------------
@@ -14,20 +14,29 @@
 
 #include "Arduino.h"
 
-class status {
+class WDTstatus {
  public:
-	status();
+	WDTstatus();
 	void init();
 	void task0set(int x);
 	int task0get();
+	void task1set(int x);
+	int task1get();
+	void task2set(int x);
+	int task2get();
 	void task3set(int x);
 	int task3get();
+	void task4set(int x);
+	int task4get();
+	void taskXset(int x);
+	int taskXget();
 	void show();
-	boolean should_be_reboot();
+	void update();
+	int getStatus();
  private:
 	int _verbose = -1;
 };
 
 // ---------------------------------------------------------
 
-#endif  // __STATUS_H__
+#endif  // __WDT_STATUS_H__

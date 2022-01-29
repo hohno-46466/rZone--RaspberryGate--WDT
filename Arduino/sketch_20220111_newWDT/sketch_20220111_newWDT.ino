@@ -44,6 +44,8 @@
 #include "classButtonSW.h"
 #include "classBlinkLED.h"
 
+#include "WDTstatus.h"
+
 // ---------------------------------------------------------
 
 // constructors
@@ -51,6 +53,10 @@
 // Button Switches
 classButtonSW task0input();
 classButtonSW task3input();
+
+// WDT Status
+
+WDTstatus myWDT();
 
 // task0 - Check the "heart beat" pulse from Raspberry Pi
 taskClass0 task0(PIN_I_PULSE);
