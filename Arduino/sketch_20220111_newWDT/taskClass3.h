@@ -20,14 +20,14 @@
 
 class taskClass3 {
  public:
-	taskClass3(int pin);
-	boolean init();
-	boolean init(int pin);
-	int core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4);
+  taskClass3(int pin);
+  boolean init();
+  boolean init(int pin);
+  int core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4);
  private:
-	int _pin = -1;
+  int _pin = -1;
 };
 
 // ---------------------------------------------------------
 
-#endif // __TASK_CLASS_3_H__
+#endif  // __TASK_CLASS_3_H__

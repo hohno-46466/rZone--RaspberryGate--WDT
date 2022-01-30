@@ -26,7 +26,7 @@ extern uint32_t eightMillis();
 //   pin - pin No. to notify to Raspberry Pi
 
 taskClass4::taskClass4(int pin) {
-	_pin = pin;
+  _pin = pin;
 }
 
 // ---------------------------------------------------------
@@ -36,16 +36,16 @@ taskClass4::taskClass4(int pin) {
 //   pin - pin No. to notify to Raspberry Pi
 
 boolean taskClass4::init() {
-	if (_pin <= 0) { return(false); }
-	pinMode(_pin, OUTPUT);
-	return(true);
+  if (_pin <= 0) { return(false); }
+  pinMode(_pin, OUTPUT);
+  return(true);
 }
 
 boolean taskClass4::init(int pin) {
-	_pin = pin;
-	if (_pin <= 0) { return(false); }
-	pinMode(_pin, OUTPUT);
-	return(true);
+  _pin = pin;
+  if (_pin <= 0) { return(false); }
+  pinMode(_pin, OUTPUT);
+  return(true);
 }
 
 // ---------------------------------------------------------

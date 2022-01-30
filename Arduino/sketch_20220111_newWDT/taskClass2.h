@@ -20,13 +20,13 @@
 
 class taskClass2 {
  public:
-	taskClass2(int pin);
-	boolean init();
-	boolean init(int pin);
+  taskClass2(int pin);
+  boolean init();
+  boolean init(int pin);
  private:
-	int _pin = -1;
+  int _pin = -1;
 };
 
 // ---------------------------------------------------------
 
-#endif // __TASK_CLASS_2_H__
+#endif  // __TASK_CLASS_2_H__

@@ -26,7 +26,7 @@ extern uint32_t eightMillis();
 //   pin - pin No. to receive WDT pulse
 
 taskClass2::taskClass2(int pin) {
-	_pin = pin;
+  _pin = pin;
 }
 
 // ---------------------------------------------------------
@@ -36,16 +36,16 @@ taskClass2::taskClass2(int pin) {
 //   pin - pin No. to receive WDT pulse
 
 boolean taskClass2::init() {
-	if (_pin <= 1) { return(false); }
-	pinMode(_pin, INPUT_PULLUP);
-	return(true);
+  if (_pin <= 1) { return(false); }
+  pinMode(_pin, INPUT_PULLUP);
+  return(true);
 }
 
 boolean taskClass2::init(int pin) {
-	_pin = pin;
-	if (_pin <= 1) { return(false); }
-	pinMode(_pin, INPUT_PULLUP);
-	return(true);
+  _pin = pin;
+  if (_pin <= 1) { return(false); }
+  pinMode(_pin, INPUT_PULLUP);
+  return(true);
 }
 
 // ---------------------------------------------------------

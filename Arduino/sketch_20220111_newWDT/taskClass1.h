@@ -21,13 +21,13 @@
 
 class taskClass1 : public classBlinkLED {
  public:
-	taskClass1(int pin); // : classBlinkLED(13){};
-	boolean init();
-	boolean init(int pin);
+  taskClass1(int pin); // : classBlinkLED(13){};
+  boolean init();
+  boolean init(int pin);
  private:
-	int _pin = -1;
+  int _pin = -1;
 };
 
 // ---------------------------------------------------------
 
-#endif // __TASK_CLASS_1_H__
+#endif  // __TASK_CLASS_1_H__

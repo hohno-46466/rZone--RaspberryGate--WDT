@@ -16,25 +16,25 @@
 
 class WDTstatus {
  public:
-	WDTstatus();
-	void init();
-	void task0set(int x);
-	int task0get();
-	void task1set(int x);
-	int task1get();
-	void task2set(int x);
-	int task2get();
-	void task3set(int x);
-	int task3get();
-	void task4set(int x);
-	int task4get();
-	void taskXset(int x);
-	int taskXget();
-	void show();
-	void update();
-	int getStatus();
+  WDTstatus();
+  void init();
+  void task0set(int x);
+  int task0get();
+  void task1set(int x);
+  int task1get();
+  void task2set(int x);
+  int task2get();
+  void task3set(int x);
+  int task3get();
+  void task4set(int x);
+  int task4get();
+  void taskXset(int x);
+  int taskXget();
+  void show();
+  void update();
+  int getStatus();
  private:
-	int _verbose = -1;
+  int _verbose = -1;
 };
 
 // ---------------------------------------------------------

@@ -20,21 +20,21 @@
 
 class classBlinkLED {
  public:
-	classBlinkLED();
-	classBlinkLED(int pin);
-	void set(int arg1, int arg2);
-	boolean blink();
-	void stop();
+  classBlinkLED();
+  classBlinkLED(int pin);
+  void set(int arg1, int arg2);
+  boolean blink();
+  void stop();
  protected:
-	int _pin = -1;
-	int _arg1 = -1;
-	int _arg2 = -1;
-	int _prev_arg1 = 0;
-	int _prev_arg2 = 0;
-	boolean _flag = false;
-	uint32_t _next_8ms = 0;
+  int _pin = -1;
+  int _arg1 = -1;
+  int _arg2 = -1;
+  int _prev_arg1 = 0;
+  int _prev_arg2 = 0;
+  boolean _flag = false;
+  uint32_t _next_8ms = 0;
 };
 
 // ---------------------------------------------------------
 
-#endif // __CLASS_BLINK_LED_H__
+#endif  // __CLASS_BLINK_LED_H__

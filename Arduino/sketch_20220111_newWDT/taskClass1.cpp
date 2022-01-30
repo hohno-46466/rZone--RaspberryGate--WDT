@@ -27,7 +27,7 @@ extern uint32_t eightMillis();
 //   pin - pin No. to blink a LED
 
 taskClass1::taskClass1(int pin) {
-	_pin = pin;
+  _pin = pin;
 }
 
 // ---------------------------------------------------------
@@ -37,16 +37,16 @@ taskClass1::taskClass1(int pin) {
 //   pin - pin No. to blink a LED
 
 boolean taskClass1::init() {
-	if (_pin <= 1) { return(false); }
-	pinMode(_pin,  OUTPUT);
-	return(true);
+  if (_pin <= 1) { return(false); }
+  pinMode(_pin,  OUTPUT);
+  return(true);
 }
 
 boolean taskClass1::init(int pin) {
-	_pin = pin;
-	if (_pin <= 1) { return(false); }
-	pinMode(_pin,  OUTPUT);
-	return(true);
+  _pin = pin;
+  if (_pin <= 1) { return(false); }
+  pinMode(_pin,  OUTPUT);
+  return(true);
 }
 
 // ---------------------------------------------------------

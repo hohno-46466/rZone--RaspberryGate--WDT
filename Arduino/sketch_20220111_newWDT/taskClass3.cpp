@@ -26,7 +26,7 @@ extern uint32_t eightMillis();
 //   pin - pin No. to reset Raspberry Pi
 
 taskClass3::taskClass3(int pin) {
-	_pin = pin;
+  _pin = pin;
 }
 
 // ---------------------------------------------------------
@@ -36,16 +36,16 @@ taskClass3::taskClass3(int pin) {
 //   pin - pin No. to reset Raspberry Pi
 
 boolean taskClass3::init() {
-	if (_pin <= 0) { return(false); }
-	pinMode(_pin, OUTPUT);
-	return(true);
+  if (_pin <= 0) { return(false); }
+  pinMode(_pin, OUTPUT);
+  return(true);
 }
 
 boolean taskClass3::init(int pin) {
-	_pin = pin;
-	if (_pin <= 0) { return(false); }
-	pinMode(_pin, OUTPUT);
-	return(true);
+  _pin = pin;
+  if (_pin <= 0) { return(false); }
+  pinMode(_pin, OUTPUT);
+  return(true);
 }
 
 // ---------------------------------------------------------
@@ -70,11 +70,11 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
   static uint32_t next2_8ms = 0;
   static int _cnt = 0;
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 2)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 2)
     Serial.print("# task3core() point1"); Serial.println();
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 1)
+#endif  // USE_GBKA
 
     /*
   if (arg4 < 0) {
@@ -99,19 +99,19 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
     return(-1);
   }
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 2)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 2)
     Serial.print("# task3core() point2"); Serial.println();
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 1)
+#endif  // USE_GBKA
 
   if (_flag == 0) {
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 2)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 2)
     Serial.print("# task3core(), _flag is zero"); Serial.println();
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 1)
+#endif  // USE_GBKA
 
 
     // _flag is zero (RESET is not activated)
@@ -121,12 +121,12 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
 
       next0_8ms = eightMillis();
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 2)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 2)
     Serial.print("# CurrentTime_8ms = "); Serial.println(CurrentTime_8ms);
     Serial.print("# _eightMillis() = "); Serial.println(next0_8ms);
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 1)
+#endif  // USE_GBKA
 
       if (_cnt == 0) {
         next0_8ms += (arg2 / 8); // End of the first guard time
@@ -135,23 +135,23 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
       next2_8ms = next1_8ms + (arg3 / 8); // End of the guard time
 
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 2)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 2)
     Serial.print("# next0_8ms = "); Serial.println(next0_8ms);
     Serial.print("# next1_8ms = "); Serial.println(next1_8ms);
     Serial.print("# next2_8ms = "); Serial.println(next2_8ms);
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 1)
+#endif  // USE_GBKA
 
       if (CurrentTime_8ms >= next0_8ms) {
         _cnt++;
         AVR_RESET_ON;
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 2)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 2)
         Serial.print("# AVR_RESET_ON  "); Serial.println(_cnt);
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 1)
+#endif  // USE_GBKA
 
       } else {
         // if _cnt is zero, we can insert guard time which is specified by arg2 by extending next0_8ms and doing nothing here
@@ -159,11 +159,11 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
     }
 
   } else {
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 2)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 2)
     Serial.print("# task3core(), _flag is 1"); Serial.println();
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 1)
+#endif  // USE_GBKA
 
     // _flag is 1 (RESET is activated)
     if (CurrentTime_8ms >= next1_8ms) {
@@ -173,11 +173,11 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
     } else  if (CurrentTime_8ms >= next2_8ms) {
       // The guard time has been done.
       _flag = 0; // _flag is 0 (RESET is deactivated)
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 2)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 2)
       Serial.print("# AVR_RESET_OFF and guard time done."); Serial.println(_cnt);
-#endif // (_DEBUG_LEVEL >= 1)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 1)
+#endif  // USE_GBKA
 
     }
   }

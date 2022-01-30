@@ -26,7 +26,7 @@ extern uint32_t eightMillis();
 //   pin - pin No. to receive WDT pulse
 
 taskClass0::taskClass0(int pin) {
-	_pin = pin;
+  _pin = pin;
 }
 
 // ---------------------------------------------------------
@@ -36,16 +36,16 @@ taskClass0::taskClass0(int pin) {
 //   pin - pin No. to receive WDT pulse
 
 boolean taskClass0::init() {
-	if (_pin <= 0) { return(false); }
-	pinMode(_pin, INPUT_PULLUP);
-	return(true);
+  if (_pin <= 0) { return(false); }
+  pinMode(_pin, INPUT_PULLUP);
+  return(true);
 }
 
 boolean taskClass0::init(int pin) {
-	_pin = pin;
-	if (_pin <= 0) { return(false); }
-	pinMode(_pin, INPUT_PULLUP);
-	return(true);
+  _pin = pin;
+  if (_pin <= 0) { return(false); }
+  pinMode(_pin, INPUT_PULLUP);
+  return(true);
 }
 
 // ---------------------------------------------------------
@@ -89,11 +89,11 @@ float taskClass0::core() {
     if (_currentVal < _LEVEL_MIN) { _currentVal = _LEVEL_MIN; }
   }
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 5)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 5)
   Serial.print(_currentVal); Serial.print(" ");
-#endif // (_DEBUG_LEVEL >= 4)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 4)
+#endif  // USE_GBKA
 
   boolean _flagX = false; // _flagX is TRUE when a new pulse is detected
 
@@ -102,22 +102,22 @@ float taskClass0::core() {
     _currentStat = true;
     _flagX = true;
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 5)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 5)
     Serial.println("L->H"); // Serial.print("H "); //
-#endif // (_DEBUG_LEVEL >= 4)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 4)
+#endif  // USE_GBKA
 
   } else if ((_currentStat == true) && (_currentVal < _LEVEL_L)) {
     // _currentState:  TRUE -> FALSE
     _currentStat = false;
     _flagX = false;
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 5)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 5)
     Serial.println("H->L"); // Serial.print("L "); //
-#endif // (_DEBUG_LEVEL >= 4)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 4)
+#endif  // USE_GBKA
   }
 
   if (_flagX) {
@@ -125,14 +125,14 @@ float taskClass0::core() {
 
     // XXX // _flagX = false; // Do you need this?
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 3)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 3)
     Serial.print("_index = "); Serial.print(_index); Serial.print(", ");
     Serial.print(_pulseCounter[_index].eightMillis / 125UL); Serial.print(", ");
     Serial.print(_pulseCounter[_index].cnt); Serial.println();
     // Serial.print(_currentT_8ms / 125UL); Serial.println();
-#endif // (_DEBUG_LEVEL >= 3)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 3)
+#endif  // USE_GBKA
 
     if ((_pulseCounter[_index].eightMillis / 125UL) == (_currentT_8ms / 125UL)) {
       // if _pulseCounter[_index] is valid, just increment the _pulseCounter[_index].cnt
@@ -168,21 +168,21 @@ float taskClass0::core() {
 
     // now _sum is the total number of pulses in the last PulseCounterSize sec.
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 4)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 4)
     if (_pulseCounter[i].eightMillis > 0) {
       Serial.print(_xx);
       Serial.print(". ");
     } else {
       Serial.print("-, ");
     }
-#endif // (_DEBUG_LEVEL >= 4)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 4)
+#endif  // USE_GBKA
 
   }
 
-#ifdef _USE_UNO_
-#if (_DEBUG_LEVEL >= 4)
+#ifdef  USE_GBKA
+#if     (DEBUG_LEVEL >= 4)
   Serial.print("-> ");
   Serial.print(_sum);
   Serial.print("/");
@@ -190,8 +190,8 @@ float taskClass0::core() {
   Serial.print(" ( ");
   Serial.print((_cnt == 0) ? 0 : (float)_sum/_cnt);
   Serial.println(")");
-#endif // (_DEBUG_LEVEL >= 4)
-#endif // _USE_UNO_
+#endif  // (DEBUG_LEVEL >= 4)
+#endif  // USE_GBKA
 
   // _retval = (_cnt == 0) ? 0 : (float)_sum/_cnt;
   _retval =_sum;
