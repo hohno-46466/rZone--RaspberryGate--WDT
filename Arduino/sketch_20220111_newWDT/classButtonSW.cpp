@@ -24,8 +24,7 @@ extern uint32_t eightMillis();
 // classButtonSW::classButtonSW()
 
 classButtonSW::classButtonSW() {
-  // _pin = pin;
-  if (_pin > 0) {
+  if (IS_PIN_OK(_pin)) {
     pinMode(_pin, INPUT_PULLUP);
     digitalWrite(_pin, LOW);
   }
@@ -37,7 +36,7 @@ classButtonSW::classButtonSW() {
 
 void classButtonSW::init(int pin) {
   _pin = pin;
-  if (_pin > 0) {
+	if (IS_PIN_OK(_pin)) {
     pinMode(_pin, INPUT_PULLUP);
     digitalWrite(_pin, LOW);
   }
@@ -68,34 +67,36 @@ boolean classButtonSW::update() {
   uint32_t _currentTime_8ms = eightMillis();
 
   if ((_currentTime_8ms - _lastTime_8ms) <= 1) {
-    return(false);
+    return(_state);
   }
 
-  if (_state) {
+	boolean _pulseState = AVR_GET_PULSE;
+
+  if (_pulseState) {
     _currentVal += _updown;
     if (_currentVal > _LEVEL_MAX) { _currentVal = _LEVEL_MAX; }
-  } else {
+  } else if (_state == SW_ON) {
     _currentVal -= _updown;
     if (_currentVal < _LEVEL_MIN) { _currentVal = _LEVEL_MIN; }
   }
 
-  if ((_state == false) && (_currentVal > _LEVEL_H)) {
-    // FALSE -> TRUE
-    _state = true;
+  if (((_state == SW_OFF) || (_state == SW_UNKNOWN)) && (_currentVal > _LEVEL_H)) {
+    // SW OFF -> SW ON
+    _state = SW_ON;
 
-  } else if ((_state == true) && (_currentVal < _LEVEL_L)) {
-    // TRUE -> FALSE
-    _state = false;
+  } else if ((_state == SW_ON) && (_currentVal < _LEVEL_L)) {
+    // SW ON -> SW OFF
+    _state = SW<_OFF;
   }
 
-  return(true);
+  return(_state);
 }
 
 // ---------------------------------------------------------
 
-// void classButtonSW::get()
+// int classButtonSW::getStat()
 
-boolean classButtonSW::get() {
+int classButtonSW::getStat() {
   return(_state);
 }
 

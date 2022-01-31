@@ -17,8 +17,12 @@
 #include "taskClass0.h"
 #include "mydefs.h"
 
+#include "classButtonSW.h"
+
 extern uint32_t CurrentTime_8ms;
 extern uint32_t eightMillis();
+
+classButtonSW task0input;
 
 // ---------------------------------------------------------
 
@@ -26,7 +30,8 @@ extern uint32_t eightMillis();
 //   pin - pin No. to receive WDT pulse
 
 taskClass0::taskClass0(int pin) {
-  _pin = pin;
+	_pin = pin;
+	task0input.init(_pin);
 }
 
 // ---------------------------------------------------------
@@ -55,14 +60,14 @@ boolean taskClass0::init(int pin) {
 // float taskClass0::core()
 
 float taskClass0::core() {
-  const int _LEVEL_MIN = 0;
-  const int _LEVEL_MAX = 100;
-  const int _LEVEL_H   = 80;
-  const int _LEVEL_L   = 20;
+	//  const int _LEVEL_MIN = 0;
+	//  const int _LEVEL_MAX = 100;
+	//  const int _LEVEL_H   = 80;
+	//  const int _LEVEL_L   = 20;
 
   int _sum = 0, _cnt = 0;
   static float _retval = 0.0;
-  static uint32_t _lastPulse = 0;
+  static uint32_t _lastPulse_8ms = 0;
   uint32_t _currentT_8ms = eightMillis();
   static struct pulseCounter{
     uint32_t eightMillis;
@@ -72,53 +77,55 @@ float taskClass0::core() {
   static boolean _currentStat = false;
   static int _currentVal = 0;
 
-  if ((_currentT_8ms - _lastPulse) <= 1) {
+  if ((_currentT_8ms - _lastPulse_8ms) <= 1) {
     return(_retval);
   }
 
-  boolean _pulseState = AVR_GET_PULSE;
+  _lastPulse_8ms = _currentT_8ms;
 
-  _lastPulse = _currentT_8ms;
+	//	  boolean _pulseState = AVR_GET_PULSE;
 
-  // digital debouncing
-  if (_pulseState) {
-    _currentVal += 15;
-    if (_currentVal > _LEVEL_MAX) { _currentVal = _LEVEL_MAX; }
-  } else {
-    _currentVal -= 15;
-    if (_currentVal < _LEVEL_MIN) { _currentVal = _LEVEL_MIN; }
-  }
+	int _tmpinput = task0input.update(); // intput with digital debouncing
+	boolean _flagX = (_tmpinput == SW_ON) ? true : false; // _flagX is TRUE when a new pulse is detected
 
-#ifdef  USE_GBKA
-#if     (DEBUG_LEVEL >= 5)
-  Serial.print(_currentVal); Serial.print(" ");
-#endif  // (DEBUG_LEVEL >= 4)
-#endif  // USE_GBKA
-
-  boolean _flagX = false; // _flagX is TRUE when a new pulse is detected
-
-  if ((_currentStat == false) && (_currentVal > _LEVEL_H)) {
-    // _currentState: FALSE -> TRUE
-    _currentStat = true;
-    _flagX = true;
-
-#ifdef  USE_GBKA
-#if     (DEBUG_LEVEL >= 5)
-    Serial.println("L->H"); // Serial.print("H "); //
-#endif  // (DEBUG_LEVEL >= 4)
-#endif  // USE_GBKA
-
-  } else if ((_currentStat == true) && (_currentVal < _LEVEL_L)) {
-    // _currentState:  TRUE -> FALSE
-    _currentStat = false;
-    _flagX = false;
-
-#ifdef  USE_GBKA
-#if     (DEBUG_LEVEL >= 5)
-    Serial.println("H->L"); // Serial.print("L "); //
-#endif  // (DEBUG_LEVEL >= 4)
-#endif  // USE_GBKA
-  }
+//   if (_pulseState) {
+//     _currentVal += 15;
+//     if (_currentVal > _LEVEL_MAX) { _currentVal = _LEVEL_MAX; }
+//   } else {
+//     _currentVal -= 15;
+//     if (_currentVal < _LEVEL_MIN) { _currentVal = _LEVEL_MIN; }
+//   }
+//
+// #ifdef  USE_GBKA
+// #if     (DEBUG_LEVEL >= 5)
+//   Serial.print(_currentVal); Serial.print(" ");
+// #endif  // (DEBUG_LEVEL >= 4)
+// #endif  // USE_GBKA
+//
+//   boolean _flagX = false; // _flagX is TRUE when a new pulse is detected
+//
+//   if ((_currentStat == false) && (_currentVal > _LEVEL_H)) {
+//     // _currentState: FALSE -> TRUE
+//     _currentStat = true;
+//     _flagX = true;
+//
+// #ifdef  USE_GBKA
+// #if     (DEBUG_LEVEL >= 5)
+//     Serial.println("L->H"); // Serial.print("H "); //
+// #endif  // (DEBUG_LEVEL >= 4)
+// #endif  // USE_GBKA
+//
+//   } else if ((_currentStat == true) && (_currentVal < _LEVEL_L)) {
+//     // _currentState:  TRUE -> FALSE
+//     _currentStat = false;
+//     _flagX = false;
+//
+// #ifdef  USE_GBKA
+// #if     (DEBUG_LEVEL >= 5)
+//     Serial.println("H->L"); // Serial.print("L "); //
+// #endif  // (DEBUG_LEVEL >= 4)
+// #endif  // USE_GBKA
+//   }
 
   if (_flagX) {
     int _index = (_currentT_8ms / 125UL) % PulseCounterSize;

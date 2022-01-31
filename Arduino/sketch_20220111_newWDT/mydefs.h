@@ -38,6 +38,14 @@ const int PulseCounterSize = 30; // Maximum watchdog
 
 // ---------------------------------------------------------
 
+#define IS_PIN_OK(x)	(x > 0)	// This should be updated to check more
+
+#define SW_ON			(1)
+#define SW_OFF			(0)
+#define SW_UNKNOWN	(-1)
+
+// ---------------------------------------------------------
+
 #ifdef  USE_GBKA
 #define PIN_I_PULSE   (6)
 #define PIN_O_LED     (4)
