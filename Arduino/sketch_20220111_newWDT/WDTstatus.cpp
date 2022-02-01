@@ -143,7 +143,7 @@ int WDTstatus::getStat() {
 
 int WDTstatus::_rule1() {
 
-	return(-1);
+  return(-1);
 }
 
 
@@ -151,10 +151,9 @@ int WDTstatus::_rule1() {
 
 int WDTstatus::_rule2() {
 
-	return(-1);
+  return(-1);
 }
 
 
 // ---------------------------------------------------------
 // ---------------------------------------------------------
-

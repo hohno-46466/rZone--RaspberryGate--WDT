@@ -24,29 +24,44 @@ extern uint32_t eightMillis();
 // classButtonSW::classButtonSW()
 
 classButtonSW::classButtonSW() {
+
   if (IS_PIN_OK(_pin)) {
     pinMode(_pin, INPUT_PULLUP);
-    digitalWrite(_pin, LOW);
   }
 }
 
-// ---------------------------------------------------------
+classButtonSW::classButtonSW(int pin, boolean pullup, boolean positive) {
 
-// void classButtonSW::init(int pin)
-
-void classButtonSW::init(int pin) {
-  _pin = pin;
-	if (IS_PIN_OK(_pin)) {
+  if (IS_PIN_OK(pin)) {
+    _pin = pin;
+    _positive = positive;
     pinMode(_pin, INPUT_PULLUP);
-    digitalWrite(_pin, LOW);
   }
+}
+
+
+// ---------------------------------------------------------
+
+// boolean classButtonSW::init(int pin, boolean pullup, boolean positive)
+
+boolean classButtonSW::init(int pin, boolean pullup, boolean positive) {
+
+  if (!IS_PIN_OK(pin)) {
+    return(false);
+  }
+
+  _pin = pin;
+  _positive = positive;
+  pinMode(_pin, pullup ? INPUT_PULLUP : INPUT);
+
+  return(true);
 }
 
 // ---------------------------------------------------------
 
-// int classButtonSW::set(int updown)
+// int classButtonSW::setParam(int updown)
 
-int classButtonSW::set(int updown) {
+int classButtonSW::setParam(int updown) {
   const int updown_min = (_LEVEL_MAX - _LEVEL_MIN) *  5 / 100;
   const int updown_max = (_LEVEL_MAX - _LEVEL_MIN) * 40 / 100;
 
@@ -57,6 +72,8 @@ int classButtonSW::set(int updown) {
 }
 
 // ---------------------------------------------------------
+
+#define GET_PIN (digitalRead(_pin) == (_positive ? HIGH : LOW))
 
 // void classButtonSW::update()
 
@@ -70,12 +87,13 @@ boolean classButtonSW::update() {
     return(_state);
   }
 
-	boolean _pulseState = AVR_GET_PULSE;
+  boolean _pulseState = GET_PIN;
 
   if (_pulseState) {
     _currentVal += _updown;
     if (_currentVal > _LEVEL_MAX) { _currentVal = _LEVEL_MAX; }
-  } else if (_state == SW_ON) {
+
+  } else {
     _currentVal -= _updown;
     if (_currentVal < _LEVEL_MIN) { _currentVal = _LEVEL_MIN; }
   }
@@ -86,7 +104,7 @@ boolean classButtonSW::update() {
 
   } else if ((_state == SW_ON) && (_currentVal < _LEVEL_L)) {
     // SW ON -> SW OFF
-    _state = SW<_OFF;
+    _state = SW_OFF;
   }
 
   return(_state);

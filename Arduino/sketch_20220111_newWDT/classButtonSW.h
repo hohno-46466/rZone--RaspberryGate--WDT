@@ -21,20 +21,22 @@
 class classButtonSW {
  public:
   classButtonSW();
-	void init(int pin);
-  int set(int updown);
+  classButtonSW(int pin, boolean pullup, boolean positive);
+  boolean init(int pin, boolean pullup, boolean positive);
+  int setParam(int updown);
   boolean update();
   int getStat();
  protected:
   const int _LEVEL_MIN = 0;
   const int _LEVEL_MAX = 100;
-  const int _LEVEL_H   = 80;	// Threshold level from Low to High
-  const int _LEVEL_L   = 20;	// Threshold level from High to Low
-  int _pin = -1;
-	int _state = -1;
-	int _currentVal = 0;  // currentVal goes up and down between _LEVEL_MIN and _LEVEL_MAX
+  const int _LEVEL_H   = 80;  // Threshold level from Low to High
+  const int _LEVEL_L   = 20;  // Threshold level from High to Low
+  int _pin    = -1;
+  int _state  = -1;
+  int _currentVal = 0;  // currentVal goes up and down between _LEVEL_MIN and _LEVEL_MAX
   int _updown = 15;
-	uint32_t _next_8ms = 0;
+  uint32_t _Tnext_8ms = 0;
+  boolean _positive = true; // true: positive logic, false: negative logic
 };
 
 // ---------------------------------------------------------

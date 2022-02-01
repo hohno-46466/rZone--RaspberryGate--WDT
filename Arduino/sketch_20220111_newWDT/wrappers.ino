@@ -25,22 +25,22 @@ int taskX_wrapper() {
 
   // example task: LED blinking
 
-  // taskX.set(500,500); taskX.blink();
+  // taskX.setParam(500,500); taskX.blink();
 
   if (debug_cnt == 0) {
-    taskX.set(50,950);
+    taskX.setParam(50,950);
 
   } else if (debug_cnt == 6) {
-    taskX.set(250,750);
+    taskX.setParam(250,750);
 
   } else if (debug_cnt == 12) {
-    taskX.set(500,500);
+    taskX.setParam(500,500);
 
   } else if (debug_cnt == 18) {
-    taskX.set(750,250);
+    taskX.setParam(750,250);
 
   } else if (debug_cnt == 24) {
-    taskX.set(950,50);
+    taskX.setParam(950,50);
   }
   taskX.blink();
 
@@ -113,19 +113,19 @@ int task1_wrapper() {
   // task1_wrapper() always returns zero
 
   if (debug_cnt < 5) {
-    task1.set(500,500); task1.blink();
+    task1.setParam(500,500); task1.blink();
 
   } else if (debug_cnt < 10) {
-    task1.set(250,250); task1.blink();
+    task1.setParam(250,250); task1.blink();
 
   } else if (debug_cnt < 15) {
-    task1.set(100,100); task1.blink();
+    task1.setParam(100,100); task1.blink();
 
   } else if (debug_cnt < 20) {
-    task1.set(50,50); task1.blink();
+    task1.setParam(50,50); task1.blink();
 
   } else {
-    task1.set(20,20); task1.blink();
+    task1.setParam(20,20); task1.blink();
   }
 
   return(0);

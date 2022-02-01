@@ -41,7 +41,7 @@
 #include "./taskClass3.h"
 #include "./taskClass4.h"
 
-// #include "classButtonSW.h"
+#include "classButtonSW.h"
 #include "classBlinkLED.h"
 
 #include "WDTstatus.h"
@@ -84,7 +84,10 @@ int task4stat = -1;
 // WDT Status
 WDTstatus myWDTx;
 
+
 // ---------------------------------------------------------
+
+#define TEST_MODE
 
 // setup()
 
@@ -101,14 +104,28 @@ void setup() {
   task4.init(PIN_O_NOTE);
 #endif  // USE_TASKX_INSTEADOF_TASK4
 
-  myWDTx.init();
-
   AVR_LED_OFF;    // LED is OFF
   AVR_NOTE_OFF;   // Reset pin on Raspberry Pi is not activated (Negative logic)
   AVR_RESET_OFF;  // No notification information
 
 #ifdef  USE_GBKA
   Serial.begin(57600);
+#endif  // USE_GBKA
+
+#ifdef  TEST_MODE
+  setupXtest();
+#else
+  setupX();
+#endif  // TEST_MODE
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+void setupX() {
+
+  myWDTx.init();
+
+#ifdef  USE_GBKA
   Serial.println("# Hello!"); Serial.println();
 #endif  // USE_GBKA
 
@@ -152,7 +169,7 @@ uint32_t eightMillis();
 
 void loop() {
 
-  CurrentTime_8ms = eightMillis();
+  USE_GBKA  CurrentTime_8ms = eightMillis();
 
   if ((CurrentTime_8ms - debug_LastCnt) >= 125 /* 125 == 1000/8 */) {
     // debug_cnt increments every second
@@ -162,13 +179,23 @@ void loop() {
       debug_cnt = 0;
 
 #ifdef  USE_GBKA
-      Serial.print(">>> CurrentTime_8ms = "); Serial.println(CurrentTime_8ms);
+      Serial.print(">>> CurrentTime_8ms = "); Serial.print(CurrentTime_8ms); Serial.print(", "); Serial.println(debug_cnt);
 #endif  // USE_GBKA
     }
     debug_LastCnt = CurrentTime_8ms;
   }
 
-// -------------------------------------
+#ifdef  TEST_MODE
+  loopXtest();
+#else
+  loopX();
+#endif  // TEST_MODE
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+void loopX() {
+
 
   // task0 - Check the "heart beat" pulse from Raspberry Pi
 
@@ -255,7 +282,7 @@ void loop() {
 #if     (DEBUG_LEVEL == 0)
   Serial.print("# "); Serial.print(task0stat);
   Serial.print("  "); Serial.print(task1stat);
-  Serial.print("  "); Serial.print(task2stat);
+<  Serial.print("  "); Serial.print(task2stat);
   Serial.print("  "); Serial.print(task3stat);
 #ifdef  USE_TASKX_INSTEADOF_TASK4
   Serial.print("  "); Serial.print(taskXstat);

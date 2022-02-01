@@ -110,7 +110,7 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
 #ifdef  USE_GBKA
 #if     (DEBUG_LEVEL >= 2)
     Serial.print("# task3core(), _flag is zero"); Serial.println();
-#endif  // (DEBUG_LEVEL >= 1)
+#endif  // (DEBUG_LEVEL >= 2)
 #endif  // USE_GBKA
 
 
@@ -125,7 +125,7 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
 #if     (DEBUG_LEVEL >= 2)
     Serial.print("# CurrentTime_8ms = "); Serial.println(CurrentTime_8ms);
     Serial.print("# _eightMillis() = "); Serial.println(next0_8ms);
-#endif  // (DEBUG_LEVEL >= 1)
+#endif  // (DEBUG_LEVEL >= 2)
 #endif  // USE_GBKA
 
       if (_cnt == 0) {
@@ -140,7 +140,7 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
     Serial.print("# next0_8ms = "); Serial.println(next0_8ms);
     Serial.print("# next1_8ms = "); Serial.println(next1_8ms);
     Serial.print("# next2_8ms = "); Serial.println(next2_8ms);
-#endif  // (DEBUG_LEVEL >= 1)
+#endif  // (DEBUG_LEVEL >= 2)
 #endif  // USE_GBKA
 
       if (CurrentTime_8ms >= next0_8ms) {
@@ -150,7 +150,7 @@ int taskClass3::core(int32_t arg1, int32_t arg2, int32_t arg3, int arg4) {
 #ifdef  USE_GBKA
 #if     (DEBUG_LEVEL >= 2)
         Serial.print("# AVR_RESET_ON  "); Serial.println(_cnt);
-#endif  // (DEBUG_LEVEL >= 1)
+#endif  // (DEBUG_LEVEL >= 2)
 #endif  // USE_GBKA
 
       } else {

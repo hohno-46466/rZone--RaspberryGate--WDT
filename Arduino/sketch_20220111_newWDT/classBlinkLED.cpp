@@ -23,32 +23,53 @@ extern uint32_t eightMillis();
 // ---------------------------------------------------------
 
 // classBlinkLED::classBlinkLED()
+// classBlinkLED::classBlinkLED(int pin, boolean positive)
 
 classBlinkLED::classBlinkLED() {
-  // _pin = pin;
-  if (_pin > 0) {
+
+  if (IS_PIN_OK(_pin)) {
     pinMode(_pin, OUTPUT);
-    digitalWrite(_pin, LOW);
+    digitalWrite(_pin, _positive ? LOW : HIGH); // turn LED off
   }
 }
 
-classBlinkLED::classBlinkLED(int pin) {
-  _pin = pin;
-  if (_pin > 0) {
+classBlinkLED::classBlinkLED(int pin, boolean positive) {
+
+  if (IS_PIN_OK(pin)) {
+    _pin = pin;
+    _positive = positive;
     pinMode(_pin, OUTPUT);
-    digitalWrite(_pin, LOW);
+    digitalWrite(_pin, _positive ? LOW : HIGH); // turn LED off
   }
 }
 
 // ---------------------------------------------------------
 
-// void classBlinkLED::set(int arg1, int arg2)
-//   arg1 - duration of LED ON (in msec);
-//   arg2 - duration of LED OFF (in msec)
+// boolean classBlinkLED::init(int pin, boolean positive)
 
-void classBlinkLED::set(int arg1, int arg2) {
-  _arg1 = arg1;
-  _arg2 = arg2;
+boolean classBlinkLED::init(int pin, boolean positive) {
+
+  if (!IS_PIN_OK(pin)) {
+    return(false);
+  }
+
+  _pin = pin;
+  _positive = positive;
+    pinMode(_pin, OUTPUT);
+  digitalWrite(_pin, _positive ? LOW : HIGH); // turn LED off
+
+  return(true);
+}
+
+// ---------------------------------------------------------
+
+// void classBlinkLED::setParam(int Ton, int Toff)
+//   Ton - duration of LED ON (in msec);
+//   Toff - duration of LED OFF (in msec)
+
+void classBlinkLED::setParam(int Ton, int Toff) {
+  _Ton = Ton;
+  _Toff = Toff;
 }
 
 // ---------------------------------------------------------
@@ -62,33 +83,33 @@ void classBlinkLED::set(int arg1, int arg2) {
 #define _LED_OFF   (digitalWrite(_pin, LOW))
 
 boolean classBlinkLED::blink() {
-  if ((_pin < 0) || (_arg1 < 0) || (_arg2 < 0)) {
+  if ((_pin < 0) || (_Ton < 0) || (_Toff < 0)) {
     return(false);
   }
-  if ((_arg1 == _prev_arg1) && (_arg2 == _prev_arg2)) {
-    // Both arg1 and arg2 are not updated
-    if (_next_8ms <= CurrentTime_8ms) {
-      if (_flag) {
-        _flag = false;
-        _next_8ms += (_arg2/8);
+  if ((_Ton == _prev_Ton) && (_Toff == _prev_Toff)) {
+    // Both Ton and Toff are not updated
+    if (_Tnext_8ms <= CurrentTime_8ms) {
+      if (_LEDstat) {
+        _LEDstat = false;
+        _Tnext_8ms += (_Toff/8);
         _LED_OFF;
       } else {
-        _flag = true;
-        _next_8ms += (_arg1/8);;
+        _LEDstat = true;
+        _Tnext_8ms += (_Ton/8);;
         _LED_ON;
       }
     }
   } else {
-    // at least one of _arg1 and _arg2 was updated
-    _prev_arg1 = _arg1;
-    _prev_arg2 = _arg2;
-    // _next_8ms = (millis() + _arg1) / 10;
-    _next_8ms = eightMillis() + (_arg1 / 8);
-    _flag = true;
+    // at least one of _Ton and _Toff was updated
+    _prev_Ton = _Ton;
+    _prev_Toff = _Toff;
+    // _Tnext_8ms = (millis() + _Ton) / 10;
+    _Tnext_8ms = eightMillis() + (_Ton / 8);
+    _LEDstat = true;
     _LED_ON;
   }
 
-  return(_flag);
+  return(_LEDstat);
 }
 
 // ---------------------------------------------------------

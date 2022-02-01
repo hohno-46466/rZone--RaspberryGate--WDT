@@ -21,18 +21,20 @@
 class classBlinkLED {
  public:
   classBlinkLED();
-  classBlinkLED(int pin);
-  void set(int arg1, int arg2);
+  classBlinkLED(int pin, boolean positive);
+  boolean init(int pin, boolean positive);
+  void setParam(int Ton, int Toff);
   boolean blink();
   void stop();
  protected:
   int _pin = -1;
-  int _arg1 = -1;
-  int _arg2 = -1;
-  int _prev_arg1 = 0;
-  int _prev_arg2 = 0;
-  boolean _flag = false;
-  uint32_t _next_8ms = 0;
+  int _Ton = -1;
+  int _Toff = -1;
+  int _prev_Ton = 0;
+  int _prev_Toff = 0;
+  boolean _LEDstat = false;
+  uint32_t _Tnext_8ms = 0;
+  boolean _positive = true; // true: positive logic (HIGH is to turn LED on), false: negative logic (LOW is to turn LED on)
 };
 
 // ---------------------------------------------------------

@@ -22,8 +22,8 @@
 // ---------------------------------------------------------
 
 #define USE_GBKA
-#define DEBUG_LEVEL  (3)
 
+#define DEBUG_LEVEL  (5)
 #define USE_TASKX_INSTEAD_OF_TASK4
 
 // ---------------------------------------------------------
@@ -38,11 +38,17 @@ const int PulseCounterSize = 30; // Maximum watchdog
 
 // ---------------------------------------------------------
 
-#define IS_PIN_OK(x)	(x > 0)	// This should be updated to check more
+#define IS_PIN_OK(x)  (x > 0)   // This should be updated to check more
 
-#define SW_ON			(1)
-#define SW_OFF			(0)
-#define SW_UNKNOWN	(-1)
+#define SW_ON       (1)
+#define SW_OFF      (0)
+#define SW_UNKNOWN  (-1)
+
+#define POSITIVE_LOGIC  (true)
+#define NEGATIVE_LOGIC  (false)
+
+#define USE_PULLUP  (true)
+#define NO_PULLUP   (false)
 
 // ---------------------------------------------------------
 
@@ -53,7 +59,7 @@ const int PulseCounterSize = 30; // Maximum watchdog
 #define PIN_O_RESET   (8)
 #define PIN_O_NOTE    (12)
 //
-#else   // if not USE_GBKA
+#else   // if not USE_GBKA (ATtiny85)
 #define PIN_I_PULSE   (0)
 #define PIN_O_LED     (1)
 #define PIN_I_REQ     (2)
@@ -68,6 +74,7 @@ const int PulseCounterSize = 30; // Maximum watchdog
 #else   // if not USE_GBKA
 #define AVR_GET_PULSE (digitalRead(PIN_I_PULSE) == LOW)
 #endif  // USE_GBKA
+
 #define AVR_GET_REQ   digitalRead(PIN_I_REQ)
 
 #define AVR_LED_ON    (digitalWrite(PIN_O_LED, HIGH))

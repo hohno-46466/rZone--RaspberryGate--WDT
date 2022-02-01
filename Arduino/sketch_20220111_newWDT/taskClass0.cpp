@@ -30,8 +30,12 @@ classButtonSW task0input;
 //   pin - pin No. to receive WDT pulse
 
 taskClass0::taskClass0(int pin) {
-	_pin = pin;
-	task0input.init(_pin);
+  _pin = pin;
+
+#ifdef  USE_GBKA
+  task0input.init(_pin, USE_PULLUP, POSITIVE_LOGIC);  // pin, pullup, positive
+#endif  // USE_GBKA
+
 }
 
 // ---------------------------------------------------------
@@ -60,10 +64,10 @@ boolean taskClass0::init(int pin) {
 // float taskClass0::core()
 
 float taskClass0::core() {
-	//  const int _LEVEL_MIN = 0;
-	//  const int _LEVEL_MAX = 100;
-	//  const int _LEVEL_H   = 80;
-	//  const int _LEVEL_L   = 20;
+  //  const int _LEVEL_MIN = 0;
+  //  const int _LEVEL_MAX = 100;
+  //  const int _LEVEL_H   = 80;
+  //  const int _LEVEL_L   = 20;
 
   int _sum = 0, _cnt = 0;
   static float _retval = 0.0;
@@ -73,7 +77,6 @@ float taskClass0::core() {
     uint32_t eightMillis;
     int cnt;
   } _pulseCounter[PulseCounterSize];
-  // const int PulseCounterSize = PulseCounterSize; // ((sizeof _secCnt) / (sizeof _pulseCounter[0]));
   static boolean _currentStat = false;
   static int _currentVal = 0;
 
@@ -83,10 +86,8 @@ float taskClass0::core() {
 
   _lastPulse_8ms = _currentT_8ms;
 
-	//	  boolean _pulseState = AVR_GET_PULSE;
-
-	int _tmpinput = task0input.update(); // intput with digital debouncing
-	boolean _flagX = (_tmpinput == SW_ON) ? true : false; // _flagX is TRUE when a new pulse is detected
+  boolean _flagX = (task0input.update() == SW_ON) ? true : false;
+  // _flagX is TRUE when a new pulse is detected
 
 //   if (_pulseState) {
 //     _currentVal += 15;

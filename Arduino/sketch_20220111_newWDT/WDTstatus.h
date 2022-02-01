@@ -35,12 +35,12 @@ class WDTstatus {
   int getStat();
  private:
   int _verbose = -1;
-	int _statTask0 = -1, _prevTask0 = -1;
-	int _statTask1 = -1, _prevTask1 = -1;
-	int _statTask2 = -1, _prevTask2 = -1;
-	int _statTask3 = -1, _prevTask3 = -1;
-	int _rule1();
-	int _rule2();
+  int _statTask0 = -1, _prevTask0 = -1;
+  int _statTask1 = -1, _prevTask1 = -1;
+  int _statTask2 = -1, _prevTask2 = -1;
+  int _statTask3 = -1, _prevTask3 = -1;
+  int _rule1();
+  int _rule2();
 };
 
 // ---------------------------------------------------------
