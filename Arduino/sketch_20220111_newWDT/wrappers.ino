@@ -19,38 +19,6 @@
 // wrapper functions
 // ---------------------------------------------------------
 
-#ifdef  USE_TASKX_INSTEADOF_TASK4
-
-int taskX_wrapper() {
-
-  // example task: LED blinking
-
-  // taskX.setParam(500,500); taskX.blink();
-
-  if (debug_cnt == 0) {
-    taskX.setParam(50,950);
-
-  } else if (debug_cnt == 6) {
-    taskX.setParam(250,750);
-
-  } else if (debug_cnt == 12) {
-    taskX.setParam(500,500);
-
-  } else if (debug_cnt == 18) {
-    taskX.setParam(750,250);
-
-  } else if (debug_cnt == 24) {
-    taskX.setParam(950,50);
-  }
-  taskX.blink();
-
-  return(0);
-}
-
-#endif  // USE_TASKX_INSTEADOF_TASK4
-
-// -------------------------------------
-
 // task0_wrapper() returns:
 //   0 - watchdog timer is running.
 //   1 - reset required (normal mode)
@@ -104,7 +72,7 @@ int task0_wrapper() {
     return(_retval);
 }
 
-// -------------------------------------
+// ---------------------------------------------------------
 
 int task1_wrapper() {
 
@@ -131,7 +99,7 @@ int task1_wrapper() {
   return(0);
 }
 
-// -------------------------------------
+// ---------------------------------------------------------
 
 // task2_wrapper() returns:
 //   0 - delayed mode
@@ -147,8 +115,7 @@ int task2_wrapper() {
   return(_retval);
 }
 
-
-// -------------------------------------
+// ---------------------------------------------------------
 
 // task3_wrapper() returns:
 //   0 - RESET pulse is NOT generated
@@ -206,7 +173,7 @@ int task3_wrapper() {
   return(_reset);
 }
 
-// -------------------------------------
+// ---------------------------------------------------------
 
 #ifndef USE_TASKX_INSTEADOF_TASK4
 
@@ -223,6 +190,38 @@ int task4_wrapper() {
 
   return(_retval);
 
+}
+
+#endif  // USE_TASKX_INSTEADOF_TASK4
+
+// ---------------------------------------------------------
+
+#ifdef  USE_TASKX_INSTEADOF_TASK4
+
+int taskX_wrapper() {
+
+  // example task: LED blinking
+
+  // taskX.setParam(500,500); taskX.blink();
+
+  if (debug_cnt == 0) {
+    taskX.setParam(50,950);
+
+  } else if (debug_cnt == 6) {
+    taskX.setParam(250,750);
+
+  } else if (debug_cnt == 12) {
+    taskX.setParam(500,500);
+
+  } else if (debug_cnt == 18) {
+    taskX.setParam(750,250);
+
+  } else if (debug_cnt == 24) {
+    taskX.setParam(950,50);
+  }
+  taskX.blink();
+
+  return(0);
 }
 
 #endif  // USE_TASKX_INSTEADOF_TASK4

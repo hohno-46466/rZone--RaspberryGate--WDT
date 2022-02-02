@@ -87,8 +87,6 @@ WDTstatus myWDTx;
 
 // ---------------------------------------------------------
 
-#define TEST_MODE
-
 // setup()
 
 void setup() {

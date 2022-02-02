@@ -2,10 +2,11 @@
 // testcode.ino
 //
 
+#ifdef test_mode
+
 // ---------------------------------------------------------
 
 #define TEST_BUTTON_ON_GBKA
-
 // #define TEST_BLINK_ON_GBKA
 
 // ---------------------------------------------------------<
@@ -87,3 +88,5 @@ void loopXtest() {
 #endif // TEST_BUTTON_ON_GBKA
 
 // ---------------------------------------------------------
+
+#endif  // test_mode

@@ -66,6 +66,11 @@ boolean classBlinkLED::init(int pin, boolean positive) {
 // void classBlinkLED::setParam(int Ton, int Toff)
 //   Ton - duration of LED ON (in msec);
 //   Toff - duration of LED OFF (in msec)
+// void classBlinkLED::setParam(int T0, int T1, int T3, int N);
+//   T0 - duration of LED OFF before T1 (in msec)
+//   T1 - duration of LED ON (in msec);
+//   T2 - duration of LED OFF after T1 (in msec)
+//   N  - number of repeating
 
 void classBlinkLED::setParam(int Ton, int Toff) {
   _Ton = Ton;

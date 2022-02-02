@@ -21,6 +21,8 @@
 
 // ---------------------------------------------------------
 
+// #define TEST_MODE
+
 #define USE_GBKA
 
 #define DEBUG_LEVEL  (5)
