@@ -21,9 +21,9 @@
 class classButtonSW {
  public:
   classButtonSW();
-  classButtonSW(int pin, boolean pullup, boolean positive);
-  boolean init(int pin, boolean pullup, boolean positive);
-  int setParam(int updown);
+  classButtonSW(int, boolean, boolean);
+  boolean init(int, boolean, boolean);
+  int setParam(int);
   boolean update();
   int getStat();
  protected:
@@ -35,7 +35,7 @@ class classButtonSW {
   int _state  = -1;
   int _currentVal = 0;  // currentVal goes up and down between _LEVEL_MIN and _LEVEL_MAX
   int _updown = 15;
-  uint32_t _Tnext_8ms = 0;
+  uint32_t _Tnext_ms = 0;
   boolean _positive = true; // true: positive logic, false: negative logic
 };
 

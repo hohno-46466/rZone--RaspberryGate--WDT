@@ -14,6 +14,8 @@
 // ---------------------------------------------------------
 
 #include "Arduino.h"
+#include "classBlinkLED.h"
+#include "mydefs.h"
 
 class outputPins {
  public:
@@ -26,6 +28,10 @@ class outputPins {
   int getResetStat();
  private:
   boolean _verbose = false;
+	classBlinkLED	_LED;
+	classBlinkLED	_RST;
+	classBlinkLED	_NOTE;
+
 };
 
 // ---------------------------------------------------------

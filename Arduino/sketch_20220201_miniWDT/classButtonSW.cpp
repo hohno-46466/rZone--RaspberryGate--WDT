@@ -17,8 +17,6 @@
 #include "classButtonSW.h"
 #include "mydefs.h"
 
-extern uint32_t eightMillis();
-
 // ---------------------------------------------------------
 
 // classButtonSW::classButtonSW()
@@ -80,10 +78,10 @@ int classButtonSW::setParam(int updown) {
 boolean classButtonSW::update() {
   // digital debouncing
 
-  static uint32_t _lastTime_8ms = 0;
-  uint32_t _currentTime_8ms = eightMillis();
+  static uint32_t _lastTime_ms = 0;
+  uint32_t _currentTime_ms = millis();
 
-  if ((_currentTime_8ms - _lastTime_8ms) <= 1) {
+  if ((_currentTime_ms - _lastTime_ms) <= 8) {
     return(_state);
   }
 

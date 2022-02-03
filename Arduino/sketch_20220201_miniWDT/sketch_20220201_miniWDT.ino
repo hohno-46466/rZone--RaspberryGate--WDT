@@ -30,6 +30,7 @@ void setup() {
   HBinterval_ms = -1;
   HBintervalLimit_ms = HB_INTERVAL_L_MS;
 
+	oPins.startBlinking(1, 1, 1/*step1_s, step2_s, step3_s*/);
 }
 
 // ---------------------------------------------------------
@@ -41,8 +42,29 @@ void setup() {
 //  2 : rebooting
 
 void loop() {
+	loopX2();
+}
+
+// ---------------------------------------------------------
+
+classBlinkLED test;
+
+void loopX2() {
+
+  // int step1_s, step2_s, step3_s;
+
+  iPins.update();
+  oPins.update();
+
+
+}
+
+// ---------------------------------------------------------
+
+void loopX1() {
 
   int step1_s, step2_s, step3_s;
+
   iPins.update();
   oPins.update();
 
@@ -83,7 +105,7 @@ void loop() {
 
     if (alertLevel == ALERT_LEVEL_1) {
       // for the first time...
-      if (iPins.getWDType() == 0) {
+      if (iPins.getWDtype() == 0) {
         step1_s = SEC_BEFORE1;
         step2_s = SEC_PULSE1;
         step3_s = SEC_AFTER1;

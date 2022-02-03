@@ -2,14 +2,14 @@
 #define __MYDEFS_H__
 
 //
-// mydefs.h
+// mydefs.h for for miniWDT
 //
 
 // ---------------------------------------------------------
 
 // History:
 // First version: Tue Feb  1 09:53:38 JST 2022 by @hohno_at_kuimc
-
+// Revised: Thu Feb  3 12:59:16 JST 2022 for miniWDT
 
 // ---------------------------------------------------------
 
@@ -22,7 +22,7 @@
 #ifdef  USE_GBKA
 #define IS_PIN_OK(x)  ((x > 0) && (x <= 13))
 #else   // if not USE_GBKA (ATtiny85)
-#define IS_PIN_OK(x)  ((x > 0) && (x <= 5))
+#define IS_PIN_OK(x)  ((x >= 0) && (x <= 5))
 #endif  // USE_GBKA
 
 #define SW_ON       (1)
@@ -58,13 +58,15 @@
 #define PIN_I_PULSE   (6)
 #define PIN_O_LED     (4)
 #define PIN_I_REQ     (7)
+#define PIN_I_TYPE    (PIN_I_REQ)
 #define PIN_O_RESET   (8)
 #define PIN_O_NOTE    (12)
 //
-#else   // if not USE_GBKA (ATtiny85)
+#else   // if not USE_GBKA (such as ATtiny85)
 #define PIN_I_PULSE   (0)
 #define PIN_O_LED     (1)
 #define PIN_I_REQ     (2)
+#define PIN_I_TYPE    (PIN_I_REQ)
 #define PIN_O_RESET   (3)
 #define PIN_O_NOTE    (4)
 #endif  // USE_GBKA
@@ -105,8 +107,8 @@
 #define SEC_PULSE1    (1)
 #define SEC_AFTER1    (1)
 
-#define SEC_BEFORE2   (600)
-#define SEC_PULSE2    (1)
+#define SEC_BEFORE2   (30)
+#define SEC_PULSE2    (900)
 #define SEC_AFTER2    (1)
 
 #define HB_INTERVAL_S_MS  (30 * 1000L)   // default timeout for heartbeat
