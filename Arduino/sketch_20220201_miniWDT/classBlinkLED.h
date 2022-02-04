@@ -24,28 +24,31 @@ class classBlinkLED {
   classBlinkLED();
   classBlinkLED(int, boolean);
   boolean init(int, boolean);
-  void setParam(int, int);
-  void setParam(int, int, int, int);
-	void setParam(int, int, int, int, int);
+  void setParam(int, int, boolean);
+  void setParam(int, int, int, int, boolean);
+	void setParam(int, int, int, int, int, boolean);
   boolean blink();
   void stop();
 	void start();
  protected:
-	uint32_t _updateTnext_ms();
-	boolean _blink = false;
+	int32_t _updateTnext_ms();
+	boolean _flag_blink = false;
+	boolean _flag_reverse = false;
   int _pin = -1;
-  int _Ton = -1;
-  int _Toff = -1;
-  int _prev_Ton = 0;
-  int _prev_Toff = 0;
+  // int _Ton = -1;
+  // int _Toff = -1;
+  // int _prev_Ton = 0;
+  // int _prev_Toff = 0;
   int _T0_ms = 1, _T0prev_ms = 0;
   int _T1_ms = 1, _T1prev_ms = 0;
   int _T2_ms = 1, _T2pre_msv = 0;
-	int _N1 = 1, _N1now = 0;
-	int _N2 = 0, _N2now = 0;
+	uint16_t _N1 = 1, _N1now = 0;
+	uint16_t _N2 = 0, _N2now = 0;
   boolean _LEDstat = false;
   uint32_t _Tnext_ms = 0;
   boolean _positive = true; // true: positive logic (HIGH is to turn LED on), false: negative logic (LOW is to turn LED on)
+	boolean _flag_useT2 = false;
+	boolean _flag_stop = false;
 };
 
 // ---------------------------------------------------------

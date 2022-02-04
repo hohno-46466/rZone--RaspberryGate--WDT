@@ -40,6 +40,10 @@ boolean outputPins::update() {
 
 boolean outputPins::startResetPulse(int step1_s, int step2_s, int step3_s) {
 
+	int dummy1 = step1_s;
+	int dummy2 = step2_s;
+	int dummy3 = step3_s;
+
   return(false);
 }
 
@@ -47,12 +51,22 @@ boolean outputPins::startResetPulse(int step1_s, int step2_s, int step3_s) {
 
 boolean outputPins::startNotification(int step1_s) {
 
+	int dummy1 = step1_s;
+	int dummy2 = 0;
+	int dummy3 = 0;
+
   return(false);
 }
 
 // ---------------------------------------------------------
 
 boolean outputPins::startBlinking(int step1_s, int step2_s, int step3_s)  {
+
+
+	int dummy1 = step1_s;
+	int dummy2 = step2_s;
+	int dummy3 = step3_s;
+
 
   return(false);
 }
