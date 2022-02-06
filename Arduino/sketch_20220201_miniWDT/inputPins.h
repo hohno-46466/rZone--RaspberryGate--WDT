@@ -26,13 +26,13 @@ class inputPins {
   int getWDtype();
  private:
   boolean _verbose = false;
-	classButtonSW _HB;	// pin for heartbeat pulse
-	classButtonSW _WD;	// pin for Watchdog Type
-	int _HBstat = -1;
-	int _WDstat = -1;
-	int _HBprev = -1;
-	int _WDprev = -1;
-	uint32_t _HBprev_ms = 0;
+  classButtonSW _HB;  // pin for heartbeat pulse
+  classButtonSW _WD;  // pin for Watchdog Type
+  int _HBstat = -1;
+  int _WDstat = -1;
+  int _HBprev = -1;
+  int _WDprev = -1;
+  uint32_t _HBprev_ms = 0;
 
 };
 

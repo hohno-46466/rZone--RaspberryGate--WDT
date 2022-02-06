@@ -30,7 +30,7 @@ void setup() {
   HBinterval_ms = -1;
   HBintervalLimit_ms = HB_INTERVAL_L_MS;
 
-	oPins.startBlinking(1, 1, 1/*step1_s, step2_s, step3_s*/);
+  oPins.setBlinking(1, 1, 1, -1, -1, false);
 }
 
 // ---------------------------------------------------------
@@ -42,7 +42,7 @@ void setup() {
 //  2 : rebooting
 
 void loop() {
-	loopX2();
+  loopX2();
 }
 
 // ---------------------------------------------------------
@@ -114,9 +114,9 @@ void loopX1() {
         step2_s = SEC_PULSE2;
         step3_s = SEC_AFTER2;
       }
-      oPins.startResetPulse(step1_s, step2_s, step3_s);
-      oPins.startNotification(step1_s);
-      oPins.startBlinking(step1_s, step2_s, step3_s);
+      oPins.setResetPulse(step1_s, step2_s, step3_s);
+      oPins.setNotification(step1_s);
+      oPins.setBlinking(step1_s, step2_s, step3_s, -1, -1, false);
       alertLevel = ALERT_LEVEL_2;
 
     } else {

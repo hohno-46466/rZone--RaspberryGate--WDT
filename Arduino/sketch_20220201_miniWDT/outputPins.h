@@ -22,15 +22,15 @@ class outputPins {
   outputPins();
   boolean init();
   boolean update();
-  boolean startResetPulse(int, int, int);
-  boolean startNotification(int);
-  boolean startBlinking(int, int, int);
+  boolean setResetPulse(int, int, int);
+  boolean setNotification(int);
+  boolean setBlinking(int, int, int, int, int, boolean);
   int getResetStat();
  private:
   boolean _verbose = false;
-	classBlinkLED	_LED;
-	classBlinkLED	_RST;
-	classBlinkLED	_NOTE;
+  classBlinkLED   _LED;
+  classBlinkLED   _RST;
+  classBlinkLED   _NOTE;
 
 };
 

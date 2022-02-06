@@ -26,6 +26,18 @@ outputPins::outputPins() {
 
 boolean outputPins::init() {
 
+  _LED.init(PIN_O_LED, true);
+  _LED.setParam(1, 1, true);
+  _LED.start();
+
+  _RST.init(PIN_O_RESET, true);
+  _RST.setParam(1, 1, true);
+  _RST.stop();
+
+  _NOTE.init(PIN_O_NOTE, true);
+  _NOTE.setParam(1, 1, true);
+  _NOTE.stop();
+
   return(false);
 }
 
@@ -33,40 +45,37 @@ boolean outputPins::init() {
 
 boolean outputPins::update() {
 
-  return(false);
-}
-
-// ---------------------------------------------------------
-
-boolean outputPins::startResetPulse(int step1_s, int step2_s, int step3_s) {
-
-	int dummy1 = step1_s;
-	int dummy2 = step2_s;
-	int dummy3 = step3_s;
+  _LED.blink();
+  _RST.blink();
+  _NOTE.blink();
 
   return(false);
 }
 
 // ---------------------------------------------------------
 
-boolean outputPins::startNotification(int step1_s) {
+boolean outputPins::setResetPulse(int step1_s, int step2_s, int step3_s) {
 
-	int dummy1 = step1_s;
-	int dummy2 = 0;
-	int dummy3 = 0;
+  _RST.setParam(step1_s, step2_s, step3_s, 0, 0, false);
 
   return(false);
 }
 
 // ---------------------------------------------------------
 
-boolean outputPins::startBlinking(int step1_s, int step2_s, int step3_s)  {
+boolean outputPins::setNotification(int step1_s) {
+
+  _NOTE.setParam(step1_s, 1, 1, 0, 0, false);
+
+  return(false);
+}
+
+// ---------------------------------------------------------
+
+boolean outputPins::setBlinking(int step1_s, int step2_s, int step3_s, int N1, int N2, boolean reverse)  {
 
 
-	int dummy1 = step1_s;
-	int dummy2 = step2_s;
-	int dummy3 = step3_s;
-
+  _LED.setParam(step1_s, step2_s, step3_s, N1, N2, reverse);
 
   return(false);
 }
