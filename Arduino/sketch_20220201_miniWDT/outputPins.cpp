@@ -18,24 +18,27 @@
 
 // ---------------------------------------------------------
 
-outputPins::outputPins() {
+// constructor
 
+outputPins::outputPins() {
+	// nothing to do here
+	// since _LED, _RST, _NOTE are prepared as the private member, we don't need to use constructor for these three objects here.
 }
 
 // ---------------------------------------------------------
 
 boolean outputPins::init() {
 
-  _LED.init(PIN_O_LED, true);
-  _LED.setParam(1, 1, true);
+  _LED.init(PIN_O_LED, POSITIVE_LOGIC);
+  _LED.setParam(1, 1, NORMAL_ACTION);
   _LED.start();
 
-  _RST.init(PIN_O_RESET, true);
-  _RST.setParam(1, 1, true);
+  _RST.init(PIN_O_RESET, POSITIVE_LOGIC);
+  _RST.setParam(1, 1, NORMAL_ACTION);
   _RST.stop();
 
-  _NOTE.init(PIN_O_NOTE, true);
-  _NOTE.setParam(1, 1, true);
+  _NOTE.init(PIN_O_NOTE, POSITIVE_LOGIC);
+  _NOTE.setParam(1, 1, NORMAL_ACTION);
   _NOTE.stop();
 
   return(false);
@@ -54,28 +57,58 @@ boolean outputPins::update() {
 
 // ---------------------------------------------------------
 
-boolean outputPins::setResetPulse(int step1_s, int step2_s, int step3_s) {
+boolean outputPins::setResetPulse(int T0_s, int T1_s, int T2_s) {
 
-  _RST.setParam(step1_s, step2_s, step3_s, 0, 0, false);
+  _RST.setParam(T0_s, T1_s, T2_s, 0, 0, NORMAL_ACTION);
 
-  return(false);
-}
-
-// ---------------------------------------------------------
-
-boolean outputPins::setNotification(int step1_s) {
-
-  _NOTE.setParam(step1_s, 1, 1, 0, 0, false);
+	// set a (single) RESET pulse as follows:
+	//   step1: T0_s sec for the first guard time
+	//   step2: T1_s sec for the NOTIFICATION
+	//   step3: T2_s sec for the second guard time
 
   return(false);
 }
 
 // ---------------------------------------------------------
 
-boolean outputPins::setBlinking(int step1_s, int step2_s, int step3_s, int N1, int N2, boolean reverse)  {
+boolean outputPins::setNotification(int T0_s) {
+
+  _NOTE.setParam(T0_s, 1, 1, 0, 0, NORMAL_ACTION);
+
+	// set a (single) NOTIFICATION pulse as follows:
+	//   step1: T0_s sec for the first guard time
+	//   step2: 1sec for the NOTIFICATION
+	//   step3: 1sec for the second guard time
+
+  return(false);
+}
+
+// ---------------------------------------------------------
+
+boolean outputPins::setBlinking(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverse)  {
 
 
-  _LED.setParam(step1_s, step2_s, step3_s, N1, N2, reverse);
+  _LED.setParam(T0_s, T1_s, T2_s, N1, N2, reverse);
+
+	// if reverse is NORMAL_ACTION, then
+	//   Repeat the following outer loop N2+1 times
+	//     Repeat the following inner loop N1+1 times
+	//       Turn LED OFF for T0_s sec
+	//       Turn LED ON for T1_s sec
+	//     End of the inner loop
+	//     Turn LED OFF for T2_s sec
+	//   End of the outer loop
+	// endif
+
+	// if reverse is REVERSE_ACTION, then
+	//   Repeat the following outer loop N2+1 times
+	//     Repeat the following inner loop N1+1 times
+	//       Turn LED ON for T0_s sec
+	//       Turn LED OFF for T1_s sec
+	//     End of the inner loop
+	//     Turn LED ON for T2_s sec
+	//   End of the outer loop
+	// endif
 
   return(false);
 }

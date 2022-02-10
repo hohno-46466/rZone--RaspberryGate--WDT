@@ -32,21 +32,19 @@ class classBlinkLED {
   void start();
  protected:
   int32_t _updateTnext_ms();
-  boolean _flag_blink = false;
-  boolean _flag_reverse = false;
   int _pin = -1;
-  // int _Ton = -1;
-  // int _Toff = -1;
-  // int _prev_Ton = 0;
-  // int _prev_Toff = 0;
-  int _T0_ms = 1, _T0prev_ms = 0;
-  int _T1_ms = 1, _T1prev_ms = 0;
-  int _T2_ms = 1, _T2pre_msv = 0;
+  int32_t _T0_ms = 1, _T0start_ms = 0;
+  int32_t _T1_ms = 1, _T1start_ms = 0;
+  int32_t _T2_ms = 1, _T2start_ms = 0;
   uint16_t _N1 = 1, _N1now = 0;
   uint16_t _N2 = 0, _N2now = 0;
   boolean _LEDstat = false;
+	int _blinkCounter = 0;
+	int _blinkCounterPrev = -1;
   uint32_t _Tnext_ms = 0;
-  boolean _positive = true; // true: positive logic (HIGH is to turn LED on), false: negative logic (LOW is to turn LED on)
+  boolean _positiveLogic = true; // true: positive logic (HIGH is to turn LED on), false: negative logic (LOW is to turn LED on)
+  boolean _flag_blink = false;
+  boolean _flag_reverseAction = false;
   boolean _flag_useT2 = false;
   boolean _flag_stop = false;
 };

@@ -32,6 +32,9 @@
 #define POSITIVE_LOGIC  (true)
 #define NEGATIVE_LOGIC  (false)
 
+#define REVERSE_ACTION  (true)
+#define NORMAL_ACTION   (false)
+
 #define USE_PULLUP  (true)
 #define NO_PULLUP   (false)
 
