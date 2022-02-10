@@ -23,6 +23,38 @@ outputPins oPins;
 // ---------------------------------------------------------
 
 void setup() {
+  if (testMode) {
+    setup4test();
+  } else {
+    setup4main();
+  }
+}
+
+
+// ---------------------------------------------------------
+
+void setup4test() {
+
+  int T0_s = 1, T1_s = 1, T2_s = 1, N1 = -1, N2 = -1;
+  boolean reverseAction = false;
+
+  iPins.init();
+  oPins.init();
+
+  T0_s = 1, T1_s = 1, T2_s = 1, N1 = -1, N2 = -1;
+  reverseAction = false;
+  oPins.setBlinking(T0_s, T1_s, T2_s, N1, N2, reverseAction);
+  oPins.startBlinking();
+}
+
+
+  // ---------------------------------------------------------
+
+
+void setup4main() {
+
+  int T0_s = 1, T1_s = 1, T2_s = 1, N1 = -1, N2 = -1;
+  boolean reverseAction = false;
 
   iPins.init();
   oPins.init();
@@ -30,7 +62,20 @@ void setup() {
   HBinterval_ms = -1;
   HBintervalLimit_ms = HB_INTERVAL_L_MS;
 
-  oPins.setBlinking(1, 1, 1, -1, -1, false);
+  T0_s = 1, T1_s = 1, T2_s = 1, N1 = -1, N2 = -1;
+  reverseAction = false;
+  oPins.setBlinking(T0_s, T1_s, T2_s, N1, N2, reverseAction);
+  oPins.startBlinking();
+
+  // T0_s = 1, T1_s = 1, T2_s = 1, N1 = 0, N2 = 0;
+  // reverseAction = false;
+  // oPins.setResetPulse(T0_s, T1_s, T2_s, N1, N2, reverseAction);
+  // oPins.stopResetPulse();
+
+  // T0_s = 1, T1_s = 2, T2_s = 1, N1 = 0, N2 = 0;
+  // reverseAction = false;
+  // oPins.setNotification(T0_s, T1_s, T2_s, N1, N2, reverseAction);
+  // oPins.stopResetPulse();
 }
 
 // ---------------------------------------------------------
@@ -42,26 +87,29 @@ void setup() {
 //  2 : rebooting
 
 void loop() {
-  loopX2();
+  if (testMode) {
+    loop4test();
+  } else {
+    loop4main();
+  }
 }
 
 // ---------------------------------------------------------
 
 classBlinkLED test;
 
-void loopX2() {
+void loop4test() {
 
   // int step1_s, step2_s, step3_s;
 
   iPins.update();
   oPins.update();
 
-
 }
 
 // ---------------------------------------------------------
 
-void loopX1() {
+void loop4main() {
 
   int step1_s, step2_s, step3_s;
 

@@ -27,32 +27,33 @@ class classBlinkLED {
   void setParam(int T0_s, int T1_s, boolean reverseAction);
   void setParam(int T0_s, int T1_s, int T2_s, int N, boolean reverseAction);
   void setParam(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverseAction);
-  boolean blink();
+  boolean blink();            // update blinking. This function needs to be called very frequently, either directly or indirectly in main().
   void stop();
   void start();
-	int stat();
+  int blinkStat();
+  int blinkCounter();
  protected:
   int32_t _updateTnext_ms();
-  int _pin = -1; // PIN No.
+  int _pin = -1;              // PIN No.
   int32_t _T0_ms = 1;         // Duration of T0
   int32_t _T1_ms = 1;         // Duration of T1
   int32_t _T2_ms = 1;         // Duration of T2
   int32_t _T0start_ms = 0;    // Millis of the last start of T0
   int32_t _T1start_ms = 0;    // Millis of the last start of T1
   int32_t _T2start_ms = 0;    // Millis of the last start of T2
-  uint16_t _N1 = 1;     // Number of inner loop
-  uint16_t _N1now = 0;  // Current count of the inner loop
-  uint16_t _N2 = 0;     // Number of outer loop
-  uint16_t _N2now = 0;  // Current count of the outer loop
-  boolean _LEDstat = true; // !!!
+  boolean _T2mode = false;    // T2 mode
+  uint32_t _Tnext_ms = 0;
+  uint16_t _N1 = 1;           // Number of inner loop
+  uint16_t _N1now = 0;        // Current count of the inner loop
+  uint16_t _N2 = 0;           // Number of outer loop
+  uint16_t _N2now = 0;        // Current count of the outer loop
+  boolean _LEDstat = true;    // A trick to start this sketch with the LED off
   int _blinkCounter = 0;
   int _blinkCounterPrev = -1;
-  uint32_t _Tnext_ms = 0;
   boolean _positiveLogic = true; // true: positive logic (HIGH is to turn LED on), false: negative logic (LOW is to turn LED on)
   boolean _flag_blink = false;
   boolean _flag_reverseAction = false;
-  boolean _flag_useT2 = false;
-  boolean _flag_stop = false;
+  boolean _flag_stop = false; // if true, blinking will stop at the end of the current loop
 };
 
 // ---------------------------------------------------------

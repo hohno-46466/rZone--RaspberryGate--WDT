@@ -21,8 +21,8 @@
 // constructor
 
 outputPins::outputPins() {
-	// nothing to do here
-	// since _LED, _RST, _NOTE are prepared as the private member, we don't need to use constructor for these three objects here.
+  // nothing to do here
+  // since _LED, _RST, _NOTE are prepared as the private member, we don't need to use constructor for these three objects here.
 }
 
 // ---------------------------------------------------------
@@ -59,12 +59,13 @@ boolean outputPins::update() {
 
 boolean outputPins::setResetPulse(int T0_s, int T1_s, int T2_s) {
 
+  _RST.stop();
   _RST.setParam(T0_s, T1_s, T2_s, 0, 0, NORMAL_ACTION);
 
-	// set a (single) RESET pulse as follows:
-	//   step1: T0_s sec for the first guard time
-	//   step2: T1_s sec for the NOTIFICATION
-	//   step3: T2_s sec for the second guard time
+  // set a (single) RESET pulse as follows:
+  //   step1: T0_s sec for the first guard time
+  //   step2: T1_s sec for the NOTIFICATION
+  //   step3: T2_s sec for the second guard time
 
   return(false);
 }
@@ -73,44 +74,100 @@ boolean outputPins::setResetPulse(int T0_s, int T1_s, int T2_s) {
 
 boolean outputPins::setNotification(int T0_s) {
 
+  _NOTE.stop();
   _NOTE.setParam(T0_s, 1, 1, 0, 0, NORMAL_ACTION);
 
-	// set a (single) NOTIFICATION pulse as follows:
-	//   step1: T0_s sec for the first guard time
-	//   step2: 1sec for the NOTIFICATION
-	//   step3: 1sec for the second guard time
+  // set a (single) NOTIFICATION pulse as follows:
+  //   step1: T0_s sec for the first guard time
+  //   step2: 1sec for the NOTIFICATION
+  //   step3: 1sec for the second guard time
 
   return(false);
 }
 
 // ---------------------------------------------------------
 
-boolean outputPins::setBlinking(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverse)  {
+boolean outputPins::setBlinking(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverseAction)  {
 
+  _LED.stop();
+  _LED.setParam(T0_s, T1_s, T2_s, N1, N2, reverseAction);
 
-  _LED.setParam(T0_s, T1_s, T2_s, N1, N2, reverse);
+  // if reverse is NORMAL_ACTION, then
+  //   Repeat the following outer loop N2+1 times
+  //     Repeat the following inner loop N1+1 times
+  //       Turn LED OFF for T0_s sec
+  //       Turn LED ON for T1_s sec
+  //     End of the inner loop
+  //     Turn LED OFF for T2_s sec
+  //   End of the outer loop
+  // endif
 
-	// if reverse is NORMAL_ACTION, then
-	//   Repeat the following outer loop N2+1 times
-	//     Repeat the following inner loop N1+1 times
-	//       Turn LED OFF for T0_s sec
-	//       Turn LED ON for T1_s sec
-	//     End of the inner loop
-	//     Turn LED OFF for T2_s sec
-	//   End of the outer loop
-	// endif
-
-	// if reverse is REVERSE_ACTION, then
-	//   Repeat the following outer loop N2+1 times
-	//     Repeat the following inner loop N1+1 times
-	//       Turn LED ON for T0_s sec
-	//       Turn LED OFF for T1_s sec
-	//     End of the inner loop
-	//     Turn LED ON for T2_s sec
-	//   End of the outer loop
-	// endif
+  // if reverse is REVERSE_ACTION, then
+  //   Repeat the following outer loop N2+1 times
+  //     Repeat the following inner loop N1+1 times
+  //       Turn LED ON for T0_s sec
+  //       Turn LED OFF for T1_s sec
+  //     End of the inner loop
+  //     Turn LED ON for T2_s sec
+  //   End of the outer loop
+  // endif
 
   return(false);
+}
+
+// ---------------------------------------------------------
+
+boolean outputPins::startResetPulse() {
+
+  _RST.start();
+
+  return(true);
+}
+
+// ---------------------------------------------------------
+
+
+boolean outputPins::startNotification() {
+
+  _NOTE.start();
+
+  return(true);
+}
+
+// ---------------------------------------------------------
+
+boolean outputPins::startBlinking() {
+
+  _LED.start();
+
+  return(-1);
+}
+
+// ---------------------------------------------------------
+
+boolean outputPins::stopResetPulse() {
+
+  _RST.stop();
+
+  return(true);
+}
+
+// ---------------------------------------------------------
+
+boolean outputPins::stopNotification() {
+
+  _NOTE.stop();
+
+  return(true);
+}
+
+// ---------------------------------------------------------
+
+boolean outputPins::stopBlinking() {
+
+  _LED.stop();
+
+  return(-1);
 }
 
 // ---------------------------------------------------------

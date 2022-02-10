@@ -25,6 +25,12 @@ class outputPins {
   boolean setResetPulse(int, int, int);
   boolean setNotification(int);
   boolean setBlinking(int, int, int, int, int, boolean);
+  boolean startResetPulse();
+  boolean startNotification();
+  boolean startBlinking();
+  boolean stopResetPulse();
+  boolean stopNotification();
+  boolean stopBlinking();
   int getResetStat();
  private:
   boolean _verbose = false;

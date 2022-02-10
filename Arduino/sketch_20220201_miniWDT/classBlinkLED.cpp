@@ -4,7 +4,6 @@
 
 # !!! This sketch is under developing. Do not build this. !!!
 
-
 // ---------------------------------------------------------
 
 // History:
@@ -232,7 +231,7 @@ void classBlinkLED::start() {
 // int classBlinkLED::blinkStat()
 
 int classBlinkLED::blinkStat() {
-	return(-1);
+  return(-1);
 }
 
 
@@ -241,7 +240,7 @@ int classBlinkLED::blinkStat() {
 // int classBlinkLED::blinkCounter()
 
 int classBlinkLED::blinkCounter() {
-	return(_blinkCounter);
+  return(_blinkCounter);
 }
 
 
@@ -260,7 +259,7 @@ int classBlinkLED::blinkCounter() {
     return(-1);
   }
 
-  if (_flag_useT2) {
+  if (_T2mode) {
     _LEDstat = false;
     _blinkCounter = 0;
     _blinkCounterPrev = 0;
@@ -270,7 +269,7 @@ int classBlinkLED::blinkCounter() {
     if (_N2now > _N2) {
     _flag_stop = true;
     }
-    _flag_useT2 = false;
+    _T2mode = false;
     return(_retT_ms);
   }
 
@@ -288,14 +287,14 @@ int classBlinkLED::blinkCounter() {
   if (_LEDstat == false) {
     // if _LEDstat is false, then turn _LEDstat true and return the assigned value of T1_ms
     _LEDstat = true;
-    _blinkCounter = _blinkCounterPrev + 1; // _blinkCounter counts the number of LED on in this period (_blinkCounter rises from one to N1*N2-1
+    _blinkCounter = _blinkCounterPrev + 1; // _blinkCounter counts the number of LED on in this period (_blinkCounter rises from 1 to N1*N2-1
     _blinkCounterPrev = _blinkCounter;
     _T1start_ms = millis();
     _retT_ms = _T1_ms;
     _N1now++;
     if (_N1now >= _N1) {
       _N1now = 0;
-      _flag_useT2 = true;
+      _T2mode = true;
     }
     return(_retT_ms);
   }
