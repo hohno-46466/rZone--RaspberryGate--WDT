@@ -89,9 +89,9 @@ boolean classBlinkLED::init(int pin, boolean positiveLogic) {
 
 void classBlinkLED::setParam(int T0_s, int T1_s, boolean reverseAction) {
   _flag_blink = true;
-	_blinkCounter = 0;
-	_blinkCounterPrev = -1;
-	_LEDstat = false;
+  _blinkCounter = 0;
+  _blinkCounterPrev = -1;
+  _LEDstat = false;
   _T0_ms = T0_s * 1000L; /* Ton  */
   _T1_ms = T1_s * 1000L; /* Toff */
   _T2_ms = 0;
@@ -106,9 +106,9 @@ void classBlinkLED::setParam(int T0_s, int T1_s, boolean reverseAction) {
 void classBlinkLED::setParam(int T0_s, int T1_s, int T2_s, int N, boolean reverseAction) {
   // N x (T0 + T1) + T2 [End]
   _flag_blink = true;
-	_blinkCounter = 0;
-	_blinkCounterPrev = -1;
-	_LEDstat = false;
+  _blinkCounter = 0;
+  _blinkCounterPrev = -1;
+  _LEDstat = false;
   _T0_ms = T0_s * 1000L;
   _T1_ms = T1_s * 1000L;
   _T2_ms = T2_s * 1000L;
@@ -123,9 +123,9 @@ void classBlinkLED::setParam(int T0_s, int T1_s, int T2_s, int N, boolean revers
 void classBlinkLED::setParam(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverseAction) {
     // N2 x (N1 x (T0 + T1) + T2) [End]
   _flag_blink = true;
-	_blinkCounter = 0;
-	_blinkCounterPrev = -1;
-	_LEDstat = false;
+  _blinkCounter = 0;
+  _blinkCounterPrev = -1;
+  _LEDstat = false;
   _T0_ms = T0_s * 1000L;
   _T1_ms = T1_s * 1000L;
   _T2_ms = T2_s * 1000L;
@@ -163,8 +163,8 @@ boolean classBlinkLED::blink() {
 
   if (_Tnext_ms > millis()) {
 
-		// nothing to do here...
-		// we are still waiting for _Tnext_ms to come
+    // nothing to do here...
+    // we are still waiting for _Tnext_ms to come
 
   } else {
     // we need to prepare for the next period
@@ -176,11 +176,11 @@ boolean classBlinkLED::blink() {
 
     _Tnext_ms += _tmp_ms;
     if (_LEDstat) {
-			_LED_ON;
-			// blinkCounter++ // we have done this is _updateTnext_ms()
-				} else {
-			_LED_OFF;
-		}
+      _LED_ON;
+      // blinkCounter++ // we have done this is _updateTnext_ms()
+        } else {
+      _LED_OFF;
+    }
   }
   _flag_blink = true;
 
@@ -228,6 +228,25 @@ void classBlinkLED::start() {
 }
 
 // ---------------------------------------------------------
+
+// int classBlinkLED::blinkStat()
+
+int classBlinkLED::blinkStat() {
+	return(-1);
+}
+
+
+// ---------------------------------------------------------
+
+// int classBlinkLED::blinkCounter()
+
+int classBlinkLED::blinkCounter() {
+	return(_blinkCounter);
+}
+
+
+
+// ---------------------------------------------------------
 // ---------------------------------------------------------
 
 /*private*/ int32_t classBlinkLED::_updateTnext_ms() {
@@ -243,9 +262,9 @@ void classBlinkLED::start() {
 
   if (_flag_useT2) {
     _LEDstat = false;
-		_blinkCounter = 0;
-		_blinkCounterPrev = 0;
-		_T2start_ms = millis();
+    _blinkCounter = 0;
+    _blinkCounterPrev = 0;
+    _T2start_ms = millis();
     _retT_ms = _T2_ms;
     _N2now++;
     if (_N2now > _N2) {
@@ -255,23 +274,23 @@ void classBlinkLED::start() {
     return(_retT_ms);
   }
 
-	// XXX ??? T0 (off) -> T1 (on) -> T2 (off) になっていない
+  // XXX ??? T0 (off) -> T1 (on) -> T2 (off) になっていない
 
   if (_LEDstat == true) {
-		// if _LEDstat is true, then turn _LEDstat false and return the assigned value of T0_ms
+    // if _LEDstat is true, then turn _LEDstat false and return the assigned value of T0_ms
     _LEDstat = false;
-		_blinkCounter = 0; // _blinkCounter is always zero when the LED is off.
-		_T0start_ms = millis();
+    _blinkCounter = 0; // _blinkCounter is always zero when the LED is off.
+    _T0start_ms = millis();
     _retT_ms = _T0_ms;
     return(_retT_ms);
   }
 
   if (_LEDstat == false) {
-		// if _LEDstat is false, then turn _LEDstat true and return the assigned value of T1_ms
+    // if _LEDstat is false, then turn _LEDstat true and return the assigned value of T1_ms
     _LEDstat = true;
-		_blinkCounter = _blinkCounterPrev + 1; // _blinkCounter counts the number of LED on in this period (_blinkCounter rises from one to N1*N2-1
-		_blinkCounterPrev = _blinkCounter;
-		_T1start_ms = millis();
+    _blinkCounter = _blinkCounterPrev + 1; // _blinkCounter counts the number of LED on in this period (_blinkCounter rises from one to N1*N2-1
+    _blinkCounterPrev = _blinkCounter;
+    _T1start_ms = millis();
     _retT_ms = _T1_ms;
     _N1now++;
     if (_N1now >= _N1) {

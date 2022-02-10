@@ -22,25 +22,31 @@
 class classBlinkLED {
  public:
   classBlinkLED();
-  classBlinkLED(int, boolean);
-  boolean init(int, boolean);
-  void setParam(int, int, boolean);
-  void setParam(int, int, int, int, boolean);
-  void setParam(int, int, int, int, int, boolean);
+  classBlinkLED(int pin, boolean positiveLogic);
+  boolean init(int pin, boolean positiveLogic);
+  void setParam(int T0_s, int T1_s, boolean reverseAction);
+  void setParam(int T0_s, int T1_s, int T2_s, int N, boolean reverseAction);
+  void setParam(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverseAction);
   boolean blink();
   void stop();
   void start();
+	int stat();
  protected:
   int32_t _updateTnext_ms();
-  int _pin = -1;
-  int32_t _T0_ms = 1, _T0start_ms = 0;
-  int32_t _T1_ms = 1, _T1start_ms = 0;
-  int32_t _T2_ms = 1, _T2start_ms = 0;
-  uint16_t _N1 = 1, _N1now = 0;
-  uint16_t _N2 = 0, _N2now = 0;
+  int _pin = -1; // PIN No.
+  int32_t _T0_ms = 1;         // Duration of T0
+  int32_t _T1_ms = 1;         // Duration of T1
+  int32_t _T2_ms = 1;         // Duration of T2
+  int32_t _T0start_ms = 0;    // Millis of the last start of T0
+  int32_t _T1start_ms = 0;    // Millis of the last start of T1
+  int32_t _T2start_ms = 0;    // Millis of the last start of T2
+  uint16_t _N1 = 1;     // Number of inner loop
+  uint16_t _N1now = 0;  // Current count of the inner loop
+  uint16_t _N2 = 0;     // Number of outer loop
+  uint16_t _N2now = 0;  // Current count of the outer loop
   boolean _LEDstat = true; // !!!
-	int _blinkCounter = 0;
-	int _blinkCounterPrev = -1;
+  int _blinkCounter = 0;
+  int _blinkCounterPrev = -1;
   uint32_t _Tnext_ms = 0;
   boolean _positiveLogic = true; // true: positive logic (HIGH is to turn LED on), false: negative logic (LOW is to turn LED on)
   boolean _flag_blink = false;
