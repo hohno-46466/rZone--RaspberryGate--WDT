@@ -244,6 +244,7 @@ void classBlinkLED::start() {
   if (_flag_useT2) {
     _LEDstat = false;
 		_blinkCounter = 0;
+		_blinkCounterPrev = 0;
 		_T2start_ms = millis();
     _retT_ms = _T2_ms;
     _N2now++;
@@ -256,20 +257,20 @@ void classBlinkLED::start() {
 
 	// XXX ??? T0 (off) -> T1 (on) -> T2 (off) になっていない
 
-  if (_LEDstat == false) {
-    // if _LEDstat is false, then turn _LEDstat true and return the assigned value of T0_ms
-    _LEDstat = true;
+  if (_LEDstat == true) {
+		// if _LEDstat is true, then turn _LEDstat false and return the assigned value of T0_ms
+    _LEDstat = false;
+		_blinkCounter = 0; // _blinkCounter is always zero when the LED is off.
 		_T0start_ms = millis();
-		_blinkCounter = _blinkCounterPrev + 1;
-		_blinkCounterPrev = _blinkCounter;
     _retT_ms = _T0_ms;
     return(_retT_ms);
   }
 
-  if (_LEDstat == true) {
-    // if _LEDstat is true, then turn _LEDstat false and return the assigned value of T1_ms
-    _LEDstat = false;
-		_blinkCounter = 0;
+  if (_LEDstat == false) {
+		// if _LEDstat is false, then turn _LEDstat true and return the assigned value of T1_ms
+    _LEDstat = true;
+		_blinkCounter = _blinkCounterPrev + 1; // _blinkCounter counts the number of LED on in this period (_blinkCounter rises from one to N1*N2-1
+		_blinkCounterPrev = _blinkCounter;
 		_T1start_ms = millis();
     _retT_ms = _T1_ms;
     _N1now++;

@@ -38,7 +38,7 @@ class classBlinkLED {
   int32_t _T2_ms = 1, _T2start_ms = 0;
   uint16_t _N1 = 1, _N1now = 0;
   uint16_t _N2 = 0, _N2now = 0;
-  boolean _LEDstat = false;
+  boolean _LEDstat = true; // !!!
 	int _blinkCounter = 0;
 	int _blinkCounterPrev = -1;
   uint32_t _Tnext_ms = 0;
