@@ -92,7 +92,7 @@ void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, boolean reverseAction
   _flag_blink = true;
   _blinkCounter = 0;
   _blinkCounterPrev = -1;
-	_LEDstat = true;    // A trick to start this sketch with the LED off
+  _LEDstat = true;    // A trick to start this sketch with the LED off
   _T0_ms = T0_ms;
   _T1_ms = T1_ms;
   _T2_ms = 0;
@@ -109,7 +109,7 @@ void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N,
   _flag_blink = true;
   _blinkCounter = 0;
   _blinkCounterPrev = -1;
-	_LEDstat = true;    // A trick to start this sketch with the LED off
+  _LEDstat = true;    // A trick to start this sketch with the LED off
   _T0_ms = T0_ms;
   _T1_ms = T1_ms;
   _T2_ms = T2_ms;
@@ -126,7 +126,7 @@ void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1
   _flag_blink = true;
   _blinkCounter = 0;
   _blinkCounterPrev = -1;
-	_LEDstat = true;    // A trick to start this sketch with the LED off
+  _LEDstat = true;    // A trick to start this sketch with the LED off
   _T0_ms = T0_ms;
   _T1_ms = T1_ms;
   _T2_ms = T2_ms;
@@ -153,8 +153,8 @@ void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1
 //   tru  - LED is ON
 //   false - LED is OFF
 
-#define _LED_ON    (digitalWrite(_pin, Logic_LED ? HIGH : LOW))
-#define _LED_OFF   (digitalWrite(_pin, Logic_LED ? LOW : HIGH))
+#define _LED_ON    (digitalWrite(_pin, LOGIC_LED ? HIGH : LOW))
+#define _LED_OFF   (digitalWrite(_pin, LOGIC_LED ? LOW : HIGH))
 
 boolean classBlinkLED::blink() {
 
@@ -186,9 +186,9 @@ boolean classBlinkLED::blink() {
 
     _Tnext_ms += _tmp_ms;
     if (_LEDstat) {
-			if (_flag_reverseAction) { _LED_OFF; } else { _LED_ON; }
-		} else {
-			if (_flag_reverseAction) { _LED_ON; } else { _LED_OFF; }
+      if (_flag_reverseAction) { _LED_OFF; } else { _LED_ON; }
+    } else {
+      if (_flag_reverseAction) { _LED_ON; } else { _LED_OFF; }
     }
   }
   _flag_blink = true;

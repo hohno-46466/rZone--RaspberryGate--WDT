@@ -88,33 +88,33 @@ const int testMode = false;
 // ---------------------------------------------------------
 
 #ifdef  USE_GBKA
-#define Logic_HBEAT      NEGATIVE_LOGIC // LOW is to recognize headeat pulse
-#define Logic_LED        POSITIVE_LOGIC // HIGH is to turn LED on
-#define Logic_DELAY      POSITIVE_LOGIC // HIGH is to designate the delayed WDT
-// #define Logic_RESET      NEGATIVE_LOGIC // LOW is to make a reset pulse
-#define Logic_RESET      POSITIVE_LOGIC // HIGH is to make a reset pulse
-#define Logic_NOTE       NEGATIVE_LOGIC // LOW is to make a notification
+#define LOGIC_HBEAT      NEGATIVE_LOGIC // LOW is to recognize headeat pulse
+#define LOGIC_LED        POSITIVE_LOGIC // HIGH is to turn LED on
+#define LOGIC_DELAY      POSITIVE_LOGIC // HIGH is to designate the delayed WDT
+// #define LOGIC_RESET      NEGATIVE_LOGIC // LOW is to make a reset pulse
+#define LOGIC_RESET      POSITIVE_LOGIC // HIGH is to make a reset pulse
+#define LOGIC_NOTE       NEGATIVE_LOGIC // LOW is to make a notification
 #else   // if not USE_GBKA
-#define Logic_HBEAT      NEGATIVE_LOGIC // LOW is to recognize headeat pulse
-#define Logic_LED        POSITIVE_LOGIC // HIGH is to turn LED on
-#define Logic_WDYPE      POSITIVE_LOGIC // HIGH is to designate the delayed WDT
-#define Logic_RESET      NEGATIVE_LOGIC // LOW is to make a reset pulse
-#define Logic_NOTE       NEGATIVE_LOGIC // LOW is to make a notification
+#define LOGIC_HBEAT      NEGATIVE_LOGIC // LOW is to recognize headeat pulse
+#define LOGIC_LED        POSITIVE_LOGIC // HIGH is to turn LED on
+#define LOGIC_WDYPE      POSITIVE_LOGIC // HIGH is to designate the delayed WDT
+#define LOGIC_RESET      NEGATIVE_LOGIC // LOW is to make a reset pulse
+#define LOGIC_NOTE       NEGATIVE_LOGIC // LOW is to make a notification
 #endif  // USE_GBKA
 
 
-#define AVR_GET_PULSE (digitalRead(PIN_I_PULSE) == (Logic_HBEAT ? HIGH : LOW))
+#define AVR_GET_PULSE (digitalRead(PIN_I_PULSE) == (LOGIC_HBEAT ? HIGH : LOW))
 
-#define AVR_GET_REQ   (digitalRead(PIN_I_REQ)   == (Logic_DELAY ? HIGH : LOW))
+#define AVR_GET_REQ   (digitalRead(PIN_I_REQ)   == (LOGIC_DELAY ? HIGH : LOW))
 
-#define AVR_LED_ON    (digitalWrite(PIN_O_LED, Logic_LED ? HIGH : LOW))
-#define AVR_LED_OFF   (digitalWrite(PIN_O_LED, Logic_LED ? LOW : HIGH))
+#define AVR_LED_ON    (digitalWrite(PIN_O_LED, LOGIC_LED ? HIGH : LOW))
+#define AVR_LED_OFF   (digitalWrite(PIN_O_LED, LOGIC_LED ? LOW : HIGH))
 
-#define AVR_NOTE_ON   (digitalWrite(PIN_O_NOTE, Logic_NOTE ? HIGH : LOW))
-#define AVR_NOTE_OFF  (digitalWrite(PIN_O_NOTE, Logic_NOTE ? LOW : HIGH))
+#define AVR_NOTE_ON   (digitalWrite(PIN_O_NOTE, LOGIC_NOTE ? HIGH : LOW))
+#define AVR_NOTE_OFF  (digitalWrite(PIN_O_NOTE, LOGIC_NOTE ? LOW : HIGH))
 
-#define AVR_RESET_ON  (digitalWrite(PIN_O_RESET, Logic_RESET ? HIGH : LOW))
-#define AVR_RESET_OFF (digitalWrite(PIN_O_RESET, Logic_RESET ? LOW : HIGH))
+#define AVR_RESET_ON  (digitalWrite(PIN_O_RESET, LOGIC_RESET ? HIGH : LOW))
+#define AVR_RESET_OFF (digitalWrite(PIN_O_RESET, LOGIC_RESET ? LOW : HIGH))
 
 // ---------------------------------------------------------
 
