@@ -2,7 +2,7 @@
 // classBlink.cpp for miniWDT
 //
 
-#if 1
+#if 0
 # !!! This sketch is under developing. Do not build this. !!!
 #endif // 0 or 1
 
@@ -67,34 +67,34 @@ boolean classBlinkLED::init(int pin, boolean positiveLogic) {
 
 // ---------------------------------------------------------
 
-// void classBlinkLED::setParam(int Ton, int Toff, boolean reverseAction)
-//   Ton - duration of LED ON (in msec);
-//   Toff - duration of LED OFF (in msec)
+// void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, boolean reverseAction)
+//   T0_ms - duration of LED OFF (in msec);
+//   T1_ms - duration of LED ON (in msec)
 //   reverseAction - set it true if you take reverse action (only useful for LED blink)
 
-// void classBlinkLED::setParam(int T0, int T1, int T2, int N, boolean reverseAction)
-//   T0 - duration of LED OFF before T1 (in msec)
-//   T1 - duration of LED ON (in msec);
-//   T2 - duration of LED OFF after T1 (in msec)
-//   N  - number of additional repeat (0 is no repeat, 1 is repeat once (2 in total), -1 is repeat forever)
+// void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N, boolean reverseAction)
+//   T0_ms - duration of LED OFF before T1 (in msec)
+//   T1_ms - duration of LED ON (in msec);
+//   T2_ms - duration of LED OFF after T1 (in msec)
+//   N     - number of additional repeat (0 is no repeat, 1 is repeat once (2 in total), -1 is repeat forever)
 //   (if N = 3, then ((T0,T1),(T0,T1),(T0,T1),T2 [End])
 //   reverseAction - set it true if you take reverse action (only useful for LED blink)
 
-// void classBlinkLED::setParam(int T0, int T1, int T2, int N1, int N2), boolean reverseAction)
-//   T0 - duration of LED OFF before T1 (in msec)
-//   T1 - duration of LED ON (in msec);
-//   T2 - duration of LED OFF after T1 (in msec)
-//   N1 - number of additional repeat of (T0+T1)
-//   N2 - number of additional repeat of ((T0+T1) x N1 + T2)
+// void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1, int N2, boolean reverseAction)
+//   T0_ms - duration of LED OFF before T1 (in msec)
+//   T1_ms - duration of LED ON (in msec);
+//   T2_ms - duration of LED OFF after T1 (in msec)
+//   N1    - number of additional repeat of (T0+T1)
+//   N2    - number of additional repeat of ((T0+T1) x N1 + T2)
 //   (if N1 = 3 and N2 = 2, then (((((T0,T1),(T0,T1),(T0,T1)),T2), ((T0,T1),(T0,T1),(T0,T1)),T2), [End])
 
-void classBlinkLED::setParam(int T0_s, int T1_s, boolean reverseAction) {
+void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, boolean reverseAction) {
   _flag_blink = true;
   _blinkCounter = 0;
   _blinkCounterPrev = -1;
-  _LEDstat = false;
-  _T0_ms = T0_s * 1000L; /* Ton  */
-  _T1_ms = T1_s * 1000L; /* Toff */
+	_LEDstat = true;    // A trick to start this sketch with the LED off
+  _T0_ms = T0_ms;
+  _T1_ms = T1_ms;
   _T2_ms = 0;
   _N1 = (uint16_t)-1; // repeat (almost) forever
   _N2 = 0;
@@ -104,15 +104,15 @@ void classBlinkLED::setParam(int T0_s, int T1_s, boolean reverseAction) {
   _Tnext_ms = millis();
 }
 
-void classBlinkLED::setParam(int T0_s, int T1_s, int T2_s, int N, boolean reverseAction) {
+void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N, boolean reverseAction) {
   // N x (T0 + T1) + T2 [End]
   _flag_blink = true;
   _blinkCounter = 0;
   _blinkCounterPrev = -1;
-  _LEDstat = false;
-  _T0_ms = T0_s * 1000L;
-  _T1_ms = T1_s * 1000L;
-  _T2_ms = T2_s * 1000L;
+	_LEDstat = true;    // A trick to start this sketch with the LED off
+  _T0_ms = T0_ms;
+  _T1_ms = T1_ms;
+  _T2_ms = T2_ms;
   _N1 = (uint16_t)N;
   _N2 = 0;
   _flag_reverseAction = reverseAction;
@@ -121,15 +121,15 @@ void classBlinkLED::setParam(int T0_s, int T1_s, int T2_s, int N, boolean revers
   _Tnext_ms = millis();
 }
 
-void classBlinkLED::setParam(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverseAction) {
+void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1, int N2, boolean reverseAction) {
     // N2 x (N1 x (T0 + T1) + T2) [End]
   _flag_blink = true;
   _blinkCounter = 0;
   _blinkCounterPrev = -1;
-  _LEDstat = false;
-  _T0_ms = T0_s * 1000L;
-  _T1_ms = T1_s * 1000L;
-  _T2_ms = T2_s * 1000L;
+	_LEDstat = true;    // A trick to start this sketch with the LED off
+  _T0_ms = T0_ms;
+  _T1_ms = T1_ms;
+  _T2_ms = T2_ms;
   _N1 = (uint16_t)N1;
   _N2 = (uint16_t)N2;
   _flag_reverseAction = reverseAction;
@@ -137,12 +137,12 @@ void classBlinkLED::setParam(int T0_s, int T1_s, int T2_s, int N1, int N2, boole
   _N2now = 0;
   _Tnext_ms = millis();
 #ifdef USE_GBKA
-	Serial.print("# setParam()");
-	Serial.print(", N1 = "), Serial.print(N1);
-	Serial.print(", N2 = "), Serial.print(N2);
-	Serial.print(", _N1 = "), Serial.print(_N1);
-	Serial.print(", _N2 = "), Serial.print(_N2);
-	Serial.println();
+  Serial.print("# setParam()");
+  Serial.print(", N1 = "), Serial.print(N1);
+  Serial.print(", N2 = "), Serial.print(N2);
+  Serial.print(", _N1 = "), Serial.print(_N1);
+  Serial.print(", _N2 = "), Serial.print(_N2);
+  Serial.println();
 #endif // USE_GBKA
 }
 
@@ -180,42 +180,18 @@ boolean classBlinkLED::blink() {
 
     int32_t _tmp_ms = _updateTnext_ms(); // get next period
     if (_tmp_ms < 0) {
+      _flag_blink = false;
       return(false);
     }
 
     _Tnext_ms += _tmp_ms;
     if (_LEDstat) {
-      _LED_ON;
-      // blinkCounter++ // we have done this is _updateTnext_ms()
-        } else {
-      _LED_OFF;
+			if (_flag_reverseAction) { _LED_OFF; } else { _LED_ON; }
+		} else {
+			if (_flag_reverseAction) { _LED_ON; } else { _LED_OFF; }
     }
   }
   _flag_blink = true;
-
-  /*
-  if ((_Ton == _prev_Ton) && (_Toff == _prev_Toff)) {
-    // Both Ton and Toff are not updated
-    if (_Tnext_ms <= millis()) {
-      if (_LEDstat) {
-        _LEDstat = false;
-        _Tnext_ms += _Toff;
-        _LED_OFF;
-      } else {
-        _LEDstat = true;
-        _Tnext_ms += _Ton;
-        _LED_ON;
-      }
-    }
-  } else {
-    // at least one of _Ton and _Toff was updated
-    _prev_Ton = _Ton;
-    _prev_Toff = _Toff;
-    _Tnext_ms = millis() + _Ton;
-    _LEDstat = true;
-    _LED_ON;
-  }
-  */
 
   return(_LEDstat);
 }
@@ -265,23 +241,25 @@ int classBlinkLED::blinkCounter() {
 
   // (((T0,T1),(T0,T1), ..),T2,)...
 
-    if (_flag_done) {
+    if (_flag_DLdone) {
       // if true, return -1 instead of returning the valid Tnext_ms value only once
       // This tells the caller to terminate the double loop.
-    _flag_done = false;
+    _flag_DLdone = false;
+    _flag_blink = false;
 
 #ifdef USE_GBKA
-    Serial.println("# _flag_done is true");
+    Serial.println("# _flag_DLdone is true to false (The double loop has been done)");
+    Serial.println("# _flag_blink is true to false (blinking stopped)");
 #endif // USE_GBKA
 
-	  return(-1);
+    return(-1);
   }
 
   if (_T2mode) {
 
 #ifdef USE_GBKA
     Serial.print("# _T2mode is true");
-		Serial.println();
+    Serial.println();
 #endif // USE_GBKA
 
     _LEDstat = false;
@@ -291,8 +269,8 @@ int classBlinkLED::blinkCounter() {
     _retT_ms = _T2_ms;
     _N2now++;
     if (_N2now > _N2) {
-      // if the double loop (both innner and outer) has been done, set _flag_done true;
-    _flag_done = true;
+      // if the double loop (both innner and outer) has been done, set _flag_DLdone true;
+    _flag_DLdone = true;
     }
     _T2mode = false;
     return(_retT_ms);
@@ -308,13 +286,13 @@ int classBlinkLED::blinkCounter() {
     _retT_ms = _T0_ms;
 
 #ifdef USE_GBKA
-    Serial.println("# _LEDstat true -> false");
-		Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
-		Serial.println();
+    Serial.print("# _LEDstat true -> false");
+    Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
+    Serial.println();
 #endif // USE_GBKA
 
 
-		return(_retT_ms);
+    return(_retT_ms);
   }
 
   if (_LEDstat == false) {
@@ -325,32 +303,32 @@ int classBlinkLED::blinkCounter() {
     _T1start_ms = millis();
     _retT_ms = _T1_ms;
     _N1now++;
-    if (_N1now >= _N1) {
+    if (_N1now > _N1) {
       _N1now = 0;
       _T2mode = true;
     }
 
 #ifdef USE_GBKA
     Serial.print("# _LEDstat false -> true");
-		Serial.print(", _N1 = "); Serial.print(_N1);
-		Serial.print(", _N1now = "); Serial.print(_N1now);
-		Serial.print(", _N2 = "); Serial.print(_N2);
-		Serial.print(", _N2now = "); Serial.print(_N2now);
-		Serial.print(", _blinkCounter = "); Serial.print(_blinkCounter);
-		Serial.print(", _blinkCounterPrev = "); Serial.print(_blinkCounterPrev);
-		Serial.print(", _T2mode= "); Serial.print(_T2mode);
-		Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
-		Serial.println();
+    Serial.print(", _N1 = "); Serial.print(_N1);
+    Serial.print(", _N1now = "); Serial.print(_N1now);
+    Serial.print(", _N2 = "); Serial.print(_N2);
+    Serial.print(", _N2now = "); Serial.print(_N2now);
+    Serial.print(", _blinkCounter = "); Serial.print(_blinkCounter);
+    Serial.print(", _blinkCounterPrev = "); Serial.print(_blinkCounterPrev);
+    Serial.print(", _T2mode= "); Serial.print(_T2mode);
+    Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
+    Serial.println();
 #endif // USE_GBKA
 
     return(_retT_ms);
   }
 
 #ifdef USE_GBKA
-	Serial.println("# it should not be here!");
+  Serial.println("# it should not be here!");
 #endif // USE_GBKA
 
-  return(0); /* NotReached */
+  return(-1); /* NotReached */
 }
 
 // ---------------------------------------------------------

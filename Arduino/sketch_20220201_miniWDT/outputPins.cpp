@@ -14,8 +14,6 @@
 #include "outputPins.h"
 #include "mydefs.h"
 
-// extern uint32_t Currenttime_sec;
-
 // ---------------------------------------------------------
 
 // constructor
@@ -57,28 +55,28 @@ boolean outputPins::update() {
 
 // ---------------------------------------------------------
 
-boolean outputPins::setResetPulse(int T0_s, int T1_s, int T2_s) {
+boolean outputPins::setResetPulse(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms) {
 
   _RST.stop();
-  _RST.setParam(T0_s, T1_s, T2_s, 0, 0, NORMAL_ACTION);
+  _RST.setParam(T0_ms, T1_ms, T2_ms, 0, 0, NORMAL_ACTION);
 
   // set a (single) RESET pulse as follows:
-  //   step1: T0_s sec for the first guard time
-  //   step2: T1_s sec for the NOTIFICATION
-  //   step3: T2_s sec for the second guard time
+  //   step1: T0(ms) for the first guard time
+  //   step2: T1(ms) for the NOTIFICATION
+  //   step3: T2(ms) sec for the second guard time
 
   return(false);
 }
 
 // ---------------------------------------------------------
 
-boolean outputPins::setNotification(int T1_s) {
+boolean outputPins::setNotification(int32_t T1_ms) {
 
   _NOTE.stop();
-  _NOTE.setParam(1, T1_s, 1, 0, 0, NORMAL_ACTION);
+  _NOTE.setParam(1000, T1_ms, 1000, 0, 0, NORMAL_ACTION);
 
   // set a (single) NOTIFICATION pulse as follows:
-  //   step1: T0_s sec for the first guard time
+  //   step1: T0(ms) sec for the first guard time
   //   step2: 1sec for the NOTIFICATION
   //   step3: 1sec for the second guard time
 
@@ -87,28 +85,28 @@ boolean outputPins::setNotification(int T1_s) {
 
 // ---------------------------------------------------------
 
-boolean outputPins::setBlinking(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverseAction)  {
+boolean outputPins::setBlinking(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1, int N2, boolean reverseAction)  {
 
   _LED.stop();
-  _LED.setParam(T0_s, T1_s, T2_s, N1, N2, reverseAction);
+  _LED.setParam(T0_ms, T1_ms, T2_ms, N1, N2, reverseAction);
 
   // if reverse is NORMAL_ACTION, then
   //   Repeat the following outer loop N2+1 times
   //     Repeat the following inner loop N1+1 times
-  //       Turn LED OFF for T0_s sec
-  //       Turn LED ON for T1_s sec
+  //       Turn LED OFF for T0(ms)
+  //       Turn LED ON for T1(ms)
   //     End of the inner loop
-  //     Turn LED OFF for T2_s sec
+  //     Turn LED OFF for T2(ms)
   //   End of the outer loop
   // endif
 
   // if reverse is REVERSE_ACTION, then
   //   Repeat the following outer loop N2+1 times
   //     Repeat the following inner loop N1+1 times
-  //       Turn LED ON for T0_s sec
-  //       Turn LED OFF for T1_s sec
+  //       Turn LED ON for T0(ms)
+  //       Turn LED OFF for T1(ms)
   //     End of the inner loop
-  //     Turn LED ON for T2_s sec
+  //     Turn LED ON for T2(ms)
   //   End of the outer loop
   // endif
 

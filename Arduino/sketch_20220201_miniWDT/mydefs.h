@@ -50,6 +50,7 @@ const int testMode = false;
 
 // ---------------------------------------------------------
 
+#define ALERT_UNDEF     (-999)
 #define ALERT_BEFORE_START  (-1) //  -1 : watchdog is not started.
 #define ALERT_LEVEL_0   (0)  //  0 : watchdog is running
 #define ALERT_LEVEL_1   (1)  //  1 : watchdog has just detected timeout now
@@ -58,7 +59,7 @@ const int testMode = false;
 #define ALERT_LEVEL_4   (4)  //
 
 
-#define RESET_BEFORE_SETUP  (-1) / -1 : not initialized
+#define RESET_BEFORE_SETUP  (-1) // -1 : not initialized
 #define RESET_STEP_0  (0)   //  0 : resetting is not started (step0)
 #define RESET_STEP_1  (1)   //  1 : resetting in progress (step1)
 #define RESET_STEP_2  (2)   //  2 : resetting in progress (step2)
@@ -90,7 +91,8 @@ const int testMode = false;
 #define Logic_HBEAT      NEGATIVE_LOGIC // LOW is to recognize headeat pulse
 #define Logic_LED        POSITIVE_LOGIC // HIGH is to turn LED on
 #define Logic_DELAY      POSITIVE_LOGIC // HIGH is to designate the delayed WDT
-#define Logic_RESET      NEGATIVE_LOGIC // LOW is to make a reset pulse
+// #define Logic_RESET      NEGATIVE_LOGIC // LOW is to make a reset pulse
+#define Logic_RESET      POSITIVE_LOGIC // HIGH is to make a reset pulse
 #define Logic_NOTE       NEGATIVE_LOGIC // LOW is to make a notification
 #else   // if not USE_GBKA
 #define Logic_HBEAT      NEGATIVE_LOGIC // LOW is to recognize headeat pulse

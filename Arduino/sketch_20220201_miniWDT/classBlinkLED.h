@@ -24,9 +24,9 @@ class classBlinkLED {
   classBlinkLED();
   classBlinkLED(int pin, boolean positiveLogic);
   boolean init(int pin, boolean positiveLogic);
-  void setParam(int T0_s, int T1_s, boolean reverseAction);
-  void setParam(int T0_s, int T1_s, int T2_s, int N, boolean reverseAction);
-  void setParam(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverseAction);
+  void setParam(int32_t T0_ms, int32_t T1_ms, boolean reverseAction);
+  void setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N, boolean reverseAction);
+  void setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1, int N2, boolean reverseAction);
   boolean blink();            // update blinking. This function needs to be called very frequently, either directly or indirectly in main().
   void stop();
   void start();
@@ -53,7 +53,7 @@ class classBlinkLED {
   boolean _positiveLogic = true;  // true: positive logic (HIGH is to turn LED on), false: negative logic (LOW is to turn LED on)
   boolean _flag_blink = false;    // true: now blinking, false: blinking stopped
   boolean _flag_reverseAction = false;  // Take reverse action (useful for temporarily interpreting the actual LED blinking pattern as the opposite of normal blinking mode)
-  boolean _flag_done = false;     // if true, blinking will be end at the end of the current loop
+  boolean _flag_DLdone = false;   // if true, blinking will be end because we are at the end of the double loop
 };
 
 // ---------------------------------------------------------

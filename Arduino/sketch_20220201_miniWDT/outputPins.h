@@ -22,15 +22,19 @@ class outputPins {
   outputPins();
   boolean init();
   boolean update();
-  boolean setResetPulse(int T0_s, int T1_s, int T2_s);
-  boolean setNotification(int T1_s);
-  boolean setBlinking(int T0_s, int T1_s, int T2_s, int N1, int N2, boolean reverseAction);
+	//
+  boolean setResetPulse(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms);
+  boolean setNotification(int32_t T1_ms);
+  boolean setBlinking(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1, int N2, boolean reverseAction);
+	//
   boolean startResetPulse();
   boolean startNotification();
   boolean startBlinking();
+	//
   boolean stopResetPulse();
   boolean stopNotification();
-  boolean stopBlinking();
+	  boolean stopBlinking();
+		//
   int getResetStat();
  private:
   boolean _verbose = false;
