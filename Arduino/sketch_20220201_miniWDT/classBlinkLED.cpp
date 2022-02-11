@@ -2,7 +2,9 @@
 // classBlink.cpp for miniWDT
 //
 
-# !!! This sketch is under developing. Do not build this. !!!
+#if 0
+// # !!! This sketch is under developing. Do not build this. !!!
+#endif // 0
 
 // ---------------------------------------------------------
 
@@ -134,6 +136,14 @@ void classBlinkLED::setParam(int T0_s, int T1_s, int T2_s, int N1, int N2, boole
   _N1now = 0;
   _N2now = 0;
   _Tnext_ms = millis();
+#ifdef USE_GBKA
+	Serial.print("# setParam()");
+	Serial.print(", N1 = "), Serial.print(N1);
+	Serial.print(", N2 = "), Serial.print(N2);
+	Serial.print(", _N1 = "), Serial.print(_N1);
+	Serial.print(", _N2 = "), Serial.print(_N2);
+	Serial.println();
+#endif // USE_GBKA
 }
 
 // ---------------------------------------------------------
@@ -231,7 +241,10 @@ void classBlinkLED::start() {
 // int classBlinkLED::blinkStat()
 
 int classBlinkLED::blinkStat() {
-  return(-1);
+  int __retval = _flag_blink ? 1 : 0;
+  // __retval will be expanded for more informatio with it
+
+  return(__retval);
 }
 
 
@@ -243,8 +256,6 @@ int classBlinkLED::blinkCounter() {
   return(_blinkCounter);
 }
 
-
-
 // ---------------------------------------------------------
 // ---------------------------------------------------------
 
@@ -254,12 +265,25 @@ int classBlinkLED::blinkCounter() {
 
   // (((T0,T1),(T0,T1), ..),T2,)...
 
-    if (_flag_stop) {
-    _flag_stop = false;
-    return(-1);
+    if (_flag_done) {
+      // if true, return -1 instead of returning the valid Tnext_ms value only once
+      // This tells the caller to terminate the double loop.
+    _flag_done = false;
+
+#ifdef USE_GBKA
+    Serial.println("# _flag_done is true");
+#endif // USE_GBKA
+
+	  return(-1);
   }
 
   if (_T2mode) {
+
+#ifdef USE_GBKA
+    Serial.print("# _T2mode is true");
+		Serial.println();
+#endif // USE_GBKA
+
     _LEDstat = false;
     _blinkCounter = 0;
     _blinkCounterPrev = 0;
@@ -267,13 +291,14 @@ int classBlinkLED::blinkCounter() {
     _retT_ms = _T2_ms;
     _N2now++;
     if (_N2now > _N2) {
-    _flag_stop = true;
+      // if the double loop (both innner and outer) has been done, set _flag_done true;
+    _flag_done = true;
     }
     _T2mode = false;
     return(_retT_ms);
   }
 
-  // XXX ??? T0 (off) -> T1 (on) -> T2 (off) になっていない
+  // XXX
 
   if (_LEDstat == true) {
     // if _LEDstat is true, then turn _LEDstat false and return the assigned value of T0_ms
@@ -281,7 +306,15 @@ int classBlinkLED::blinkCounter() {
     _blinkCounter = 0; // _blinkCounter is always zero when the LED is off.
     _T0start_ms = millis();
     _retT_ms = _T0_ms;
-    return(_retT_ms);
+
+#ifdef USE_GBKA
+    Serial.println("# _LEDstat true -> false");
+		Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
+		Serial.println();
+#endif // USE_GBKA
+
+
+		return(_retT_ms);
   }
 
   if (_LEDstat == false) {
@@ -296,8 +329,26 @@ int classBlinkLED::blinkCounter() {
       _N1now = 0;
       _T2mode = true;
     }
+
+#ifdef USE_GBKA
+    Serial.print("# _LEDstat false -> true");
+		Serial.print(", _N1 = "); Serial.print(_N1);
+		Serial.print(", _N1now = "); Serial.print(_N1now);
+		Serial.print(", _N2 = "); Serial.print(_N2);
+		Serial.print(", _N2now = "); Serial.print(_N2now);
+		Serial.print(", _blinkCounter = "); Serial.print(_blinkCounter);
+		Serial.print(", _blinkCounterPrev = "); Serial.print(_blinkCounterPrev);
+		Serial.print(", _T2mode= "); Serial.print(_T2mode);
+		Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
+		Serial.println();
+#endif // USE_GBKA
+
     return(_retT_ms);
   }
+
+#ifdef USE_GBKA
+	Serial.println("# it should not be here!");
+#endif // USE_GBKA
 
   return(0); /* NotReached */
 }

@@ -72,10 +72,10 @@ boolean outputPins::setResetPulse(int T0_s, int T1_s, int T2_s) {
 
 // ---------------------------------------------------------
 
-boolean outputPins::setNotification(int T0_s) {
+boolean outputPins::setNotification(int T1_s) {
 
   _NOTE.stop();
-  _NOTE.setParam(T0_s, 1, 1, 0, 0, NORMAL_ACTION);
+  _NOTE.setParam(1, T1_s, 1, 0, 0, NORMAL_ACTION);
 
   // set a (single) NOTIFICATION pulse as follows:
   //   step1: T0_s sec for the first guard time
@@ -140,7 +140,7 @@ boolean outputPins::startBlinking() {
 
   _LED.start();
 
-  return(-1);
+  return(true);
 }
 
 // ---------------------------------------------------------
@@ -167,14 +167,14 @@ boolean outputPins::stopBlinking() {
 
   _LED.stop();
 
-  return(-1);
+  return(true);
 }
 
 // ---------------------------------------------------------
 
 int outputPins::getResetStat() {
 
-  return(-1);
+  return(true);
 }
 
 // ---------------------------------------------------------

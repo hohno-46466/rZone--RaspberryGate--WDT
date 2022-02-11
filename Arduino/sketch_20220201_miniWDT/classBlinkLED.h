@@ -50,10 +50,10 @@ class classBlinkLED {
   boolean _LEDstat = true;    // A trick to start this sketch with the LED off
   int _blinkCounter = 0;
   int _blinkCounterPrev = -1;
-  boolean _positiveLogic = true; // true: positive logic (HIGH is to turn LED on), false: negative logic (LOW is to turn LED on)
-  boolean _flag_blink = false;
-  boolean _flag_reverseAction = false;
-  boolean _flag_stop = false; // if true, blinking will stop at the end of the current loop
+  boolean _positiveLogic = true;  // true: positive logic (HIGH is to turn LED on), false: negative logic (LOW is to turn LED on)
+  boolean _flag_blink = false;    // true: now blinking, false: blinking stopped
+  boolean _flag_reverseAction = false;  // Take reverse action (useful for temporarily interpreting the actual LED blinking pattern as the opposite of normal blinking mode)
+  boolean _flag_done = false;     // if true, blinking will be end at the end of the current loop
 };
 
 // ---------------------------------------------------------

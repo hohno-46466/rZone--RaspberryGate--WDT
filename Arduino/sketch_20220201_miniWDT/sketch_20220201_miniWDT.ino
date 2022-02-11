@@ -21,6 +21,8 @@ inputPins iPins;
 outputPins oPins;
 
 // ---------------------------------------------------------
+// setup()
+// ---------------------------------------------------------
 
 void setup() {
   if (testMode) {
@@ -30,7 +32,6 @@ void setup() {
   }
 }
 
-
 // ---------------------------------------------------------
 
 void setup4test() {
@@ -38,10 +39,14 @@ void setup4test() {
   int T0_s = 1, T1_s = 1, T2_s = 1, N1 = -1, N2 = -1;
   boolean reverseAction = false;
 
+#ifdef USE_GBKA
+	Serial.begin(57600);
+	Serial.print("\n*** setup4test() ***\n\n");
+#endif // USE_GBKA
   iPins.init();
   oPins.init();
 
-  T0_s = 1, T1_s = 1, T2_s = 1, N1 = -1, N2 = -1;
+  T0_s = 1, T1_s = 2, T2_s = 1, N1 = 2, N2 = 0;
   reverseAction = false;
   oPins.setBlinking(T0_s, T1_s, T2_s, N1, N2, reverseAction);
   oPins.startBlinking();
@@ -62,22 +67,26 @@ void setup4main() {
   HBinterval_ms = -1;
   HBintervalLimit_ms = HB_INTERVAL_L_MS;
 
-  T0_s = 1, T1_s = 1, T2_s = 1, N1 = -1, N2 = -1;
+  T0_s = 1; T1_s = 1; T2_s = 2; N1 = 2; N2 = 0;
   reverseAction = false;
   oPins.setBlinking(T0_s, T1_s, T2_s, N1, N2, reverseAction);
   oPins.startBlinking();
 
-  // T0_s = 1, T1_s = 1, T2_s = 1, N1 = 0, N2 = 0;
-  // reverseAction = false;
-  // oPins.setResetPulse(T0_s, T1_s, T2_s, N1, N2, reverseAction);
-  // oPins.stopResetPulse();
+	T0_s = 1; T1_s = 2; T2_s = 1;
+  reverseAction = false;
+  oPins.setResetPulse(T0_s, T1_s, T2_s);
+  oPins.stopResetPulse();
+	// oPins.startResetPulse();
 
-  // T0_s = 1, T1_s = 2, T2_s = 1, N1 = 0, N2 = 0;
-  // reverseAction = false;
-  // oPins.setNotification(T0_s, T1_s, T2_s, N1, N2, reverseAction);
-  // oPins.stopResetPulse();
+  T1_s = 5;
+  reverseAction = false;
+  oPins.setNotification(T1_s);
+  oPins.stopResetPulse();
+	// oPins.startResetPulse();
 }
 
+// ---------------------------------------------------------
+// loop()
 // ---------------------------------------------------------
 
 // AlertLevel:
@@ -165,6 +174,9 @@ void loop4main() {
       oPins.setResetPulse(step1_s, step2_s, step3_s);
       oPins.setNotification(step1_s);
       oPins.setBlinking(step1_s, step2_s, step3_s, -1, -1, false);
+      oPins.startResetPulse();
+      oPins.startNotification();
+      oPins.startBlinking();
       alertLevel = ALERT_LEVEL_2;
 
     } else {
