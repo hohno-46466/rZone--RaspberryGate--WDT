@@ -2,9 +2,9 @@
 // classBlink.cpp for miniWDT
 //
 
-#if 0
-// # !!! This sketch is under developing. Do not build this. !!!
-#endif // 0
+#if 1
+# !!! This sketch is under developing. Do not build this. !!!
+#endif // 0 or 1
 
 // ---------------------------------------------------------
 
