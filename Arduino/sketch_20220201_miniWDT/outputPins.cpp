@@ -46,9 +46,9 @@ boolean outputPins::init() {
 
 boolean outputPins::update() {
 
-  _LED.blink();
-  _RST.blink();
-  _NOTE.blink();
+  _LED.update();
+  _RST.update();
+  _NOTE.update();
 
   return(false);
 }

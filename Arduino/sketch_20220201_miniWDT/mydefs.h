@@ -102,19 +102,20 @@ const int testMode = false;
 #define LOGIC_NOTE       NEGATIVE_LOGIC // LOW is to make a notification
 #endif  // USE_GBKA
 
-
-#define AVR_GET_PULSE (digitalRead(PIN_I_PULSE) == (LOGIC_HBEAT ? HIGH : LOW))
-
-#define AVR_GET_REQ   (digitalRead(PIN_I_REQ)   == (LOGIC_DELAY ? HIGH : LOW))
-
-#define AVR_LED_ON    (digitalWrite(PIN_O_LED, LOGIC_LED ? HIGH : LOW))
-#define AVR_LED_OFF   (digitalWrite(PIN_O_LED, LOGIC_LED ? LOW : HIGH))
-
-#define AVR_NOTE_ON   (digitalWrite(PIN_O_NOTE, LOGIC_NOTE ? HIGH : LOW))
-#define AVR_NOTE_OFF  (digitalWrite(PIN_O_NOTE, LOGIC_NOTE ? LOW : HIGH))
-
-#define AVR_RESET_ON  (digitalWrite(PIN_O_RESET, LOGIC_RESET ? HIGH : LOW))
-#define AVR_RESET_OFF (digitalWrite(PIN_O_RESET, LOGIC_RESET ? LOW : HIGH))
+#if 0
+// #define AVR_GET_PULSE (digitalRead(PIN_I_PULSE) == (LOGIC_HBEAT ? HIGH : LOW))
+//
+// #define AVR_GET_REQ   (digitalRead(PIN_I_REQ)   == (LOGIC_DELAY ? HIGH : LOW))
+//
+// #define AVR_LED_ON    (digitalWrite(PIN_O_LED, LOGIC_LED ? HIGH : LOW))
+// #define AVR_LED_OFF   (digitalWrite(PIN_O_LED, LOGIC_LED ? LOW : HIGH))
+//
+// #define AVR_NOTE_ON   (digitalWrite(PIN_O_NOTE, LOGIC_NOTE ? HIGH : LOW))
+// #define AVR_NOTE_OFF  (digitalWrite(PIN_O_NOTE, LOGIC_NOTE ? LOW : HIGH))
+//
+// #define AVR_RESET_ON  (digitalWrite(PIN_O_RESET, LOGIC_RESET ? HIGH : LOW))
+// #define AVR_RESET_OFF (digitalWrite(PIN_O_RESET, LOGIC_RESET ? LOW : HIGH))
+#endif // 0
 
 // ---------------------------------------------------------
 

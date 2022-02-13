@@ -23,11 +23,13 @@ class classBlinkLED {
  public:
   classBlinkLED();
   classBlinkLED(int pin, boolean positiveLogic);
+	//
   boolean init(int pin, boolean positiveLogic);
   void setParam(int32_t T0_ms, int32_t T1_ms, boolean reverseAction);
   void setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N, boolean reverseAction);
   void setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1, int N2, boolean reverseAction);
-  boolean blink();            // update blinking. This function needs to be called very frequently, either directly or indirectly in main().
+	//
+  boolean update();            // update blinking. This function needs to be called very frequently, either directly or indirectly in main().
   void stop();
   void start();
   int blinkStat();

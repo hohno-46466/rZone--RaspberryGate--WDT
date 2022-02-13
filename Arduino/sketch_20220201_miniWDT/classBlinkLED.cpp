@@ -2,8 +2,10 @@
 // classBlink.cpp for miniWDT
 //
 
+// ---------------------------------------------------------
+
 #if 0
-# !!! This sketch is under developing. Do not build this. !!!
+# WARNING: !!! This sketch is under development. Please do not build it!
 #endif // 0 or 1
 
 // ---------------------------------------------------------
@@ -148,7 +150,7 @@ void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1
 
 // ---------------------------------------------------------
 
-// boolean classBlinkLED::blink()
+// boolean classBlinkLED::update()
 // returns
 //   tru  - LED is ON
 //   false - LED is OFF
@@ -156,7 +158,7 @@ void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1
 #define _LED_ON    (digitalWrite(_pin, LOGIC_LED ? HIGH : LOW))
 #define _LED_OFF   (digitalWrite(_pin, LOGIC_LED ? LOW : HIGH))
 
-boolean classBlinkLED::blink() {
+boolean classBlinkLED::update() {
 
   if (!_flag_blink) {
     return(false);

@@ -230,14 +230,17 @@ void loop4main() {
   iPins.update();
   oPins.update();
 
+
+	// alertLevel is -1 when the sketch starts
   if (alertLevel < 0) {
 
     // in case watchdog is not initialized
     iPins.init();
     oPins.init();
 
+		// alertLevel -1 -> 0 // watchdog has just started.
     prevLevel = alertLevel;
-    alertLevel = ALERT_LEVEL_0; // watchdog has just started.
+    alertLevel = ALERT_LEVEL_0;
 
   } else if (alertLevel == ALERT_LEVEL_0) {
 
@@ -246,7 +249,7 @@ void loop4main() {
 
     if (HBinterval_ms >= (HBintervalLimit_ms)) {
 
-      // watchdog alert!
+      // alertLevel 0 -> 1 // watchdog alert!
       prevLevel = alertLevel;
       alertLevel = ALERT_LEVEL_1;
 
@@ -286,6 +289,7 @@ void loop4main() {
       oPins.startNotification();
       oPins.startBlinking();
 
+			// alertLevel 1 -> 2
       prevLevel = alertLevel;
       alertLevel = ALERT_LEVEL_2;
 
@@ -302,6 +306,7 @@ void loop4main() {
       if (oPins.getResetStat() >= RESET_STEP_4) {
         // rebooting process has been done
 
+				// alertLevel 2 -> -1
         prevLevel = alertLevel;
         alertLevel = ALERT_BEFORE_START; // watchdog runs again after initialization
 

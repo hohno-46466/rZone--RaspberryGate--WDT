@@ -33,9 +33,10 @@ class outputPins {
   //
   boolean stopResetPulse();
   boolean stopNotification();
-    boolean stopBlinking();
-    //
+  boolean stopBlinking();
+  //
   int getResetStat();
+  //
  private:
   boolean _verbose = false;
   classBlinkLED   _LED;
