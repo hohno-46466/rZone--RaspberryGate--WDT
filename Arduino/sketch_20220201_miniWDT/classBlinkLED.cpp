@@ -104,6 +104,15 @@ void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, boolean reverseAction
   _N1now = 0;
   _N2now = 0;
   _Tnext_ms = millis();
+#ifdef USE_GBKA
+  Serial.print("# setParam()");
+  Serial.print("  _T0_ms = "); Serial.print(_T0_ms);
+  Serial.print(", _T1_ms = "); Serial.print(_T1_ms);
+  Serial.print(", _T2_ms = "); Serial.print(_T2_ms);
+  Serial.print(", _N1 = "); Serial.print(_N1);
+  Serial.print(", _N2 = "); Serial.print(_N2);
+  Serial.println();
+#endif // USE_GBKA
 }
 
 void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N, boolean reverseAction) {
@@ -121,6 +130,15 @@ void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N,
   _N1now = 0;
   _N2now = 0;
   _Tnext_ms = millis();
+#ifdef USE_GBKA
+  Serial.print("# setParam()");
+  Serial.print("  _T0_ms = "); Serial.print(_T0_ms);
+  Serial.print(", _T1_ms = "); Serial.print(_T1_ms);
+  Serial.print(", _T2_ms = "); Serial.print(_T2_ms);
+  Serial.print(", _N1 = "); Serial.print(_N1);
+  Serial.print(", _N2 = "); Serial.print(_N2);
+  Serial.println();
+#endif // USE_GBKA
 }
 
 void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1, int N2, boolean reverseAction) {
@@ -140,10 +158,11 @@ void classBlinkLED::setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1
   _Tnext_ms = millis();
 #ifdef USE_GBKA
   Serial.print("# setParam()");
-  Serial.print(", N1 = "), Serial.print(N1);
-  Serial.print(", N2 = "), Serial.print(N2);
-  Serial.print(", _N1 = "), Serial.print(_N1);
-  Serial.print(", _N2 = "), Serial.print(_N2);
+  Serial.print("  _T0_ms = "); Serial.print(_T0_ms);
+  Serial.print(", _T1_ms = "); Serial.print(_T1_ms);
+  Serial.print(", _T2_ms = "); Serial.print(_T2_ms);
+  Serial.print(", _N1 = "); if (1) {Serial.print(N1); Serial.print("-> ");} Serial.print(_N1);
+  Serial.print(", _N2 = "); if (1) {Serial.print(N2); Serial.print("-> ");} Serial.print(_N2);
   Serial.println();
 #endif // USE_GBKA
 }
@@ -244,14 +263,13 @@ int classBlinkLED::blinkCounter() {
   // (((T0,T1),(T0,T1), ..),T2,)...
 
     if (_flag_DLdone) {
-      // if true, return -1 instead of returning the valid Tnext_ms value only once
+      // if true, return -1 instead of returning the valid Tnext_ms value.
       // This tells the caller to terminate the double loop.
     _flag_DLdone = false;
     _flag_blink = false;
 
 #ifdef USE_GBKA
-    Serial.println("# _flag_DLdone is true to false (The double loop has been done)");
-    Serial.println("# _flag_blink is true to false (blinking stopped)");
+    Serial.println("# The double loop has been done, and blinking will be stopped");
 #endif // USE_GBKA
 
     return(-1);
@@ -260,7 +278,9 @@ int classBlinkLED::blinkCounter() {
   if (_T2mode) {
 
 #ifdef USE_GBKA
-    Serial.print("# _T2mode is true");
+    _loopCounter++;
+    Serial.print("# _T2mode is true (The inner loop has been done). _loopCounter = ");
+    Serial.print(_loopCounter);
     Serial.println();
 #endif // USE_GBKA
 
@@ -288,9 +308,11 @@ int classBlinkLED::blinkCounter() {
     _retT_ms = _T0_ms;
 
 #ifdef USE_GBKA
+#if (DEBUG_LEVEL > 2)
     Serial.print("# _LEDstat true -> false");
     Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
     Serial.println();
+#endif // (DEBUG_LEVEL > 2)
 #endif // USE_GBKA
 
 
@@ -311,6 +333,7 @@ int classBlinkLED::blinkCounter() {
     }
 
 #ifdef USE_GBKA
+#if (DEBUG_LEVEL > 2)
     Serial.print("# _LEDstat false -> true");
     Serial.print(", _N1 = "); Serial.print(_N1);
     Serial.print(", _N1now = "); Serial.print(_N1now);
@@ -321,6 +344,7 @@ int classBlinkLED::blinkCounter() {
     Serial.print(", _T2mode= "); Serial.print(_T2mode);
     Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
     Serial.println();
+#endif // (DEBUG_LEVEL > 2)
 #endif // USE_GBKA
 
     return(_retT_ms);

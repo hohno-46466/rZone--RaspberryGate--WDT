@@ -27,6 +27,14 @@ const int testMode = false;
 
 #define DEBUG_LEVEL  (2)
 
+#if (DEBUG_LEVEL > 0)
+#define DEBUG_MODE
+#endif // (DEBUG_LEVEL > 0)
+
+#ifdef DEBUG_MODE
+#define DEBUG_BLINK_LED
+#endif // DEBUG_MODE
+
 // ---------------------------------------------------------
 
 #ifdef  USE_GBKA
@@ -50,13 +58,13 @@ const int testMode = false;
 
 // ---------------------------------------------------------
 
-#define ALERT_UNDEF     (-999)
+#define ALERT_UNDEF   (-999)
 #define ALERT_BEFORE_START  (-1) //  -1 : watchdog is not started.
-#define ALERT_LEVEL_0   (0)  //  0 : watchdog is running
-#define ALERT_LEVEL_1   (1)  //  1 : watchdog has just detected timeout now
-#define ALERT_LEVEL_2   (2)  //  2 : rebooting
-#define ALERT_LEVEL_3   (3)  //  3 : N/A
-#define ALERT_LEVEL_4   (4)  //  4 : N/A
+#define ALERT_LEVEL_0 (0)   //  0 : watchdog is running
+#define ALERT_LEVEL_1 (1)   //  1 : watchdog has just detected timeout now
+#define ALERT_LEVEL_2 (2)   //  2 : rebooting
+#define ALERT_LEVEL_3 (3)   //  3 : N/A
+#define ALERT_LEVEL_4 (4)   //  4 : N/A
 
 
 #define RESET_BEFORE_SETUP  (-1) // -1 : not initialized
@@ -69,8 +77,8 @@ const int testMode = false;
 // ---------------------------------------------------------
 
 #ifdef  USE_GBKA
-#define PIN_I_PULSE   (6)
-#define PIN_O_LED     (4)
+#define PIN_I_PULSE   (6)   // GBKA Button
+#define PIN_O_LED     (4)   // GBKA LED
 #define PIN_I_REQ     (7)
 #define PIN_I_TYPE    (PIN_I_REQ)
 #define PIN_O_RESET   (8)
@@ -88,16 +96,19 @@ const int testMode = false;
 // ---------------------------------------------------------
 
 #ifdef  USE_GBKA
-#define LOGIC_HBEAT      NEGATIVE_LOGIC // LOW is to recognize headeat pulse
+// #define LOGIC_HBEAT      NEGATIVE_LOGIC // LOW is to recognize heartbeat pulse
+#define LOGIC_HBEAT      POSITIVE_LOGIC // HIGH is to recognize heartbeat pulse
 #define LOGIC_LED        POSITIVE_LOGIC // HIGH is to turn LED on
 #define LOGIC_DELAY      POSITIVE_LOGIC // HIGH is to designate the delayed WDT
 // #define LOGIC_RESET      NEGATIVE_LOGIC // LOW is to make a reset pulse
 #define LOGIC_RESET      POSITIVE_LOGIC // HIGH is to make a reset pulse
-#define LOGIC_NOTE       NEGATIVE_LOGIC // LOW is to make a notification
+// #define LOGIC_NOTE       NEGATIVE_LOGIC // LOW is to make a notification
+#define LOGIC_NOTE       POSITIVE_LOGIC // HIGH is to make a notification
+//
 #else   // if not USE_GBKA
-#define LOGIC_HBEAT      NEGATIVE_LOGIC // LOW is to recognize headeat pulse
+#define LOGIC_HBEAT      NEGATIVE_LOGIC // LOW is to recognize heartbeat pulse
 #define LOGIC_LED        POSITIVE_LOGIC // HIGH is to turn LED on
-#define LOGIC_WDYPE      POSITIVE_LOGIC // HIGH is to designate the delayed WDT
+#define LOGIC_DELAY      POSITIVE_LOGIC // HIGH is to designate the delayed WDT
 #define LOGIC_RESET      NEGATIVE_LOGIC // LOW is to make a reset pulse
 #define LOGIC_NOTE       NEGATIVE_LOGIC // LOW is to make a notification
 #endif  // USE_GBKA

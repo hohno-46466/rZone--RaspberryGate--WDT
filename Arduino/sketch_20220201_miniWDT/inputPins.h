@@ -24,6 +24,10 @@ class inputPins {
   //
   int32_t getHBinterval_ms();
   int getWDtype();
+#ifdef TEST_MODE
+	int getHBstat();
+	int getWDstat();
+#endif // TEST_MODE
   //
  private:
   boolean _verbose = false;

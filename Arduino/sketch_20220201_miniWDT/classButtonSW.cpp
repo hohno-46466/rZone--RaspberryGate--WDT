@@ -80,7 +80,7 @@ int classButtonSW::setSensitivity(int updown) {
 #define _GET_PULSE (digitalRead(_pin) == (_positive ? HIGH : LOW))
 #define _BUTTON_SCAN_INTERVAL_MIN   (8)
 
-// void classButtonSW::update()
+// boolean classButtonSW::update()
 
 boolean classButtonSW::update() {
   // digital debouncing

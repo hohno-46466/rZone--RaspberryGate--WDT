@@ -26,8 +26,11 @@ inputPins::inputPins() {
 
 boolean inputPins::init() {
 
-  _HB.init(PIN_I_PULSE, USE_PULLUP, NEGATIVE_LOGIC);
-  _WD.init(PIN_I_TYPE, USE_PULLUP, NEGATIVE_LOGIC);
+	boolean _HBlogic = LOGIC_HBEAT;
+	boolean _WDlogic = LOGIC_DELAY;
+
+  _HB.init(PIN_I_PULSE, USE_PULLUP, _HBlogic);
+  _WD.init(PIN_I_TYPE, USE_PULLUP, _WDlogic);
   _HBstat = -1;
   _WDstat = -1;
   _HBprev_ms = 0;
@@ -71,6 +74,21 @@ int inputPins::getWDtype() {
 
   return(_WDstat);
 }
+
+// ---------------------------------------------------------
+// ---------------------------------------------------------
+
+#ifdef TEST_MODE
+
+int inputPins::getHBstat() {
+	return(_HBstat);
+}
+
+int inputPins::getWDstat() {
+	return(_WDstat);
+}
+
+#endif // TEST_MODE
 
 // ---------------------------------------------------------
 // ---------------------------------------------------------

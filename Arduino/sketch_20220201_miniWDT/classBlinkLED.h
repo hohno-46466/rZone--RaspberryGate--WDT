@@ -18,17 +18,18 @@
 // ---------------------------------------------------------
 
 #include "Arduino.h"
+#include "mydefs.h"
 
 class classBlinkLED {
  public:
   classBlinkLED();
   classBlinkLED(int pin, boolean positiveLogic);
-	//
+  //
   boolean init(int pin, boolean positiveLogic);
   void setParam(int32_t T0_ms, int32_t T1_ms, boolean reverseAction);
   void setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N, boolean reverseAction);
   void setParam(int32_t T0_ms, int32_t T1_ms, int32_t T2_ms, int N1, int N2, boolean reverseAction);
-	//
+  //
   boolean update();            // update blinking. This function needs to be called very frequently, either directly or indirectly in main().
   void stop();
   void start();
@@ -56,6 +57,9 @@ class classBlinkLED {
   boolean _flag_blink = false;    // true: now blinking, false: blinking stopped
   boolean _flag_reverseAction = false;  // Take reverse action (useful for temporarily interpreting the actual LED blinking pattern as the opposite of normal blinking mode)
   boolean _flag_DLdone = false;   // if true, blinking will be end because we are at the end of the double loop
+#ifdef DEBUG_MODE
+  int _loopCounter = 0;
+#endif // DEBUG_MODE
 };
 
 // ---------------------------------------------------------

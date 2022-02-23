@@ -48,8 +48,7 @@ void setup4test() {
   iPins.init();
   oPins.init();
 
-  // T0_ms = 400, T1_ms = 100, T2_ms = 3000, N1 = 4, N2 = -1;
-  T0_ms = 500, T1_ms = 500, T2_ms = 2000, N1 = 2, N2 = -1;
+  T0_ms = 400, T1_ms = 100, T2_ms = 3000, N1 = 4, N2 = -1;
   reverseAction = false;
   oPins.setBlinking(T0_ms, T1_ms, T2_ms, N1, N2, reverseAction);
   oPins.startBlinking();
@@ -57,10 +56,12 @@ void setup4test() {
   T0_ms = 1*1000L; T1_ms = 2*1000L; T2_ms = 1*1000L;
   oPins.setResetPulse(T0_ms, T1_ms, T2_ms);
   oPins.stopResetPulse();
+  // oPins.startResetPulse();
 
   T1_ms = 20*1000L;
   oPins.setNotification(T1_ms);
   oPins.stopNotification();
+  // oPins.startNotification();
 
 }
 
@@ -81,7 +82,8 @@ void setup4main() {
   T0_s = 1; T1_s = 1; T2_s = 2; N1 = 2; N2 = 0;
   reverseAction = false;
   oPins.setBlinking(T0_s * 1000L, T1_s * 1000L, T2_s * 1000L, N1, N2, reverseAction);
-  oPins.startBlinking();
+  // oPins.startBlinking();
+  oPins.stopBlinking();
 
   T0_s = 1; T1_s = 2; T2_s = 1;
   // reverseAction = false;
@@ -121,7 +123,7 @@ void loop4test() {
   iPins.update();
   oPins.update();
 
-	updateStateMachine4test();
+  updateStateMachine4test();
 }
 
 // ---------------------------------------------------------
@@ -131,7 +133,7 @@ void loop4main() {
   iPins.update();
   oPins.update();
 
-	updateStateMachine4main();
+  updateStateMachine4main();
 
 }
 

@@ -7,7 +7,62 @@
 
 void updateStateMachine4test() {
 
-  int T0_s, T1_s, T2_s;
+  // int _T0_s, _T1_s, _T2_s;
+	static int32_t _HBinterval_prev_ms = 0;
+	static int32_t _HBstat = 0, _HBstat_prev = 0;
+
+  // alertLevel is -1 when the sketch starts
+  if (alertLevel < 0) {
+
+    // The following initialization are required when alertLevel is -1
+    iPins.init();
+    oPins.init();
+
+    // alertLevel -1 -> 0 // watchdog has just started.
+    prevLevel = alertLevel;
+    alertLevel = ALERT_LEVEL_0;
+    if (prevLevel != alertLevel) {
+      Serial.print("# alertLevel = "); Serial.print(prevLevel);
+      Serial.print(" -> "); Serial.print(alertLevel);
+			Serial.println();
+    }
+
+	  // alert Level 0
+  } else if (alertLevel == ALERT_LEVEL_0) {
+
+    // watchdog is running
+    HBinterval_ms = iPins.getHBinterval_ms();
+		_HBstat = iPins.getHBstat();
+
+		if (_HBstat != _HBstat_prev) {
+			// Serial.print("# _HBstat = "); Serial.print(_HBstat);
+			// Serial.println();
+		}
+		_HBstat_prev = _HBstat;
+
+		if (HBinterval_ms != _HBinterval_prev_ms) {
+			Serial.print("# alertLevel = "); Serial.print(alertLevel);
+			Serial.print(", HBinterval_ms = "); Serial.print(HBinterval_ms);
+			Serial.println();
+		}
+		_HBinterval_prev_ms = HBinterval_ms;
+
+
+    if (HBinterval_ms >= (HBintervalLimit_ms)) {
+
+      // alertLevel 0 -> 1 // watchdog alert!
+      prevLevel = alertLevel;
+      alertLevel = ALERT_LEVEL_1;
+
+		}
+	}
+}
+
+// ---------------------------------------------------------
+
+void updateStateMachine4testX() {
+
+  int _T0_s, _T1_s, _T2_s;
 
   // alertLevel is -1 when the sketch starts
   if (alertLevel < 0) {
@@ -63,17 +118,17 @@ void updateStateMachine4test() {
     if (alertLevel == ALERT_LEVEL_1) {
       // for the first time...
       if (iPins.getWDtype() == 0) {
-        T0_s = SEC_BEFORE1;
-        T1_s = SEC_PULSE1;
-        T2_s = SEC_AFTER1;
+        _T0_s = SEC_BEFORE1;
+        _T1_s = SEC_PULSE1;
+        _T2_s = SEC_AFTER1;
       } else {
-        T0_s = SEC_BEFORE2;
-        T1_s = SEC_PULSE2;
-        T2_s = SEC_AFTER2;
+        _T0_s = SEC_BEFORE2;
+        _T1_s = SEC_PULSE2;
+        _T2_s = SEC_AFTER2;
       }
-      oPins.setResetPulse(T0_s * 1000L, T1_s * 1000L, T2_s * 1000L);
-      oPins.setNotification(T0_s * 1000L);
-      oPins.setBlinking(T0_s * 1000L, T1_s * 1000L, T2_s * 1000L, -1, -1, false);
+      oPins.setResetPulse(_T0_s * 1000L, _T1_s * 1000L, _T2_s * 1000L);
+      oPins.setNotification(_T0_s * 1000L);
+      oPins.setBlinking(_T0_s * 1000L, _T1_s * 1000L, _T2_s * 1000L, -1, -1, false);
       oPins.startResetPulse();
       oPins.startNotification();
       oPins.startBlinking();
@@ -118,7 +173,7 @@ void updateStateMachine4test() {
 
 void updateStateMachine4main() {
 
-  int T0_s, T1_s, T2_s;
+  int _T0_s, _T1_s, _T2_s;
 
   // alertLevel is -1 when the sketch starts
   if (alertLevel < 0) {
@@ -166,17 +221,17 @@ void updateStateMachine4main() {
     if (alertLevel == ALERT_LEVEL_1) {
       // for the first time...
       if (iPins.getWDtype() == 0) {
-        T0_s = SEC_BEFORE1;
-        T1_s = SEC_PULSE1;
-        T2_s = SEC_AFTER1;
+        _T0_s = SEC_BEFORE1;
+        _T1_s = SEC_PULSE1;
+        _T2_s = SEC_AFTER1;
       } else {
-        T0_s = SEC_BEFORE2;
-        T1_s = SEC_PULSE2;
-        T2_s = SEC_AFTER2;
+        _T0_s = SEC_BEFORE2;
+        _T1_s = SEC_PULSE2;
+        _T2_s = SEC_AFTER2;
       }
-      oPins.setResetPulse(T0_s * 1000L, T1_s * 1000L, T2_s * 1000L);
-      oPins.setNotification(T0_s * 1000L);
-      oPins.setBlinking(T0_s * 1000L, T1_s * 1000L, T2_s * 1000L, -1, -1, false);
+      oPins.setResetPulse(_T0_s * 1000L, _T1_s * 1000L, _T2_s * 1000L);
+      oPins.setNotification(_T0_s * 1000L);
+      oPins.setBlinking(_T0_s * 1000L, _T1_s * 1000L, _T2_s * 1000L, -1, -1, false);
       oPins.startResetPulse();
       oPins.startNotification();
       oPins.startBlinking();
