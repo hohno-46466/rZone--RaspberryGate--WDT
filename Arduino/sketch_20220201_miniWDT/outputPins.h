@@ -1,5 +1,5 @@
-#ifndef __OUTPUT_PINS__H__
-#define __OUTPUT_PINS__H__
+#ifndef __OUTPUT_PINS_H__
+#define __OUTPUT_PINS_H__
 
 //
 // outputPins.h
@@ -47,4 +47,4 @@ class outputPins {
 
 // ---------------------------------------------------------
 
-#endif  // __OUTPUT_PINS__H__
+#endif  // __OUTPUT_PINS_H__

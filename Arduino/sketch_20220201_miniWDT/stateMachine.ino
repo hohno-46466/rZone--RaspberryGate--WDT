@@ -8,8 +8,10 @@
 void updateStateMachine4test() {
 
   // int _T0_s, _T1_s, _T2_s;
-	static int32_t _HBinterval_prev_ms = 0;
-	static int32_t _HBstat = 0, _HBstat_prev = 0;
+  static int32_t _HBinterval_prev_ms = 0;
+#ifdef TEST_MODE
+  static int32_t _HBstat = 0, _HBstat_prev = 0;
+#endif // TEST_MODE
 
   // alertLevel is -1 when the sketch starts
   if (alertLevel < 0) {
@@ -24,38 +26,39 @@ void updateStateMachine4test() {
     if (prevLevel != alertLevel) {
       Serial.print("# alertLevel = "); Serial.print(prevLevel);
       Serial.print(" -> "); Serial.print(alertLevel);
-			Serial.println();
+      Serial.println();
     }
 
-	  // alert Level 0
+    // alert Level 0
   } else if (alertLevel == ALERT_LEVEL_0) {
 
     // watchdog is running
     HBinterval_ms = iPins.getHBinterval_ms();
-		_HBstat = iPins.getHBstat();
 
-		if (_HBstat != _HBstat_prev) {
-			// Serial.print("# _HBstat = "); Serial.print(_HBstat);
-			// Serial.println();
-		}
-		_HBstat_prev = _HBstat;
+#ifdef TEST_MODE
+    _HBstat = iPins.getHBstat();
+    if (_HBstat != _HBstat_prev) {
+      Serial.print("# _HBstat = "); Serial.print(_HBstat);
+      Serial.println();
+    }
+    _HBstat_prev = _HBstat;
+#endif // TEST_MODE
 
-		if (HBinterval_ms != _HBinterval_prev_ms) {
-			Serial.print("# alertLevel = "); Serial.print(alertLevel);
-			Serial.print(", HBinterval_ms = "); Serial.print(HBinterval_ms);
-			Serial.println();
-		}
-		_HBinterval_prev_ms = HBinterval_ms;
-
+    if (HBinterval_ms != _HBinterval_prev_ms) {
+      // Serial.print("# alertLevel = "); Serial.print(alertLevel);
+			// Serial.print(", HBinterval_ms = "); Serial.print(_HBinterval_prev_ms);
+			// Serial.print(" -> "); Serial.print(HBinterval_ms);
+      // Serial.println();
+    }
+    _HBinterval_prev_ms = HBinterval_ms;
 
     if (HBinterval_ms >= (HBintervalLimit_ms)) {
-
       // alertLevel 0 -> 1 // watchdog alert!
       prevLevel = alertLevel;
       alertLevel = ALERT_LEVEL_1;
 
-		}
-	}
+    }
+  }
 }
 
 // ---------------------------------------------------------

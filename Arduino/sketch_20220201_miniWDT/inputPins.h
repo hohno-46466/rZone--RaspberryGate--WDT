@@ -1,5 +1,5 @@
-#ifndef __INPUT_PINS__H__
-#define __INPUT_PINS__H__
+#ifndef __INPUT_PINS_H__
+#define __INPUT_PINS_H__
 
 //
 // inputPins.h
@@ -25,8 +25,8 @@ class inputPins {
   int32_t getHBinterval_ms();
   int getWDtype();
 #ifdef TEST_MODE
-	int getHBstat();
-	int getWDstat();
+  int getHBstat();
+  int getWDstat();
 #endif // TEST_MODE
   //
  private:
@@ -42,4 +42,4 @@ class inputPins {
 
 // ---------------------------------------------------------
 
-#endif  // __INPUT_PINS__H__
+#endif  // __INPUT_PINS_H__
