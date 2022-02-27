@@ -258,7 +258,7 @@ int classBlinkLED::blinkCounter() {
 
 /*private*/ int32_t classBlinkLED::_updateTnext_ms() {
 
-  int32_t _retT_ms = 0;
+  int32_t __retT_ms = 0;
 
   // (((T0,T1),(T0,T1), ..),T2,)...
 
@@ -269,7 +269,9 @@ int classBlinkLED::blinkCounter() {
     _flag_blink = false;
 
 #ifdef USE_GBKA
+#if (DEBUG_LEVEL > 2)
     Serial.println("# The double loop has been done, and blinking will be stopped");
+#endif // (DEBUG_LEVEL > 2)
 #endif // USE_GBKA
 
     return(-1);
@@ -278,24 +280,26 @@ int classBlinkLED::blinkCounter() {
   if (_T2mode) {
 
 #ifdef USE_GBKA
+#if (DEBUG_LEVEL > 2)
     _loopCounter++;
     Serial.print("# _T2mode is true (The inner loop has been done). _loopCounter = ");
     Serial.print(_loopCounter);
     Serial.println();
+#endif // (DEBUG_LEVEL > 2)
 #endif // USE_GBKA
 
     _LEDstat = false;
     _blinkCounter = 0;
     _blinkCounterPrev = 0;
     _T2start_ms = millis();
-    _retT_ms = _T2_ms;
+    __retT_ms = _T2_ms;
     _N2now++;
     if (_N2now > _N2) {
       // if the double loop (both innner and outer) has been done, set _flag_DLdone true;
     _flag_DLdone = true;
     }
     _T2mode = false;
-    return(_retT_ms);
+    return(__retT_ms);
   }
 
   // XXX
@@ -305,18 +309,18 @@ int classBlinkLED::blinkCounter() {
     _LEDstat = false;
     _blinkCounter = 0; // _blinkCounter is always zero when the LED is off.
     _T0start_ms = millis();
-    _retT_ms = _T0_ms;
+    __retT_ms = _T0_ms;
 
 #ifdef USE_GBKA
-#if (DEBUG_LEVEL > 2)
+#if (DEBUG_LEVEL > 3)
     Serial.print("# _LEDstat true -> false");
-    Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
+    Serial.print(", __retT_ms = "); Serial.print(__retT_ms);
     Serial.println();
-#endif // (DEBUG_LEVEL > 2)
+#endif // (DEBUG_LEVEL > 3)
 #endif // USE_GBKA
 
 
-    return(_retT_ms);
+    return(__retT_ms);
   }
 
   if (_LEDstat == false) {
@@ -325,7 +329,7 @@ int classBlinkLED::blinkCounter() {
     _blinkCounter = _blinkCounterPrev + 1; // _blinkCounter counts the number of LED on in this period (_blinkCounter rises from 1 to N1*N2-1
     _blinkCounterPrev = _blinkCounter;
     _T1start_ms = millis();
-    _retT_ms = _T1_ms;
+    __retT_ms = _T1_ms;
     _N1now++;
     if (_N1now > _N1) {
       _N1now = 0;
@@ -333,7 +337,7 @@ int classBlinkLED::blinkCounter() {
     }
 
 #ifdef USE_GBKA
-#if (DEBUG_LEVEL > 2)
+#if (DEBUG_LEVEL > 3)
     Serial.print("# _LEDstat false -> true");
     Serial.print(", _N1 = "); Serial.print(_N1);
     Serial.print(", _N1now = "); Serial.print(_N1now);
@@ -342,12 +346,12 @@ int classBlinkLED::blinkCounter() {
     Serial.print(", _blinkCounter = "); Serial.print(_blinkCounter);
     Serial.print(", _blinkCounterPrev = "); Serial.print(_blinkCounterPrev);
     Serial.print(", _T2mode= "); Serial.print(_T2mode);
-    Serial.print(", _retT_ms = "); Serial.print(_retT_ms);
+    Serial.print(", __retT_ms = "); Serial.print(__retT_ms);
     Serial.println();
-#endif // (DEBUG_LEVEL > 2)
+#endif // (DEBUG_LEVEL > 3)
 #endif // USE_GBKA
 
-    return(_retT_ms);
+    return(__retT_ms);
   }
 
 #ifdef USE_GBKA

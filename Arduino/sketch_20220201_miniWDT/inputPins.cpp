@@ -51,19 +51,20 @@ boolean inputPins::update() {
 
 int32_t inputPins::getHBinterval_ms() {
 
-  uint32_t _currentT_ms = millis();
-  int32_t _interval_ms = 0;
+  uint32_t __currentT_ms = millis();
+  int32_t __interval_ms = 0;
 
-  _interval_ms = (int32_t)(_currentT_ms - _HBprev_ms);
+  // __interval_ms = (int32_t)(__currentT_ms - _HBprev_ms);
 
   _HBstat = _HB.getStat();
 
   if ((_HBprev != _HBstat) && (_HBstat == SW_ON)) {
-    _HBprev_ms = _currentT_ms;
+    __interval_ms = (int32_t)(__currentT_ms - _HBprev_ms);
+    _HBprev_ms = __currentT_ms;
   }
   _HBprev = _HBstat;
 
-  return(_interval_ms);
+  return(__interval_ms);
 }
 
 // ---------------------------------------------------------
@@ -86,6 +87,14 @@ int inputPins::getHBstat() {
 
 int inputPins::getWDstat() {
   return(_WDstat);
+}
+
+int inputPins::getHBcurrentButtonVal() {
+  return(_HB.getCurrentButtonVal());
+}
+
+void inputPins::showHBhistory() {
+  _HB.showOnOffHistory();
 }
 
 #endif // TEST_MODE

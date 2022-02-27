@@ -13,17 +13,19 @@
 
 // ---------------------------------------------------------
 
+#define USE_GBKA
+
 #define TEST_MODE
 
 #ifdef TEST_MODE
 const int testMode = true;
+extern boolean globalTestFlag1;
+extern boolean globalTestFlag2;
 #else // TEST_MODE
 const int testMode = false;
 #endif // TEST_MODE
 
 // ---------------------------------------------------------
-
-#define USE_GBKA
 
 #define DEBUG_LEVEL  (2)
 

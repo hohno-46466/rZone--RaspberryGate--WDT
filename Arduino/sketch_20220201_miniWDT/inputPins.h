@@ -27,6 +27,8 @@ class inputPins {
 #ifdef TEST_MODE
   int getHBstat();
   int getWDstat();
+  int getHBcurrentButtonVal();
+  void showHBhistory();
 #endif // TEST_MODE
   //
  private:

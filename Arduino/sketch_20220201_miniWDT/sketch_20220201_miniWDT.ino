@@ -21,20 +21,31 @@ int32_t HBintervalLimit_ms = HB_INTERVAL_L_MS;
 inputPins iPins;
 outputPins oPins;
 
+#ifdef TEST_MODE
+boolean globalTestFlag1 = false;
+boolean globalTestFlag2 = false;
+#endif // TEST_MODE
+
 // ---------------------------------------------------------
 // setup()
 // ---------------------------------------------------------
 
 void setup() {
+#ifdef TEST_MODE
+  setup4test();
+#else // TEST_MODE
+  setup4main();
+#endif // TEST_MODE
+
   if (testMode) {
-    setup4test();
   } else {
-    setup4main();
   }
+
 }
 
 // ---------------------------------------------------------
 
+#ifdef TEST_MODE
 void setup4test() {
 
   int32_t T0_ms = 1000, T1_ms = 1000, T2_ms = 1000;
@@ -55,15 +66,17 @@ void setup4test() {
 
   T0_ms = 1*1000L; T1_ms = 2*1000L; T2_ms = 1*1000L;
   oPins.setResetPulse(T0_ms, T1_ms, T2_ms);
-  oPins.stopResetPulse();
-  // oPins.startResetPulse();
+  // oPins.stopResetPulse();
+  oPins.startResetPulse();
 
   T1_ms = 20*1000L;
   oPins.setNotification(T1_ms);
-  oPins.stopNotification();
-  // oPins.startNotification();
+  // oPins.stopNotification();
+  oPins.startNotification();
 
 }
+
+#endif // TEST_MODE
 
   // ---------------------------------------------------------
 
@@ -107,24 +120,38 @@ void setup4main() {
 //  2 : rebooting
 
 void loop() {
+#ifdef TEST_MODE
+  loop4test();
+#else // TEST_MODE
+  loop4main();
+#endif // TEST_MODE
+
   if (testMode) {
-    loop4test();
   } else {
-    loop4main();
   }
 }
 
 // ---------------------------------------------------------
 
+#ifdef TEST_MODE
+
 classBlinkLED test;
 
 void loop4test() {
+
+  static uint32_t tmpT_ms = 0;
+  if (tmpT_ms <= millis()) {
+    globalTestFlag1 = true;
+    tmpT_ms += 200;
+  }
 
   iPins.update();
   oPins.update();
 
   updateStateMachine4test();
 }
+
+#endif // TEST_MODE
 
 // ---------------------------------------------------------
 

@@ -5,28 +5,41 @@
 // ---------------------------------------------------------
 // ---------------------------------------------------------
 
+#ifdef TEST_MODE
+
 void updateStateMachine4test() {
 
   // int _T0_s, _T1_s, _T2_s;
   static int32_t _HBinterval_prev_ms = 0;
-#ifdef TEST_MODE
   static int32_t _HBstat = 0, _HBstat_prev = 0;
-#endif // TEST_MODE
+
+
+  if (globalTestFlag2) {
+    int tmpval = iPins.getHBcurrentButtonVal();
+#ifdef USE_GBKA
+    Serial.print("HBcurrentButtonVal = ");
+    Serial.print(tmpval);
+    Serial.println();
+#endif // USE_GBKA
+    globalTestFlag2 = false;
+  }
 
   // alertLevel is -1 when the sketch starts
   if (alertLevel < 0) {
 
     // The following initialization are required when alertLevel is -1
-    iPins.init();
-    oPins.init();
+    // iPins.init();
+    // oPins.init();
 
     // alertLevel -1 -> 0 // watchdog has just started.
     prevLevel = alertLevel;
     alertLevel = ALERT_LEVEL_0;
     if (prevLevel != alertLevel) {
+#ifdef USE_GBKA
       Serial.print("# alertLevel = "); Serial.print(prevLevel);
       Serial.print(" -> "); Serial.print(alertLevel);
       Serial.println();
+#endif // USE_GBKA
     }
 
     // alert Level 0
@@ -35,33 +48,43 @@ void updateStateMachine4test() {
     // watchdog is running
     HBinterval_ms = iPins.getHBinterval_ms();
 
-#ifdef TEST_MODE
     _HBstat = iPins.getHBstat();
     if (_HBstat != _HBstat_prev) {
       Serial.print("# _HBstat = "); Serial.print(_HBstat);
       Serial.println();
+      if (_HBstat == 0) {
+        iPins.showHBhistory();
+      }
     }
     _HBstat_prev = _HBstat;
-#endif // TEST_MODE
 
     if (HBinterval_ms != _HBinterval_prev_ms) {
-      // Serial.print("# alertLevel = "); Serial.print(alertLevel);
-			// Serial.print(", HBinterval_ms = "); Serial.print(_HBinterval_prev_ms);
-			// Serial.print(" -> "); Serial.print(HBinterval_ms);
-      // Serial.println();
+#ifdef USE_GBKA
+      Serial.print("# alertLevel = "); Serial.print(alertLevel);
+      Serial.print(", HBinterval_ms = "); Serial.print(_HBinterval_prev_ms);
+      Serial.print(" -> "); Serial.print(HBinterval_ms);
+      Serial.println();
+#endif // USE_GBKA
     }
     _HBinterval_prev_ms = HBinterval_ms;
 
     if (HBinterval_ms >= (HBintervalLimit_ms)) {
       // alertLevel 0 -> 1 // watchdog alert!
       prevLevel = alertLevel;
-      alertLevel = ALERT_LEVEL_1;
-
+      // alertLevel = ALERT_LEVEL_1;
+#ifdef USE_GBKA
+      Serial.print("# alertLevel changed: "); Serial.print(prevLevel);
+      Serial.print(" -> "); Serial.print(alertLevel);
+      Serial.println();
+#endif // USE_GBKA
     }
   }
 }
+#endif // TEST_MODE
 
 // ---------------------------------------------------------
+
+#ifdef TEST_MODE
 
 void updateStateMachine4testX() {
 
@@ -78,6 +101,9 @@ void updateStateMachine4testX() {
     prevLevel = alertLevel;
     alertLevel = ALERT_LEVEL_0;
     if (prevLevel != alertLevel) {
+#ifdef USE_GBKA
+#endif // USE_GBKA
+
       Serial.print("# alertLevel = "); Serial.print(prevLevel);
       Serial.print(" -> "); Serial.println(alertLevel);
     }
@@ -94,6 +120,9 @@ void updateStateMachine4testX() {
       prevLevel = alertLevel;
       alertLevel = ALERT_LEVEL_1;
     if (prevLevel != alertLevel) {
+#ifdef USE_GBKA
+#endif // USE_GBKA
+
       Serial.print("# alertLevel = "); Serial.print(prevLevel);
       Serial.print(" -> "); Serial.println(alertLevel);
     }
@@ -140,6 +169,9 @@ void updateStateMachine4testX() {
       prevLevel = alertLevel;
       alertLevel = ALERT_LEVEL_2;
       if (prevLevel != alertLevel) {
+#ifdef USE_GBKA
+#endif // USE_GBKA
+
         Serial.print("# alertLevel = "); Serial.print(prevLevel);
         Serial.print(" -> "); Serial.println(alertLevel);
       }
@@ -161,6 +193,9 @@ void updateStateMachine4testX() {
         prevLevel = alertLevel;
         alertLevel = ALERT_BEFORE_START; // watchdog runs again after initialization
         if (prevLevel != alertLevel) {
+#ifdef USE_GBKA
+#endif // USE_GBKA
+
           Serial.print("# alertLevel = "); Serial.print(prevLevel);
           Serial.print(" -> "); Serial.println(alertLevel);
         }
@@ -170,6 +205,12 @@ void updateStateMachine4testX() {
     }
   }
 }
+
+#endif // TEST_MODE
+
+#ifdef TEST_MODE
+#endif // TEST_MODE
+
 
 // ---------------------------------------------------------
 // ---------------------------------------------------------
