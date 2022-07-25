@@ -79,8 +79,8 @@ Watchdog Timers for Raspberry Gate
      
      13 directories, 60 files (Wed Jul 20 05:56:28 JST 2022)
 
-# Note: url = https://github.com/hohno-46466/rZone--RaspberryGate--WDT
+Note: url = https://github.com/hohno-46466/rZone--RaspberryGate--WDT
 
-# Note: url = git@github.com:hohno-46466/rZone--RaspberryGate--WDT.git
+Note: url = git@github.com:hohno-46466/rZone--RaspberryGate--WDT.git
 
 -EOF-
