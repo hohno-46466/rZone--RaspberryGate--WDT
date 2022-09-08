@@ -13,7 +13,6 @@ Watchdog Timers for Raspberry Gate
      │   │   └──  sketch_20220110_test1.ino
      │   ├──  sketch_20220111_newWDT/
      │   │   ├──  BACKUP/
-     │   │   │   ├──  sketch_20220111_newWDT.ino.bak
      │   │   │   ├──  sketch_20220111_newWDT=20220113-1.ino
      │   │   │   └──  tasks.ino
      │   │   ├──  README.md
@@ -77,7 +76,7 @@ Watchdog Timers for Raspberry Gate
      └──  workspace/
          └──  README.md
      
-     13 directories, 60 files (Sun Aug 28 21:29:43 JST 2022)
+     13 directories, 59 files (Mon Sep  5 19:33:10 JST 2022)
 
 
 Note: URL = https://github.com/hohno-46466/rZone--RaspberryGate--WDT
