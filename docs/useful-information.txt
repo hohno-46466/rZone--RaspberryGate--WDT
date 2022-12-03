@@ -1,5 +1,5 @@
 
-# Last updated: Tue Jan 11 08:57:38 JST 2022
+# Last update: Tue Jan 11 08:57:38 JST 2022
 
 * ATtiny85 Module with Micro USB 
 
