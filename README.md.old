@@ -76,7 +76,7 @@ Watchdog Timers for Raspberry Gate
      └──  workspace/
          └──  README.md
      
-     13 directories, 59 files (Thu Nov 17 15:15:40 JST 2022)
+     13 directories, 59 files (Sun Nov 20 00:10:43 JST 2022)
 
 
 Note: URL = https://github.com/hohno-46466/rZone--RaspberryGate--WDT
